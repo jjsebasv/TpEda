@@ -8,6 +8,10 @@ public class Main {
 		Board b = new Board(7, 7);
 		b.printBorad();
 		
+		System.out.println();
+		
+		b.move(3, 1, 0, 1);
+		b.printBorad();
 		
 	}
 
