@@ -10,7 +10,13 @@ public class Main {
 		
 		System.out.println();
 		
-		b.move(3, 1, 0, 1);
+		try {
+			b.move(2, 2, 1, 2);
+			b.move(2, 4, 1, 4);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		b.printBorad();
 		
 	}
