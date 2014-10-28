@@ -13,6 +13,8 @@ public class Board {
 	private int rows;
 	private int cols;
 	private Box board[][];
+	private int turn;
+
 
 	public Board(int r, int c) throws Exception{
 		if (r >= 7 && c >= 7) {
@@ -28,9 +30,7 @@ public class Board {
 	public Box getBox(int x, int y) {
 		if (!belongsToRows(x) || !belongsToCols(y))
 			return null;
-		return board[x][y];
-
-	}
+		return board[x][y];	}
 
 	private void createBoard() {
 		int value = 0;
@@ -47,14 +47,14 @@ public class Board {
 							|| ((j == 0 || j == this.cols - 1) && (i <= this.rows / 2 + 1 && i >= this.rows / 2 - 1))
 							|| ((i == 1 || i == this.rows - 2) && j == this.cols / 2)
 							|| ((j == 1 || j == this.cols - 2) && i == this.rows / 2)) {
-						auxB = new Box(value, 'E');
+						auxB = new Box(value, 'N');
 					} else if ((i <= (this.rows / 2 + 1))
 							&& (i >= (this.rows / 2 - 1))
 							&& (j <= (this.cols / 2 + 1))
 							&& (j >= (this.cols / 2 - 1))) {
 						auxB = new Box(value, 'G');
 					} else {
-						auxB = new Box(value, '-');
+						auxB = new Box(value, '0');
 					}
 
 				}
@@ -63,11 +63,11 @@ public class Board {
 		}
 	}
 
-	public void move(int iFrom, int jFrom, int iTo, int jTo) throws Exception { // Esto
-																				// tendría
-		// que devolver
-		// un Board?
-		if (validateMove(iFrom, jFrom, iTo, jTo)) {
+
+	public void move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ // Esto tendrï¿½a
+																// que devolver
+																// un Board?
+		if ( validateMove(iFrom, jFrom, iTo, jTo)) {				
 			swap(iFrom, jFrom, iTo, jTo);
 			if((iTo == 0 && jTo == 0) || (iTo == this.rows -1 && jTo == 0) || (iTo == 0 && jTo == this.cols - 1) || (iTo == this.rows-1 && jTo == this.cols-1)){
 				throw new WinGameException();
@@ -101,14 +101,14 @@ public class Board {
 		to.setCharacter(from.getCharacter());
 		to.setSide(from.getSide());
 		to.setEmpty(false);
-		from.setCharacter('-');
+		from.setCharacter('0');
 		from.setSide(0);
 		from.setEmpty(true);
 
 	}
-
-	private boolean validateMove(int iF, int jF, int iT, int jT) {
-		if (iF != iT && jF != jT) {// no son en línea recta
+	
+	private boolean validateMove(int iF, int jF, int iT, int jT){
+		if( iF != iT && jF != jT){// no son en linea recta
 			return false;
 		}
 		if (iF == iT && jF == jT) { // mismo lugar
@@ -120,12 +120,13 @@ public class Board {
 				|| !getBox(iT, jT).isEmpty()) {
 			return false;
 		}
-		for (int i = iF; i < iT; i++) { // camino obstruído en la fila
+
+		for (int i = iF; i < iT; i++) { // camino obstruido en la fila
 			if (!getBox(i, jF).isEmpty()) {
 				return false;
 			}
 		}
-		for (int j = jF; j < jT; j++) { // camino obstruído en la columna
+		for (int j = jF; j < jT; j++) { // camino obstruido en la columna
 			if (!getBox(iT, j).isEmpty()) {
 				return false;
 			}
@@ -167,7 +168,7 @@ public class Board {
 	}
 
 	private void eliminate(Box other) {
-		other.setCharacter('-');
+		other.setCharacter('0');
 		other.setEmpty(true);
 		other.setSide(0);
 	}
@@ -192,4 +193,9 @@ public class Board {
 		}
 		return false;
 	}
+	
+	private void exportBoard(){
+		
+	}
 }
+

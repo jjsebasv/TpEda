@@ -9,7 +9,7 @@ public class Box {
 	
 	public Box(int value, char cc){
 		this.value = value;
-		if( cc == '-'){
+		if( cc == '0'){
 			this.side = 0;
 			this.empty = true;
 		}
