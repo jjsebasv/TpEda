@@ -1,6 +1,8 @@
 package code;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,79 +11,108 @@ import java.util.Arrays;
 import javax.naming.directory.InvalidAttributesException;
 
 import exceptions.EndGameException;
-import exceptions.WinGameException;
 
 public class Board {
 
-	private int rows;
-	private int cols;
+	private int dimention;
 	private Box board[][];
 	private int turn;
 
 
-	public Board(int r, int c) throws Exception{
-		if (r >= 7 && c >= 7) {
-			this.rows = r;
-			this.cols = c;
-			this.board = new Box[r][c];
-			this.createBoard();
-		}else{
-			throw new InvalidAttributesException();
-		}
+	public Board(String file){
+		this.createBoard(file);
 	}
 
 	public Box getBox(int x, int y) {
 		if (!belongsToRows(x) || !belongsToCols(y))
 			return null;
-		return board[x][y];	}
-
-	private void createBoard() {
-		int value = 0;
-		for (int i = 0; i < this.rows; i++) {
-			Box auxB;
-			for (int j = 0; j < this.cols; j++) {
-				if (i == (int) this.rows / 2 && j == (int) this.cols / 2) {
-					value = this.rows * this.cols;
-					auxB = new Box(value, 'K');
-				} else {
-					value = Math.min((this.rows - 1) - i, i)
-							+ Math.min((this.cols - 1) - j, j);
-					if (((i == 0 || i == this.rows - 1) && (j <= this.cols / 2 + 1 && j >= this.cols / 2 - 1))
-							|| ((j == 0 || j == this.cols - 1) && (i <= this.rows / 2 + 1 && i >= this.rows / 2 - 1))
-							|| ((i == 1 || i == this.rows - 2) && j == this.cols / 2)
-							|| ((j == 1 || j == this.cols - 2) && i == this.rows / 2)) {
-						auxB = new Box(value, 'N');
-					} else if ((i <= (this.rows / 2 + 1))
-							&& (i >= (this.rows / 2 - 1))
-							&& (j <= (this.cols / 2 + 1))
-							&& (j >= (this.cols / 2 - 1))) {
-						auxB = new Box(value, 'G');
-					} else {
-						auxB = new Box(value, '0');
-					}
-
-				}
-				this.board[i][j] = auxB;
-			}
-		}
+		return board[x][y];	
 	}
 
+	private void createBoard(String file) {
+		try {
+			int k = 0;
+			int g = 0;
+			int n = 0;
+			
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			String l = br.readLine();
+			
+			// creo el turno
+			this.turn = Integer.valueOf(l.toCharArray()[0]);
+			if ( this.turn < 1 && turn > 2 ){
+				System.out.println("f");
+				throw new InvalidAttributesException();
+			}
+			
+			//creo el tablero
+			l = br.readLine();
+			char[] line = l.toCharArray();
+			this.dimention = l.length();
+			if ( dimention % 2 == 0 || dimention < 7 || dimention > 19){
+				throw new InvalidAttributesException();
+			}
+			this.board = new Box[dimention][dimention];
+			
+			for (int i = 0; i < dimention; i++) {
+				for (int j = 0; j < dimention; j++) {
+					board[i][j] = new Box(0,line[j]);
+					switch (line[j]) {
+					case 'N':
+						n++;
+						break;
+					case 'K':
+						k++;
+						break;
+					case 'G':
+						g++;
+						break;
+					}
+				}
+				line = br.readLine().toCharArray();
+			}
+			
+			//valido el tablero
+			validateBoard(k,n,g);
+			br.close();
+			fr.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	private void validateBoard(int k, int n, int g) throws InvalidAttributesException{	
+		if ( k != 1 ){
+			throw new InvalidAttributesException();
+		}
+		
+		if ( (dimention <= 11 && ( g != 8 || n != 16))){
+			throw new InvalidAttributesException();
+		}
+		else if ( dimention > 11 && (g != 12 || n != 24) ) {
+			throw new InvalidAttributesException();
+		}
+	}
 
 	public void move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ // Esto tendr�a
 																// que devolver
 																// un Board?
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {				
 			swap(iFrom, jFrom, iTo, jTo);
-			if((iTo == 0 && jTo == 0) || (iTo == this.rows -1 && jTo == 0) || (iTo == 0 && jTo == this.cols - 1) || (iTo == this.rows-1 && jTo == this.cols-1)){
-				throw new WinGameException();
+			if((iTo == 0 && jTo == 0) || (iTo == this.dimention -1 && jTo == 0) || (iTo == 0 && jTo == this.dimention - 1) || (iTo == this.dimention-1 && jTo == this.dimention-1)){
+				//throw new WinGameException();
 			}
 			eat(iTo, jTo);
 		}
 	}
 
 	public void printBoard() {
-		for (int i = 0; i < this.rows; i++) {
-			for (int j = 0; j < this.cols; j++) {
+		for (int i = 0; i < this.dimention; i++) {
+			for (int j = 0; j < this.dimention; j++) {
 				System.out.print(getBox(i, j).getCharacter() + " ");
 			}
 			System.out.println();
@@ -90,11 +121,11 @@ public class Board {
 	}
 
 	private boolean belongsToRows(int x) {
-		return (x < this.rows && x >= 0);
+		return (x < this.dimention && x >= 0);
 	}
 
 	private boolean belongsToCols(int y) {
-		return (y < this.rows && y >= 0);
+		return (y < this.dimention && y >= 0);
 	}
 
 	private void swap(int iF, int jF, int iT, int jT) {
@@ -201,11 +232,11 @@ public class Board {
 		File fpw = new File(System.currentTimeMillis()+".txt");
 		try {
  	        FileWriter fw = new FileWriter(fpw);
- 	        fw.write(turn);
+ 	        fw.write(this.turn);
  	        fw.write("\n");	
  	        
- 	        for (int i = 0; i < this.rows; i++) {
- 				for (int j = 0; j < this.cols; j++) {
+ 	        for (int i = 0; i < this.dimention; i++) {
+ 				for (int j = 0; j < this.dimention; j++) {
  					fw.write(getBox(i, j).getCharacter());
  				}
  				fw.write("\n");
@@ -217,6 +248,10 @@ public class Board {
  	        // TODO Auto-generated catch block
  	        e.printStackTrace();
  	    }
+	}
+	
+	public void addBoard(){
+		
 	}
 }
 
