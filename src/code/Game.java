@@ -1,7 +1,12 @@
 package code;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.naming.directory.InvalidAttributesException;
 
 public class Game {
 
@@ -19,8 +24,47 @@ public class Game {
 		this.depth = depth;
 		this.tree = tree;
 		this.prune = prune;
+		getTurn(file);
 		board = new Board(file);
 	}
 
+	private void getTurn(String file) {
+		try {
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			String l = br.readLine();
+			this.turn = Integer.valueOf(l.toCharArray()[0]);
+			if ( this.turn < 1 && turn > 2 ){
+				System.out.println("f");
+				throw new InvalidAttributesException();
+			}	
+			br.close();
+			fr.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void saveGame(){
+		File fpw = new File(System.currentTimeMillis()+".txt");
+		try {
+ 	        FileWriter fw = new FileWriter(fpw);
+ 	        fw.write(this.turn);
+ 	        fw.write("\n");	
+ 	        
+ 	        for (int i = 0; i < board.getDimention(); i++) {
+ 				for (int j = 0; j < board.getDimention(); j++) {
+ 					fw.write(board.getBox(i, j).getCharacter());
+ 				}
+ 				fw.write("\n");
+ 			}
+ 	        
+ 	        fw.write("\n");
+ 	        fw.close();
+ 	    } catch (IOException e) {
+ 	        // TODO Auto-generated catch block
+ 	        e.printStackTrace();
+ 	    }
+	}
 	
 }

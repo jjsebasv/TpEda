@@ -16,7 +16,6 @@ public class Board {
 
 	private int dimention;
 	private Box board[][];
-	private int turn;
 
 
 	public Board(String file){
@@ -27,6 +26,27 @@ public class Board {
 		if (!belongsToRows(x) || !belongsToCols(y))
 			return null;
 		return board[x][y];	
+	}
+	
+	
+	public int getDimention() {
+		return dimention;
+	}
+
+	public void setDimention(int dimention) {
+		this.dimention = dimention;
+	}
+
+	public Box[][] getBoard() {
+		return board;
+	}
+
+	public void setBoard(Box[][] board) {
+		this.board = board;
+	}
+
+	public void addBoard(){
+		
 	}
 
 	private void createBoard(String file) {
@@ -39,13 +59,6 @@ public class Board {
 			BufferedReader br = new BufferedReader(fr);
 			String l = br.readLine();
 			
-			// creo el turno
-			this.turn = Integer.valueOf(l.toCharArray()[0]);
-			if ( this.turn < 1 && turn > 2 ){
-				System.out.println("f");
-				throw new InvalidAttributesException();
-			}
-			
 			//creo el tablero
 			l = br.readLine();
 			char[] line = l.toCharArray();
@@ -56,6 +69,7 @@ public class Board {
 			this.board = new Box[dimention][dimention];
 			
 			for (int i = 0; i < dimention; i++) {
+					line = l.toCharArray();
 				for (int j = 0; j < dimention; j++) {
 					board[i][j] = new Box(0,line[j]);
 					switch (line[j]) {
@@ -70,7 +84,7 @@ public class Board {
 						break;
 					}
 				}
-				line = br.readLine().toCharArray();
+				l = br.readLine();
 			}
 			
 			//valido el tablero
@@ -228,30 +242,6 @@ public class Board {
 		return false;
 	}
 	
-	public void exportBoard(){
-		File fpw = new File(System.currentTimeMillis()+".txt");
-		try {
- 	        FileWriter fw = new FileWriter(fpw);
- 	        fw.write(this.turn);
- 	        fw.write("\n");	
- 	        
- 	        for (int i = 0; i < this.dimention; i++) {
- 				for (int j = 0; j < this.dimention; j++) {
- 					fw.write(getBox(i, j).getCharacter());
- 				}
- 				fw.write("\n");
- 			}
- 	        
- 	        fw.write("\n");
- 	        fw.close();
- 	    } catch (IOException e) {
- 	        // TODO Auto-generated catch block
- 	        e.printStackTrace();
- 	    }
-	}
 	
-	public void addBoard(){
-		
-	}
 }
 
