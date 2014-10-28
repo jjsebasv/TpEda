@@ -6,33 +6,39 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.naming.directory.InvalidAttributesException;
+
 import exceptions.EndGameException;
+import exceptions.WinGameException;
 
 public class Board {
 
 	private int rows;
 	private int cols;
+	private Box board[][];
 	private int turn;
-	private ArrayList<ArrayList<Box>> board;
 
-	public Board(int r, int c) {
-		this.rows = r;
-		this.cols = c;
-		this.board = new ArrayList<>();
-		this.createBoard();
+
+	public Board(int r, int c) throws Exception{
+		if (r >= 7 && c >= 7) {
+			this.rows = r;
+			this.cols = c;
+			this.board = new Box[r][c];
+			this.createBoard();
+		}else{
+			throw new InvalidAttributesException();
+		}
 	}
 
 	public Box getBox(int x, int y) {
-		if( !belongsToRows(x) || !belongsToCols(y))
+		if (!belongsToRows(x) || !belongsToCols(y))
 			return null;
-		return board.get(x).get(y);
-	}
+		return board[x][y];	}
 
 	private void createBoard() {
 		int value = 0;
 		for (int i = 0; i < this.rows; i++) {
 			Box auxB;
-			ArrayList<Box> aux = new ArrayList<>();
 			for (int j = 0; j < this.cols; j++) {
 				if (i == (int) this.rows / 2 && j == (int) this.cols / 2) {
 					value = this.rows * this.cols;
@@ -55,17 +61,20 @@ public class Board {
 					}
 
 				}
-				aux.add(auxB);
+				this.board[i][j] = auxB;
 			}
-			this.board.add(aux);
 		}
 	}
+
 
 	public void move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ // Esto tendr�a
 																// que devolver
 																// un Board?
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {				
 			swap(iFrom, jFrom, iTo, jTo);
+			if((iTo == 0 && jTo == 0) || (iTo == this.rows -1 && jTo == 0) || (iTo == 0 && jTo == this.cols - 1) || (iTo == this.rows-1 && jTo == this.cols-1)){
+				throw new WinGameException();
+			}
 			eat(iTo, jTo);
 		}
 	}
@@ -88,89 +97,99 @@ public class Board {
 		return (y < this.rows && y >= 0);
 	}
 
-	
-	private void swap(int iF, int jF, int iT, int jT){
+	private void swap(int iF, int jF, int iT, int jT) {
 		Box from = getBox(iF, jF);
 		Box to = getBox(iT, jT);
-		
+
 		to.setCharacter(from.getCharacter());
 		to.setSide(from.getSide());
 		to.setEmpty(false);
 		from.setCharacter('0');
 		from.setSide(0);
 		from.setEmpty(true);
-		
-		
+
 	}
 	
 	private boolean validateMove(int iF, int jF, int iT, int jT){
-		if( iF != iT && jF != jT){// no son en l�nea recta
+		if( iF != iT && jF != jT){// no son en linea recta
 			return false;
 		}
-		if( iF == iT && jF == jT){ // mismo lugar
+		if (iF == iT && jF == jT) { // mismo lugar
 			return false;
 		}
-		if ( !belongsToRows(iF) || !belongsToRows(iT) || !belongsToCols(jF) // celdas habilitadas
+		if (!belongsToRows(iF) || !belongsToRows(iT)
+				|| !belongsToCols(jF) // celdas habilitadas
 				|| !belongsToCols(iT) || getBox(iF, jF).isEmpty()
 				|| !getBox(iT, jT).isEmpty()) {
 			return false;
 		}
-		for( int i = iF; i < iT; i++){ // camino obstru�do en la fila
-			if( !getBox(i, jF).isEmpty() ){
+
+		for (int i = iF; i < iT; i++) { // camino obstruido en la fila
+			if (!getBox(i, jF).isEmpty()) {
 				return false;
 			}
 		}
-		for( int j = jF; j < jT; j++){ // camino obstru�do en la columna
-			if( !getBox(iT, j).isEmpty() ){ 
+		for (int j = jF; j < jT; j++) { // camino obstruido en la columna
+			if (!getBox(iT, j).isEmpty()) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	private void eat(int x, int y) throws Exception{
+
+	private void eat(int x, int y) throws Exception {
 		Box aux = getBox(x, y);
-		if( belongsToRows(x-1) && getBox(x-1, y).getSide() != aux.getSide() && getBox(x-1, y).getSide() != 0 && !isKing(x-1, y) ){
-			if(belongsToRows(x-2) && getBox(x-2, y).getSide() == aux.getSide()){
-				eliminate(getBox(x-1, y));
+		if (belongsToRows(x - 1) && getBox(x - 1, y).getSide() != aux.getSide()
+				&& getBox(x - 1, y).getSide() != 0 && !isKing(x - 1, y)) {
+			if (belongsToRows(x - 2)
+					&& getBox(x - 2, y).getSide() == aux.getSide()) {
+				eliminate(getBox(x - 1, y));
 			}
 		}
-		if( belongsToRows(x+1) && getBox(x+1, y).getSide() != aux.getSide() && getBox(x+1, y).getSide() != 0 && !isKing(x+1, y)){
-			if(belongsToRows(x+2) && getBox(x+2, y).getSide() == aux.getSide()){
-				eliminate(getBox(x+1, y));
+		if (belongsToRows(x + 1) && getBox(x + 1, y).getSide() != aux.getSide()
+				&& getBox(x + 1, y).getSide() != 0 && !isKing(x + 1, y)) {
+			if (belongsToRows(x + 2)
+					&& getBox(x + 2, y).getSide() == aux.getSide()) {
+				eliminate(getBox(x + 1, y));
 			}
 		}
-		if( belongsToCols(y-1) && getBox(x, y-1).getSide() != aux.getSide() && getBox(x, y-1).getSide() != 0 && !isKing(x, y-1)){
-			if(belongsToCols(y-2) && getBox(x, y-2).getSide() == aux.getSide()){
-				eliminate(getBox(x, y-1));
+		if (belongsToCols(y - 1) && getBox(x, y - 1).getSide() != aux.getSide()
+				&& getBox(x, y - 1).getSide() != 0 && !isKing(x, y - 1)) {
+			if (belongsToCols(y - 2)
+					&& getBox(x, y - 2).getSide() == aux.getSide()) {
+				eliminate(getBox(x, y - 1));
 			}
 		}
-		if( belongsToCols(y+1) && getBox(x, y+1).getSide() != aux.getSide() && getBox(x, y+1).getSide() != 0 && !isKing(x, y+1)){
-			if(belongsToCols(y+2) && getBox(x, y+2).getSide() == aux.getSide()){
-				eliminate(getBox(x, y+1));
+		if (belongsToCols(y + 1) && getBox(x, y + 1).getSide() != aux.getSide()
+				&& getBox(x, y + 1).getSide() != 0 && !isKing(x, y + 1)) {
+			if (belongsToCols(y + 2)
+					&& getBox(x, y + 2).getSide() == aux.getSide()) {
+				eliminate(getBox(x, y + 1));
 			}
 		}
 	}
-	
-	private void eliminate(Box other){
+
+	private void eliminate(Box other) {
 		other.setCharacter('0');
 		other.setEmpty(true);
 		other.setSide(0);
 	}
-	
-	private boolean isKing(int x, int y) throws Exception{
+
+	private boolean isKing(int x, int y) throws Exception {
 		Box cell = getBox(x, y);
-		if(cell.getCharacter() == 'K'){
+		if (cell.getCharacter() == 'K') {
 			int count = 0;
 			ArrayList<Box> neig = new ArrayList<>();
-			neig.addAll(Arrays.asList(getBox(x-1, y),getBox(x+1, y),getBox(x, y-1),getBox(x, y+1)));
+			neig.addAll(Arrays.asList(getBox(x - 1, y), getBox(x + 1, y),
+					getBox(x, y - 1), getBox(x, y + 1)));
 			for (Box box : neig) {
-				if(box != null && box.getSide() != cell.getSide() && box.getSide() != 0  ){
+				if (box != null && box.getSide() != cell.getSide()
+						&& box.getSide() != 0) {
 					count++;
-				}				
+				}
 			}
-			if( count >= 3){
+			if (count >= 3) {
 				eliminate(cell);
 				throw new EndGameException();
 			}
