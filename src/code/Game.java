@@ -10,7 +10,7 @@ import javax.naming.directory.InvalidAttributesException;
 
 public class Game {
 
-	private Board board;
+	public Board board;
 	private boolean visual;
 	private boolean tree;
 	private boolean prune;

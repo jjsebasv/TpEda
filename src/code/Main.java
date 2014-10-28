@@ -4,6 +4,8 @@ import java.io.File;
 
 import javax.naming.directory.InvalidAttributesException;
 
+import view.Table;
+
 public class Main {
 
 	public static void main(String[] args) throws Exception {
@@ -11,7 +13,11 @@ public class Main {
 
 		String[] params = parser(args);
 		Game game = new Game(params[0],Boolean.valueOf(params[3]),Integer.valueOf(params[1]), Integer.valueOf(params[2]), Boolean.valueOf(params[5]), Boolean.valueOf(params[6]) );
-		game.saveGame();
+		if ( Boolean.valueOf(params[3]) ){
+			Table gameView = new Table(game);
+			gameView.setVisible(true);
+		}
+		
 		
 
 		
