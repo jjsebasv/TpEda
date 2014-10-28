@@ -9,6 +9,7 @@ public class Board {
 
 	private int rows;
 	private int cols;
+	private int turn;
 	private ArrayList<ArrayList<Box>> board;
 
 	public Board(int r, int c) {
@@ -22,7 +23,6 @@ public class Board {
 		if( !belongsToRows(x) || !belongsToCols(y))
 			return null;
 		return board.get(x).get(y);
-
 	}
 
 	private void createBoard() {
@@ -41,14 +41,14 @@ public class Board {
 							|| ((j == 0 || j == this.cols - 1) && (i <= this.rows / 2 + 1 && i >= this.rows / 2 - 1))
 							|| ((i == 1 || i == this.rows - 2) && j == this.cols / 2)
 							|| ((j == 1 || j == this.cols - 2) && i == this.rows / 2)) {
-						auxB = new Box(value, 'E');
+						auxB = new Box(value, 'N');
 					} else if ((i <= (this.rows / 2 + 1))
 							&& (i >= (this.rows / 2 - 1))
 							&& (j <= (this.cols / 2 + 1))
 							&& (j >= (this.cols / 2 - 1))) {
 						auxB = new Box(value, 'G');
 					} else {
-						auxB = new Box(value, '-');
+						auxB = new Box(value, '0');
 					}
 
 				}
@@ -58,7 +58,7 @@ public class Board {
 		}
 	}
 
-	public void move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ // Esto tendría
+	public void move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ // Esto tendrï¿½a
 																// que devolver
 																// un Board?
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {				
@@ -93,7 +93,7 @@ public class Board {
 		to.setCharacter(from.getCharacter());
 		to.setSide(from.getSide());
 		to.setEmpty(false);
-		from.setCharacter('-');
+		from.setCharacter('0');
 		from.setSide(0);
 		from.setEmpty(true);
 		
@@ -101,7 +101,7 @@ public class Board {
 	}
 	
 	private boolean validateMove(int iF, int jF, int iT, int jT){
-		if( iF != iT && jF != jT){// no son en línea recta
+		if( iF != iT && jF != jT){// no son en lï¿½nea recta
 			return false;
 		}
 		if( iF == iT && jF == jT){ // mismo lugar
@@ -112,12 +112,12 @@ public class Board {
 				|| !getBox(iT, jT).isEmpty()) {
 			return false;
 		}
-		for( int i = iF; i < iT; i++){ // camino obstruído en la fila
+		for( int i = iF; i < iT; i++){ // camino obstruï¿½do en la fila
 			if( !getBox(i, jF).isEmpty() ){
 				return false;
 			}
 		}
-		for( int j = jF; j < jT; j++){ // camino obstruído en la columna
+		for( int j = jF; j < jT; j++){ // camino obstruï¿½do en la columna
 			if( !getBox(iT, j).isEmpty() ){ 
 				return false;
 			}
@@ -151,7 +151,7 @@ public class Board {
 	}
 	
 	private void eliminate(Box other){
-		other.setCharacter('-');
+		other.setCharacter('0');
 		other.setEmpty(true);
 		other.setSide(0);
 	}
@@ -174,4 +174,9 @@ public class Board {
 		}
 		return false;
 	}
+	
+	private void exportBoard(){
+		
+	}
 }
+
