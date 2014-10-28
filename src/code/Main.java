@@ -6,7 +6,7 @@ public class Main {
 		// TODO Auto-generated method stub
 
 		Board b = new Board(7, 7);
-		b.printBorad();
+		b.printBoard();
 		
 		System.out.println();
 		
@@ -17,7 +17,8 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		b.printBorad();
+		b.printBoard();
+		b.exportBoard();
 		
 	}
 

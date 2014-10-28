@@ -1,5 +1,8 @@
 package code;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -67,7 +70,7 @@ public class Board {
 		}
 	}
 
-	public void printBorad() {
+	public void printBoard() {
 		for (int i = 0; i < this.rows; i++) {
 			for (int j = 0; j < this.cols; j++) {
 				System.out.print(getBox(i, j).getCharacter() + " ");
@@ -175,8 +178,26 @@ public class Board {
 		return false;
 	}
 	
-	private void exportBoard(){
-		
+	public void exportBoard(){
+		File fpw = new File(System.currentTimeMillis()+".txt");
+		try {
+ 	        FileWriter fw = new FileWriter(fpw);
+ 	        fw.write(turn);
+ 	        fw.write("\n");	
+ 	        
+ 	        for (int i = 0; i < this.rows; i++) {
+ 				for (int j = 0; j < this.cols; j++) {
+ 					fw.write(getBox(i, j).getCharacter());
+ 				}
+ 				fw.write("\n");
+ 			}
+ 	        
+ 	        fw.write("\n");
+ 	        fw.close();
+ 	    } catch (IOException e) {
+ 	        // TODO Auto-generated catch block
+ 	        e.printStackTrace();
+ 	    }
 	}
 }
 
