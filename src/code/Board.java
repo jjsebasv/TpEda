@@ -71,7 +71,9 @@ public class Board {
 			for (int i = 0; i < dimention; i++) {
 					line = l.toCharArray();
 				for (int j = 0; j < dimention; j++) {
-					board[i][j] = new Box(0,line[j]);
+					int indexi = ( i <= dimention/2 )? i : dimention-i-1;
+					int indexj = ( j <= dimention/2 )? j : dimention-j-1;
+					board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j]);
 					switch (line[j]) {
 					case 'N':
 						n++;
