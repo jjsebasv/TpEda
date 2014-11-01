@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import code.Board;
 import code.Box;
 import code.Game;
 
@@ -33,12 +34,16 @@ public class Table extends JFrame {
 
 	private JPanel contentPane;
 	private Game game;
-	private Set<JButton> table;
 	private int dimention;
-	private JButton from;
-	private JButton to;
-
+	private MyButton from;
+	private MyButton to;
+	private static MyButton visualBoard[][];
+	private int counter;
+	
 	public Table(final Game game) {
+		
+		visualBoard = new MyButton[game.board.getDimention()][game.board.getDimention()];
+		this.counter = 0;
 		dimention = game.board.getDimention();
 		this.game = game;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,8 +62,8 @@ public class Table extends JFrame {
 				System.exit(0);
 			}
 		});
-		from = new JButton();
-		to = new JButton();
+		from = new MyButton(0,0,' ');
+		to = new MyButton(0,0,' ');
 		btnSaveGame.setForeground(new Color(0, 0, 0));
 		btnSaveGame.setBackground(Color.WHITE);
 		contentPane.add(btnSaveGame, BorderLayout.SOUTH);
@@ -68,17 +73,16 @@ public class Table extends JFrame {
 		lblLaFugaDel.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblLaFugaDel, BorderLayout.NORTH);
 		
-		this.table = new HashSet<JButton>();
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 	       
-		      panel.setLayout(new GridLayout(8,8,1,1)); 
+		panel.setLayout(new GridLayout(8,8,1,1)); 
 		       
-		       for (int i=0; i< game.board.getDimention(); i++){ 
+		for (int i=0; i< game.board.getDimention(); i++){ 
 		       
 		           for (int j=0; j < game.board.getDimention(); j++){ 
 		          
-		                   	JButton button = new JButton(" "); 
+		                   	MyButton button = new MyButton(i,j,' '); 	                   	
 		                    button.setBackground(Color.WHITE);
 		             
 		                    char c = game.board.getBoard()[i][j].getCharacter() ;
@@ -99,20 +103,35 @@ public class Table extends JFrame {
 		                    	button.setIcon(new ImageIcon("./images/castle.png"));
 		                    	button.setBackground(Color.BLUE);
 		                    }
+		                    visualBoard[i][j] = button;
 		                    button.addActionListener(new ActionListener() {
 		            			public void actionPerformed(ActionEvent e) {
-		            				if ( from == null ){
-		            					from = (JButton) e.getSource();
+		            				if ( counter == 0 ){
+		            					//validatePiece();
+		            					from = (MyButton) e.getSource();
+		            					counter++;
 		            				}
 		            				else{
-		            					to = (JButton) e.getSource();
-		            					//game.move();
+		            					//validatePiece();
+		            					to = (MyButton) e.getSource();
+		            					try {
+		            						System.out.print(from.getFil());
+		            						System.out.print(from.getCol());
+		            						System.out.print(to.getFil());
+		            						System.out.println(to.getCol());
+		     
+											game.move(from.getFil(),from.getCol(),to.getFil(),to.getCol());
+											game.board.printBoard();
+											repaint(game.board);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
 		            					
 		            				}
 		            			}
 
 		            		});
-		                    table.add(button);
 		                    panel.add(button);
 		              
 		           } 
@@ -121,5 +140,37 @@ public class Table extends JFrame {
 	
 	}
 	
+	public static void repaint(Board board){
+		Box casilla;
+		MyButton boton;
+		ImageIcon image = new ImageIcon();
+		for (int i=0; i<board.getDimention(); i++){ 
+	           for (int j=0; j < board.getDimention(); j++){ 
+	        	   casilla =board.getBoard()[i][j];
+	        	   boton = visualBoard[i][j];
+	        	   switch (casilla.getCharacter()) {
+					case 'K':
+						image = new ImageIcon("./images/king.png");
+						visualBoard[i][j].setIcon(image);
+						break;
+					case 'N':
+						image = new ImageIcon("./images/enemy.png");
+						visualBoard[i][j].setIcon(image);
+						break;
+					case 'G':
+						image = new ImageIcon("./images/guard.png");
+						visualBoard[i][j].setIcon(image);
+						break;
+					case '0':
+						if ( (i != 0 && i != board.getDimention() - 1) || ( j != 0 && j != board.getDimention() - 1 )){
+							visualBoard[i][j].setIcon(null);
+							break;
+	                    }
+					}
+	        	   
+	           }
+		}
+		
+	}
 
 }

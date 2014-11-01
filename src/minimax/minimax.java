@@ -10,9 +10,9 @@ public class minimax {
 	
 
 	public static Board miniMax(Game actualGame, int depth, Integer prune, Node actual, Long timeBound) {
-		//if (depth == 0 || state.getTurn() > 2) {
-		//	return new Move(state.value());
-		//}
+		if (depth == 0 || actualGame.getTurn() > 2) {
+			return actualGame.board;
+		}
 		Board board = actualGame.board;
 		Move answer = new Move(board, Integer.MIN_VALUE); // A partir de aca,
 															// todos los moves

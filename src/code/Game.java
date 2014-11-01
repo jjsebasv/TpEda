@@ -82,9 +82,9 @@ public class Game {
 		this.board = m.getBoard();
 	}
 	
-	public void move(int iF, int jF, int iT, int jT) throws Exception{
-		board.move(iF, jF, iT, jT);
-		//mover computadora
+
+	public void move(int fil, int col, int fil2, int col2) throws Exception {
+		board.move(fil,col,fil2, col2);		
 	}
 	
 	
