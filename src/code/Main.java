@@ -2,6 +2,7 @@ package code;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -15,7 +16,8 @@ public class Main {
 		
 
 		String[] params = parser(args);
-		Game game = new Game(params[0],Boolean.valueOf(params[3]),Integer.valueOf(params[1]), Integer.valueOf(params[2]), Boolean.valueOf(params[5]), Boolean.valueOf(params[6]) );
+		int turn = getTurn(params[0]);
+		Game game = new Game(params[0],Boolean.valueOf(params[3]),Integer.valueOf(params[1]), Integer.valueOf(params[2]), Boolean.valueOf(params[5]), Boolean.valueOf(params[6]),turn  );
 		game.board.printBoard();
 		if ( Boolean.valueOf(params[3]) ){
 			Table gameView = new Table(game);
@@ -105,5 +107,25 @@ public class Main {
 		}
 			
 		return params;
+	}
+	
+	private static int getTurn(String file) {
+		int turn = 1;
+		try {
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			String l = br.readLine();
+			turn = Integer.valueOf(l.toCharArray()[0]);
+			if ( turn < 1 && turn > 2 ){
+				System.out.println("f");
+				br.close();
+				throw new InvalidAttributesException();
+			}	
+			br.close();
+			fr.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return turn;
 	}
 }

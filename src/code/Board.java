@@ -119,7 +119,8 @@ public class Board {
 	}
 
 	public Board move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
-		if ( validateMove(iFrom, jFrom, iTo, jTo)) {				
+		if ( validateMove(iFrom, jFrom, iTo, jTo)) {	
+			System.out.println("move validado");
 			swap(iFrom, jFrom, iTo, jTo);
 			if((iTo == 0 && jTo == 0) || (iTo == this.dimention -1 && jTo == 0) || (iTo == 0 && jTo == this.dimention - 1) || (iTo == this.dimention-1 && jTo == this.dimention-1)){
 				throw new WinGameException();
@@ -164,29 +165,33 @@ public class Board {
 	
 	private boolean validateMove(int iF, int jF, int iT, int jT){
 		if( iF != iT && jF != jT){// no son en linea recta
+			System.out.println("no son en linea R");
 			return false;
 		}
 		if (iF == iT && jF == jT) { // mismo lugar
+			System.out.println("mismo lugar");
 			return false;
 		}
 		if (!belongsToRows(iF) || !belongsToRows(iT)
 				|| !belongsToCols(jF) // celdas habilitadas
 				|| !belongsToCols(iT) || getBox(iF, jF).isEmpty()
 				|| !getBox(iT, jT).isEmpty()) {
+			System.out.println("fuera de las lineas o casillero ocupado");
 			return false;
 		}
 
 		for (int i = iF; i < iT; i++) { // camino obstruido en la fila
-			if (!getBox(i, jF).isEmpty()) {
+			if ( i != iF && !getBox(i, jF).isEmpty()) {
+				System.out.println("camino obstruido fila");
 				return false;
 			}
 		}
-		for (int j = jF; j < jT; j++) { // camino obstruido en la columna
-			if (!getBox(iT, j).isEmpty()) {
+		for (int j = jF; j <= jT; j++) { // camino obstruido en la columna
+			if ( j != jF && !getBox(iT, j).isEmpty()) {
+				System.out.println("camino obstruido col");
 				return false;
 			}
 		}
-
 		return true;
 	}
 

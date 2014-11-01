@@ -8,35 +8,45 @@ import java.io.IOException;
 
 import javax.naming.directory.InvalidAttributesException;
 
+import minimax.minimax;
+
 public class Game {
 
 	public Board board;
 	private boolean visual;
 	private boolean tree;
 	private boolean prune;
-	private int maxtime;
+	private long maxtime;
 	private int depth;
 	private int turn;
 	private String file;
 	
-	public Game(String file, boolean visual, int maxtime, int depth, boolean tree, boolean prune){
+	public Game(String file, boolean visual, long maxtime, int depth, boolean tree, boolean prune, int turn){
 		this.visual = visual;
 		this.maxtime = maxtime;
 		this.depth = depth;
 		this.tree = tree;
 		this.prune = prune;
 		this.file = file;
-		getTurn(file);
-		board = new Board(file);
+		this.turn = turn;
+		if ( turn == 2 ){
+			Integer pru = (prune)? new Integer(1) : null;
+			board = minimax.miniMax(this, depth, pru, null, maxtime);
+		}
+		else{
+			board = new Board(file);
+		}
+		this.turn = 1;
 	}
 
-	private void getTurn(String file) {
-		try {
-			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
-			String l = br.readLine();
-			this.turn = Integer.valueOf(l.toCharArray()[0]);
-			if ( this.turn < 1 && turn > 2 ){
+	/*
+	//private void getTurn(String file) {
+		//try {
+			//FileReader fr = new FileReader(file);
+			//BufferedReader br = new BufferedReader(fr);
+			//String l = br.readLine();
+			//this.turn = Integer.valueOf(l.toCharArray()[0]);
+			//if ( this.turn < 1 && turn > 2 ){
 				System.out.println("f");
 				br.close();
 				throw new InvalidAttributesException();
@@ -47,6 +57,7 @@ public class Game {
 			e.printStackTrace();
 		}
 	}
+	*/
 	
 	public int getTurn(){
 		return this.turn;
@@ -75,7 +86,7 @@ public class Game {
 	}
 	
 	public Game duplicate(){
-		return new Game(file, visual,maxtime, depth, tree, prune);
+		return new Game(file, visual,maxtime, depth, tree, prune,turn);
 	}
 	
 	public void exeMove(Move m){
@@ -84,8 +95,17 @@ public class Game {
 	
 
 	public void move(int fil, int col, int fil2, int col2) throws Exception {
-		board.move(fil,col,fil2, col2);		
+		board = board.move(fil,col,fil2, col2);	
+		this.turn = 2;
+		board.printBoard();
+		System.out.println("-------");
+		Integer pru = (prune)? new Integer(1) : null;
+		board = minimax.miniMax(this, depth, pru, null, maxtime);
+		board.printBoard();
+		System.out.println("-------");
+		this.turn = 1;
 	}
+	
 	
 	
 }

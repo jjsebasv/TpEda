@@ -115,14 +115,15 @@ public class Table extends JFrame {
 		            					//validatePiece();
 		            					to = (MyButton) e.getSource();
 		            					try {
-		            						System.out.print(from.getFil());
-		            						System.out.print(from.getCol());
-		            						System.out.print(to.getFil());
-		            						System.out.println(to.getCol());
+		            						//System.out.print(from.getFil());
+		            						//System.out.print(from.getCol());
+		            						//System.out.print(to.getFil());
+		            						//System.out.println(to.getCol());
 		     
 											game.move(from.getFil(),from.getCol(),to.getFil(),to.getCol());
-											game.board.printBoard();
+											//game.board.printBoard();
 											repaint(game.board);
+											counter = 0;
 										} catch (Exception e1) {
 											// TODO Auto-generated catch block
 											e1.printStackTrace();
