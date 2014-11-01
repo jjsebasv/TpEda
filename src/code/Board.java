@@ -7,10 +7,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.naming.directory.InvalidAttributesException;
 
 import exceptions.EndGameException;
+import exceptions.InvalidMoveException;
+import exceptions.WinGameException;
 
 public class Board {
 
@@ -64,6 +67,7 @@ public class Board {
 			char[] line = l.toCharArray();
 			this.dimention = l.length();
 			if ( dimention % 2 == 0 || dimention < 7 || dimention > 19){
+				br.close();
 				throw new InvalidAttributesException();
 			}
 			this.board = new Box[dimention][dimention];
@@ -114,16 +118,17 @@ public class Board {
 		}
 	}
 
-	public void move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ // Esto tendr�a
-																// que devolver
-																// un Board?
+	public Board move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {				
 			swap(iFrom, jFrom, iTo, jTo);
 			if((iTo == 0 && jTo == 0) || (iTo == this.dimention -1 && jTo == 0) || (iTo == 0 && jTo == this.dimention - 1) || (iTo == this.dimention-1 && jTo == this.dimention-1)){
-				//throw new WinGameException();
+				throw new WinGameException();
 			}
 			eat(iTo, jTo);
+			return this;
 		}
+		throw new InvalidMoveException();
+		
 	}
 
 	public void printBoard() {
@@ -242,6 +247,34 @@ public class Board {
 			}
 		}
 		return false;
+	}
+	
+	
+	public List<Move> getMoves(int x, int y){
+		List<Move> l = new ArrayList<>();
+		for(int i = 0; i < this.dimention; i++){
+			for(int j = 0; j < this.dimention; j++){
+				if( validateMove(x, y, i, j) ){
+					try {
+						Board auxBoard = move(x, y, i, j);
+						l.add(new Move(auxBoard, getBox(i, j).getValue()));
+					} catch (EndGameException eg) {
+						// TODO Auto-generated catch block
+						l.add(new Move(null, Integer.MAX_VALUE ) );
+						continue;
+					} catch (WinGameException wg) {
+						// TODO Auto-generated catch block
+						l.add(new Move(null, Integer.MIN_VALUE ) );
+						continue;
+					} catch (Exception e) { // no se a que exception hace referencia
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						continue;
+					};
+				}
+			}
+		}
+		return l;
 	}
 	
 	

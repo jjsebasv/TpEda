@@ -17,6 +17,7 @@ public class Game {
 	private int maxtime;
 	private int depth;
 	private int turn;
+	private String file;
 	
 	public Game(String file, boolean visual, int maxtime, int depth, boolean tree, boolean prune){
 		this.visual = visual;
@@ -24,6 +25,7 @@ public class Game {
 		this.depth = depth;
 		this.tree = tree;
 		this.prune = prune;
+		this.file = file;
 		getTurn(file);
 		board = new Board(file);
 	}
@@ -36,6 +38,7 @@ public class Game {
 			this.turn = Integer.valueOf(l.toCharArray()[0]);
 			if ( this.turn < 1 && turn > 2 ){
 				System.out.println("f");
+				br.close();
 				throw new InvalidAttributesException();
 			}	
 			br.close();
@@ -43,6 +46,10 @@ public class Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public int getTurn(){
+		return this.turn;
 	}
 
 	public void saveGame(){
@@ -65,6 +72,14 @@ public class Game {
  	        // TODO Auto-generated catch block
  	        e.printStackTrace();
  	    }
+	}
+	
+	public Game duplicate(){
+		return new Game(file, visual,maxtime, depth, tree, prune);
+	}
+	
+	public void exeMove(Move m){
+		this.board = m.getBoard();
 	}
 	
 }
