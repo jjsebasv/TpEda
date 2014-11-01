@@ -11,15 +11,13 @@ public class Node {
 	private boolean prune = false;
 	
 	
-	
-	
 	public void setFigure(int i) {
 		// TODO Auto-generated method stub
 		this.figure = i;
 	}
 	
 	public void setColour(int c){
-		
+		this.colour = c;
 	}
 	
 	public void setChosen(Node cn){

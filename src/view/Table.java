@@ -23,15 +23,20 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Table extends JFrame {
 
 	private JPanel contentPane;
 	private Game game;
-	private JButton visualBoard[][];
+	private Set<JButton> table;
 	private int dimention;
+	private JButton from;
+	private JButton to;
 
 	public Table(final Game game) {
 		dimention = game.board.getDimention();
@@ -52,6 +57,8 @@ public class Table extends JFrame {
 				System.exit(0);
 			}
 		});
+		from = new JButton();
+		to = new JButton();
 		btnSaveGame.setForeground(new Color(0, 0, 0));
 		btnSaveGame.setBackground(Color.WHITE);
 		contentPane.add(btnSaveGame, BorderLayout.SOUTH);
@@ -61,7 +68,7 @@ public class Table extends JFrame {
 		lblLaFugaDel.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblLaFugaDel, BorderLayout.NORTH);
 		
-		this.visualBoard = new JButton[game.board.getDimention()][game.board.getDimention()];
+		this.table = new HashSet<JButton>();
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 	       
@@ -71,7 +78,7 @@ public class Table extends JFrame {
 		       
 		           for (int j=0; j < game.board.getDimention(); j++){ 
 		          
-		                    JButton button = new JButton(" "); 
+		                   	JButton button = new JButton(" "); 
 		                    button.setBackground(Color.WHITE);
 		             
 		                    char c = game.board.getBoard()[i][j].getCharacter() ;
@@ -94,18 +101,25 @@ public class Table extends JFrame {
 		                    }
 		                    button.addActionListener(new ActionListener() {
 		            			public void actionPerformed(ActionEvent e) {
-		            				//game.board.move(iFrom, jFrom, iTo, jTo);
+		            				if ( from == null ){
+		            					from = (JButton) e.getSource();
+		            				}
+		            				else{
+		            					to = (JButton) e.getSource();
+		            					//game.move();
+		            					
+		            				}
 		            			}
+
 		            		});
-		                    visualBoard[i][j] = button;
+		                    table.add(button);
 		                    panel.add(button);
 		              
 		           } 
-		            
-		           getContentPane().add(panel,BorderLayout.CENTER); 
-		            
-		             }
-		
-		
+		           		getContentPane().add(panel,BorderLayout.CENTER); 
+		       }
+	
 	}
+	
+
 }

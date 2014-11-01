@@ -1,13 +1,16 @@
 package code;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.naming.directory.InvalidAttributesException;
 
 import view.Table;
 
 public class Main {
-
+	
 	public static void main(String[] args) throws Exception {
 		
 
@@ -19,12 +22,27 @@ public class Main {
 			gameView.setVisible(true);
 		}
 		
-		
-
-		
+		// leer hasta que se acabe el juego
+		if ( !Boolean.valueOf(params[3]) ) {
+		Exception e = new Exception();
+			while ( e == null ){
+				try {
+					readMove(game);
+				} catch (Exception e2) {
+					e = e2;
+				}
+			}
+		}
 		
 	}
 	
+	private static void readMove(Game game) throws Exception {
+		BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
+		String line=buffer.readLine();
+		char[] array = line.toCharArray();
+		game.move(Integer.valueOf(array[1]), Integer.valueOf(array[2]), Integer.valueOf(array[5]), Integer.valueOf(array[6]));
+	}
+
 	public static String[] parser(String[] args) throws InvalidAttributesException{
 		int size = args.length;
 		String[] params = new String[7];
