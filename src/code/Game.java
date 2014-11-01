@@ -30,7 +30,7 @@ public class Game {
 		this.file = file;
 		this.turn = turn;
 		if ( turn == 2 ){
-			Integer pru = (prune)? new Integer(1) : null;
+			Integer pru = (prune)? new Integer(1) : 0;
 			board = minimax.miniMax(this, depth, pru, null, maxtime);
 		}
 		else{
@@ -99,7 +99,7 @@ public class Game {
 		this.turn = 2;
 		board.printBoard();
 		System.out.println("-------");
-		Integer pru = (prune)? new Integer(1) : null;
+		Integer pru = (prune)? new Integer(1) : 0;
 		board = minimax.miniMax(this, depth, pru, null, maxtime);
 		board.printBoard();
 		System.out.println("-------");

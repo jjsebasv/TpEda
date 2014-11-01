@@ -163,10 +163,14 @@ public class Table extends JFrame {
 						visualBoard[i][j].setIcon(image);
 						break;
 					case '0':
-						if ( (i != 0 && i != board.getDimention() - 1) || ( j != 0 && j != board.getDimention() - 1 )){
-							visualBoard[i][j].setIcon(null);
-							break;
+						
+						if ( i == board.getDimention() /2 && j == board.getDimention() / 2  ) {
+							image = new ImageIcon("./images/throne.png");
+							visualBoard[i][j].setIcon(image);
+						}else if ( (i != 0 && i != board.getDimention() - 1) || ( j != 0 && j != board.getDimention() - 1 ) ){
+							visualBoard[i][j].setIcon(null);	
 	                    }
+						break;
 					}
 	        	   
 	           }
