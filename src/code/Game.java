@@ -12,7 +12,7 @@ import exceptions.EndGameException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
 import minimax.minimax;
-import minimax.minimax2;
+
 
 public class Game {
 
@@ -121,7 +121,6 @@ public class Game {
 	}
 
 	public void exeMove(Move m){
-		System.out.println((m.getBoard()== null) + " exeMove");
 		this.board = m.getBoard();
 		
 	}
