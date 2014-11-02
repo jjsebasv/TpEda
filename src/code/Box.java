@@ -7,8 +7,10 @@ public class Box {
 	private char character;
 	private int side;
 	
-	public Box(int value, char cc){
+	public Box(int value, char cc, int side, boolean empty){
 		this.value = value;
+		this.side = side;
+		this.empty = empty;
 		if( cc == '0'){
 			this.side = 0;
 			this.empty = true;

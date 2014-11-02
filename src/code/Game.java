@@ -129,6 +129,7 @@ public class Game {
 		this.board = board.move( fil,col,fil2, col2);	
 		this.turn = 2;
 		
+		
 		board.printBoard();
 		System.out.println("-- LE TOCA MOVER A LA PC --");
 		Integer p = null;
