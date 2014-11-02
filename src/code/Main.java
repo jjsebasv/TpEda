@@ -55,11 +55,11 @@ public class Main {
 		switch (args[5]) {
 		case "-maxtime":
 			params[1] = args[6];
-			params[2] = "10";
+			params[2] = "0";
 			break;
 		case "-depth":
 			params[2] = args[6];
-			params[1] = "10";
+			params[1] = "0";
 			break;
 		default:
 			throw new InvalidAttributesException();

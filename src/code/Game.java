@@ -110,6 +110,8 @@ public class Game {
 			aTurn = 2;
 		else
 			aTurn = 1;
+		
+		//Board aux = new Box[dimention][dimention];
 		Game gm = new Game(b, visual,maxtime, depth, tree, prune,aTurn);
 		return gm;
 	}
@@ -141,7 +143,7 @@ public class Game {
 			System.out.println("cabio de side: " + this.turn);
 	
 			board.printBoard();
-	
+			
 			System.out.println("-- LE TOCA MOVER A LA PC --");
 			Integer p = null;
 			if ( prune){

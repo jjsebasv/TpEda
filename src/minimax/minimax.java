@@ -12,73 +12,67 @@ public class minimax {
 	
 	
 	
-	public static Board minMax(Game actualGame, Integer depth, boolean prune, Long time) throws InvalidMoveException, BoardOutOfBoundsException{
-		Board board = actualGame.board;
+	public static Board minMax(Game game, Integer depth, boolean prune, Long time) throws InvalidMoveException, BoardOutOfBoundsException{
+		Board auxBoard = null;
+		System.out.println("ACTUAL GAME BOARD MINIMAX:");
+		game.board.printBoard();
 		
-		if( depth == null){
-			depth = Integer.parseInt(Long.toString(time % board.getDimention()));
+		Integer pru = (prune)? 1 : 0;
+		if( depth == 0 ){
+			auxBoard =  minMaxTimeR(game.board,game,null,time,Integer.MAX_VALUE,pru,game.board.getDimention()).getBoard();
+		}else{
+			System.out.println("con depth");
+			//auxBoard = minMaxDepthR()
 		}
-		Integer pru = (prune)? Integer.MAX_VALUE : null;
 		
-		Node first = new Node();
-		
-		Board auxBoard = minMaxR(board,actualGame, first, depth, System.currentTimeMillis() + time, Integer.MIN_VALUE, pru, board.getDimention()).getBoard();
+
 		if(auxBoard != null){
 			System.out.println("MINMAX");
-			actualGame.board = auxBoard;
+			game.board = auxBoard;
 		}
-		board.printBoard();
-		return board;
+		game.board.printBoard();
+		return game.board;
 	}
 	
-	private static Move minMaxR(Board board, Game game, Node actualNode, int depth, long finalTime, int bestChoise, Integer actualPrune, int dimention) throws InvalidMoveException, BoardOutOfBoundsException{
+	
+	private static Move minMaxTimeR(Board board, Game game, Node current, long finalTime, int bestChoise, Integer actualPrune, int dimention) throws InvalidMoveException, BoardOutOfBoundsException{
 		Game auxGame = game.duplicate(board);
 		auxGame.board = board;
 		
 		Move answer = new Move (board, bestChoise);
 		Node nodeAnswer = null;
-		
-		if( depth == 0 ){ 
-			return answer; 
-		}	
 			
-		List<Move> possibleMoves;
+		List<Move> posibleMoves;
 		
 		for(int i = 0; i < dimention; i++){
 			for(int j = 0; j < dimention; j++){
 				if(System.currentTimeMillis() > finalTime){ //si el tiempo se agota, devuelve lo mejor que encontro
-					nodeAnswer = actualNode;
+					nodeAnswer = current;
 					return answer;
 				}
-				if(board.getBox(i, j).getPiece().getPlayer().getTurn() == auxGame.getTurn() ){
+				
+				
 
-					possibleMoves = board.getMoves(i, j);
-					for (Move m : possibleMoves) {
+				if( board.getBoard()[i][j].getPiece().getC() == 'N' ){
+					System.out.println("juega pc");
+
+					posibleMoves = board.getMoves(i, j);
+					System.out.println("posible moves ("+i+","+j+") : "+posibleMoves.size());
+					for (Move m : posibleMoves) {
 						auxGame.exeMove(m);
-						actualNode.move = m;
-					
-						System.out.println((auxGame.board == null) + " board ");
-						System.out.println((auxGame == null) + " auxGame ");
-						System.out.println((actualPrune == null) + " actualPrune ");
-						
-						Move resp = minMaxR(auxGame.board, auxGame, new Node(), depth - 1, finalTime, bestChoise, actualPrune, dimention);
-						
-						
-						actualNode.Next(resp);
+						current.move = m;
+				
+						Move resp = minMaxTimeR(auxGame.board, auxGame, new Node(), finalTime, bestChoise, actualPrune, dimention);
+						current.Next(resp);
 						m.setValue(- resp.getValue() );
-						
 						
 						if (actualPrune != null) { // si es con poda
 							if (m.getValue() >= actualPrune) {
 								nodeAnswer.setColour(1);
-								Node son = new Node();
+							Node son = new Node();
 								son.label = "Poda";
 								son.setColour(2);
-								if (depth % 2 == 0)
-									son.setFigure(1);
-								else
-									son.setFigure(2);
-								actualNode.next.offerLast(son);
+								current.next.offerLast(son);
 								game.board = answer.getBoard();
 								return answer;
 							} else {
@@ -86,28 +80,27 @@ public class minimax {
 							}
 						}
 						
-						if (depth % 2 == 0)
-							actualNode.setFigure(1);
-						else
-							actualNode.setFigure(2);
-						
 						if(resp.getValue() > answer.getValue()){
 							bestChoise = resp.getValue();
 							answer = resp;
-							nodeAnswer = actualNode.next.getLast();
+							nodeAnswer = current.next.getLast();
 						}
-						
-						
-							
+
 					}
 				}
 			}
 		}
 		if(nodeAnswer == null)
-			nodeAnswer = actualNode;
+			nodeAnswer = current;
 		nodeAnswer.setColour(1);
 		game.board = answer.getBoard();
 		return answer;
 	}
+	
+	private static Move minMaxDepthR(Board board, Game game, Node actualNode, int depth, int bestChoise, Integer actualPrune, int dimention){
+		return null;
+	}
+	
+	
 	
 }

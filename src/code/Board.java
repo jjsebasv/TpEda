@@ -24,7 +24,9 @@ public class Board {
 
 
 	public Board(String file){
-			this.createBoard(file);
+			if (file != null ){
+				this.createBoard(file);
+			}
 	}
 	
 	public Board(int d ){
@@ -178,33 +180,34 @@ public class Board {
 			
 			//mismo lugar
 			if ( iF == iT && jT == jF ){
-				throw new InvalidMoveException();
+				System.out.print("mismo lugar");
+				return false;
+			}else{
 			}
+			
 			// no es dentro del tablero
 			if ( iF > dimention || jF > dimention || iT > dimention || jT > dimention ||
 					 iF < 0 || jF < 0|| iT < 0 || jT < 0) {
-				throw new BoardOutOfBoundsException();
+				System.out.print("mala dimension");
+				return false;
 			}
 
 			// no es en linea reacta
 			if ( iF != iT && jF != jT) {
-				throw new InvalidMoveException();
-			}
-
-			if (from.isEnemy()) {
-				throw new InvalidMoveException();
+				System.out.println("no en linea R");
+				return false;
 			}
 
 			// destino castillo pieza no es rey
 			if (from.getPiece().getC() != 'K'
 					&& ( (iT == 0 && jT == 0 ) || (iT == 0 && jT == dimention-1 ) || (iT == dimention-1 && jT == 0 ) || (iT == dimention-1 && jT == dimention -1 ) )) {
-				throw new InvalidMoveException();
+				return false;
 
 			}
 
 			// castilla trono -> solo rey
 			if (from.getPiece().getC() != 'K' && (iT == dimention/2 && jT == dimention/2 ) ) {
-				throw new InvalidMoveException();
+				return false;
 			}
 
 
@@ -218,7 +221,7 @@ public class Board {
 						Box aux= board[fil][col];
 
 						if (aux.getPiece().getC() != '0' && fil != dimention /2 && col != dimention /2) {
-							throw new InvalidMoveException();
+							return false;
 						}
 
 						/*
@@ -226,7 +229,7 @@ public class Board {
 						 * puedan pasar por el trono
 						 */
 						if (dimention >= 13 && aux.getFila() != dimention / 2 && aux.getColumna() != dimention /2 && board[iF][jF].getPiece().getC() == 'G') {
-							throw new InvalidMoveException();
+							return false;
 						}
 
 					}
@@ -314,44 +317,52 @@ public class Board {
 	
 	public List<Move> getMoves(int x, int y) throws InvalidMoveException, BoardOutOfBoundsException{
 		List<Move> l = new ArrayList<>();
-		Board auxBoard = this;
+		Board original = this;
+		Board auxBoard = new Board(null);
+		
 		for(int i = 0; i < this.dimention; i++){
 			for(int j = 0; j < this.dimention; j++){
+				
 				int value;
-				if( getBox(x, y).getPiece().getC() == 'K' )
-					value = getBox(i, j).getValue();
-				else if( getBox(x, y).getPiece().getC() == 'G')
-					value = enemies(i,j);
-				else 
-					value = getBox(i,i).getValue();
+				//if( getBox(x, y).getPiece().getC() == 'K' )
+				//	value = getBox(i, j).getValue();
+				//else if( getBox(x, y).getPiece().getC() == 'G')
+				//	value = enemies(i,j);
+				//else 
+					value = getBox(i,j).getValue();
+					System.out.print("get move para: ("+x+","+y+")("+i+","+j+")");
 				if( validateMove(x, y, i, j) ){
-					System.out.println("VALIDO EL MOVIMINETO");
+					System.out.println("- VALIDO EL MOVIMINETO");
 					try {
-						auxBoard = move( x, y, i, j);
-						System.out.println((auxBoard == null) + " lala " + x + y);
+						auxBoard = original;
+						auxBoard.move(x, y, i, j);
+						auxBoard.printBoard();
 						l.add(new Move(auxBoard, value));
 					} catch (EndGameException eg) {
-						// TODO Auto-generated catch block
 						l.add(new Move(auxBoard, Integer.MAX_VALUE ) );
-						continue;
 					} catch (WinGameException wg) {
-						// TODO Auto-generated catch block
 						l.add(new Move(auxBoard, Integer.MIN_VALUE ) );
-						continue;
 					} catch (Exception e) { // no se a que exception hace referencia
-						// TODO Auto-generated catch block
-						//e.printStackTrace();
 						System.out.println("invalid move");
-						continue;
 					};
+				}else{
+					System.out.println(" - NO VALIDO");
 				}
 			}
 		}
-		//System.out.println("posibles movimientos");
-		//System.out.println(l);
-		//System.out.println("--------");
 		return l;
 	}
+	
+	public void printBoardValues() {
+		for (int i = 0; i < this.dimention; i++) {
+			for (int j = 0; j < this.dimention; j++) {
+				System.out.print(getBox(i, j).getValue() + " ");
+			}
+			System.out.println();
+		}
+
+	}
+	
 	
 	
 }
