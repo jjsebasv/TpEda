@@ -26,6 +26,7 @@ public class minimax {
 		Node next = null, nodeAnswer = null; 
 		if (prune != null)
 			actualPrune = Integer.MAX_VALUE;
+		
 		for (int i = 0; i < board.getDimention(); i++) {
 			for (int j = 0; j < board.getDimention(); j++) {
 				if (current > fin){
