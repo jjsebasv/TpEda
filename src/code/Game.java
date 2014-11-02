@@ -149,6 +149,7 @@ public class Game {
 			}else{
 				p = 0;
 			}
+
 			board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
 			//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
 			System.out.println("-------");

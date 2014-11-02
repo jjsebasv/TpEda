@@ -31,12 +31,11 @@ public class minimax {
 	
 	private static Move minMaxR(Board board, Game game, Node actualNode, int depth, long finalTime, int bestChoise, Integer actualPrune, int dimention){
 		Game auxGame = game.duplicate(board);
-
-				
 		auxGame.board = board;
-		System.out.println((board == null));
+		
 		Move answer = new Move (board, bestChoise);
 		Node nodeAnswer = null;
+		
 		if( depth == 0 ){ 
 			return answer; 
 		}	
@@ -50,11 +49,12 @@ public class minimax {
 					return answer;
 				}
 				if(board.getBox(i, j).getSide() == auxGame.getTurn() ){
-					System.out.println("entro aca");
+
 					possibleMoves = board.getMoves(i, j);
 					for (Move m : possibleMoves) {
 						auxGame.exeMove(m);
 						actualNode.move = m;
+					
 						System.out.println((auxGame.board == null) + " board ");
 						System.out.println((auxGame == null) + " auxGame ");
 						System.out.println((actualPrune == null) + " actualPrune ");
