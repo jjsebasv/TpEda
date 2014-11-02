@@ -152,9 +152,10 @@ public class Game {
 				p = 0;
 			}
 			//board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
-			//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
-			//System.out.println("-------");
-			//this.turn = 1;
+			board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
+			System.out.println("-- YA MOVIO LA PC ---");
+			board.printBoard();
+			this.turn = 1;
 		
 		}
 	
