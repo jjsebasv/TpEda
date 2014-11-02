@@ -152,10 +152,9 @@ public class Game {
 
 			board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
 			//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
-			System.out.println("-------");
-			board.printBoard();
-			System.out.println("-------");
-			//this.turn = 1;
+			//board.printBoard();
+			System.out.println("-- YA JUGO LA PC ---");
+			this.turn = 1;
 		
 		}
 	
