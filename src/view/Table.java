@@ -25,6 +25,10 @@ import java.awt.Font;
 
 import javax.swing.ImageIcon;
 
+import exceptions.EndGameException;
+import exceptions.InvalidMoveException;
+import exceptions.WinGameException;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
@@ -39,6 +43,7 @@ public class Table extends JFrame {
 	private MyButton to;
 	private static MyButton visualBoard[][];
 	private int counter;
+	private JLabel label;
 	
 	public Table(final Game game) {
 		
@@ -62,11 +67,20 @@ public class Table extends JFrame {
 				System.exit(0);
 			}
 		});
-		from = new MyButton(0,0,' ');
-		to = new MyButton(0,0,' ');
 		btnSaveGame.setForeground(new Color(0, 0, 0));
 		btnSaveGame.setBackground(Color.WHITE);
-		contentPane.add(btnSaveGame, BorderLayout.SOUTH);
+		contentPane.add(btnSaveGame, BorderLayout.EAST);
+		
+		label = new JLabel("");
+		label.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		label.setForeground(Color.RED);
+		label.setBackground(Color.WHITE);
+		label.setVisible(true);
+		contentPane.add(label,BorderLayout.WEST);
+		
+		
+		from = new MyButton(0,0,' ');
+		to = new MyButton(0,0,' ');
 		
 		JLabel lblLaFugaDel = new JLabel("LA FUGA DEL REY");
 		lblLaFugaDel.setFont(new Font("Cambria", Font.PLAIN, 25));
@@ -119,9 +133,18 @@ public class Table extends JFrame {
 		            						//System.out.print(from.getCol());
 		            						//System.out.print(to.getFil());
 		            						//System.out.println(to.getCol());
-		     
-											game.move(from.getFil(),from.getCol(),to.getFil(),to.getCol());
-											//game.board.printBoard();
+		            						try {
+		            							game.move(from.getFil(),from.getCol(),to.getFil(),to.getCol());
+		            							label.setText("                   ");
+												//game.board.printBoard();
+											} catch (WinGameException e1) {
+												label.setText("  GANASTE EL JUEGO ");
+											} catch (InvalidMoveException e2) {
+												label.setText("MOVIMIENTO INVALIDO");
+											} catch (EndGameException e3) {
+												label.setText("  PERDISTE EL JUEGO ");
+											}
+											
 											repaint(game.board);
 											counter = 0;
 										} catch (Exception e1) {

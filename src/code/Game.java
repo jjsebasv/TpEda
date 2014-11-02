@@ -8,7 +8,11 @@ import java.io.IOException;
 
 import javax.naming.directory.InvalidAttributesException;
 
+import exceptions.EndGameException;
+import exceptions.InvalidMoveException;
+import exceptions.WinGameException;
 import minimax.minimax;
+import minimax.minimax2;
 
 public class Game {
 
@@ -122,15 +126,21 @@ public class Game {
 	
 
 	public void move(int fil, int col, int fil2, int col2) throws Exception {
-		Board aux = board.move( fil,col,fil2, col2);	
-		this.board = aux;
+		this.board = board.move( fil,col,fil2, col2);	
 		this.turn = 2;
+		
 		board.printBoard();
 		System.out.println("-- LE TOCA MOVER A LA PC --");
-		board = minimax.minMax(this, depth, prune, maxtime);
-		board.printBoard();
-		System.out.println("-------");
-		this.turn = 1;
+		Integer p = null;
+		if ( prune){
+			p = 1;
+		}else{
+			p = 0;
+		}
+		//board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
+		//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
+		//System.out.println("-------");
+		//this.turn = 1;
 	}
 	
 	

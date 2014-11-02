@@ -13,8 +13,6 @@ public class minimax {
 	public static Board minMax(Game actualGame, Integer depth, boolean prune, Long time){
 		Board board = actualGame.board;
 		
-		
-		
 		if( depth == null){
 			depth = Integer.parseInt(Long.toString(time % board.getDimention()));
 		}
@@ -46,18 +44,6 @@ public class minimax {
 		}	
 			
 		List<Move> possibleMoves;
-		Game auxGame = null;
-		Integer actualPrune = null; 
-		Node next = null, nodeAnswer = null; 
-		if (prune != null)
-			actualPrune = Integer.MAX_VALUE;
-		
-		for (int i = 0; i < board.getDimention(); i++) {
-			for (int j = 0; j < board.getDimention(); j++) {
-				if (current > fin){
-					System.out.println("tiempo agotado");
-					return null;
-		
 		
 		for(int i = 0; i < dimention; i++){
 			for(int j = 0; j < dimention; j++){
