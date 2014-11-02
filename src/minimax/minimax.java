@@ -46,7 +46,6 @@ public class minimax {
 		}	
 			
 		List<Move> possibleMoves;
-<<<<<<< HEAD
 		Game auxGame = null;
 		Integer actualPrune = null; 
 		Node next = null, nodeAnswer = null; 
@@ -58,7 +57,6 @@ public class minimax {
 				if (current > fin){
 					System.out.println("tiempo agotado");
 					return null;
-=======
 		
 		
 		for(int i = 0; i < dimention; i++){
@@ -66,7 +64,6 @@ public class minimax {
 				if(System.currentTimeMillis() > finalTime){ //si el tiempo se agota, devuelve lo mejor que encontro
 					nodeAnswer = actualNode;
 					return answer;
->>>>>>> 51bc79016f4dc33016574d79075528cf168fc0a6
 				}
 				if(board.getBox(i, j).getSide() == auxGame.getTurn() ){
 					System.out.println("entro aca");
