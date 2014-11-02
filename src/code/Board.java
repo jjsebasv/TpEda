@@ -214,14 +214,6 @@ public class Board {
 				|| !belongsToCols(jF) // celdas habilitadas
 				|| !belongsToCols(iT) || getBox(iF, jF).isEmpty()
 				|| !getBox(iT, jT).isEmpty()) {
-			if ( getBox(iF, jF).isEmpty()) {
-				//System.out.println("de donde vengo esta vacio");
-				//System.out.println("de donde vengo   "+ board[iF][jF]);
-				
-			}else{
-				//System.out.println("a donde voy no esta vacio");
-			}
-			//System.out.println("no esta vacio o fuera del rango");
 			return false;
 		}
 		if ( board[iF][jF].getCharacter() == 'N' && (iT == 0 || iT == dimention - 1)  && ( jT == 0 || jT == dimention - 1 ) ){
@@ -230,32 +222,34 @@ public class Board {
 		}
 
 		
-		int auxF = iF;
-		int auxT = iT;
-		if ( iF < iT ){
-			auxF = iT;
-			auxT = iF;
-		}
-		for (int i = auxF; i < auxT; i++) { // camino obstruido en la fila
-			if ( i != iF && !getBox(i, jF).isEmpty()) {
-				//System.out.println("camino obs fila");
-				return false;
+		if( iF < iT){ // significa que se mueve verticalmente de arriba hacia abajo
+			for(int i = iF+1; i <= iT; i++){
+				if(!getBox(i, jF).isEmpty()) //camino obstruido en columna
+					return false;
 			}
 		}
 		
-		int auxjF = jF;
-		int auxjT = jT;
-		if ( jF < jT ){
-			auxjF = jT;
-			auxjT = jF;
+		if( iF > iT){ // significa que se mueve verticalmente de abajo hacia arriba
+			for(int i = iF-1; i >= iT; i--){
+				if(!getBox(i,jF).isEmpty()) //camino obstruido en columna
+					return false;
+			}	
 		}
 		
-		for (int j = auxjF; j <= auxjT; j++) { // camino obstruido en la columna
-			if ( j != jF && !getBox(iT, j).isEmpty()) {
-				//System.out.println("camino obs col");
-				return false;
+		if( jF < jT){ // significa que se mueve horizontalmente de izquierda a derecha
+			for(int j = jF+1; j <= jT; j++){
+				if(!getBox(iF, j).isEmpty()) //camino obstruido en fila
+					return false;
 			}
 		}
+		
+		if( jF > jT){ // significa que se mueve horizontalmente de derecha a izquieda
+			for(int j = jF-1; j >= jT; j--){
+				if(!getBox(iF,j).isEmpty()) //camino obstruido en fila
+					return false;
+			}	
+		}
+		
 		return true;
 	}
 
@@ -351,7 +345,7 @@ public class Board {
 					try {
 						auxBoard = move( x, y, i, j);
 						System.out.println(auxBoard == null);
-						l.add(new Move(auxBoard, getBox(i, j).getValue()));
+						l.add(new Move(auxBoard, value));
 					} catch (EndGameException eg) {
 						// TODO Auto-generated catch block
 						l.add(new Move(null, Integer.MAX_VALUE ) );

@@ -122,6 +122,7 @@ public class Game {
 	}
 
 	public void exeMove(Move m){
+		System.out.println((m.getBoard()== null) + " exeMove");
 		this.board = m.getBoard();
 	}
 	
