@@ -126,10 +126,19 @@ public class Game {
 	
 
 	public void move(int fil, int col, int fil2, int col2) throws Exception {
+		if(this.board.getBox(fil, col).getSide() != this.turn)
+			throw new InvalidMoveException();
 		this.board = board.move( fil,col,fil2, col2);	
+<<<<<<< HEAD
 		this.turn = 2;
 		
 		
+=======
+		if(this.turn == 1)
+			this.turn = 2;
+		if(this.turn == 2)
+			this.turn = 1;
+>>>>>>> 6d272d2216a2d536f5274ab1a480caddf20031f3
 		board.printBoard();
 		System.out.println("-- LE TOCA MOVER A LA PC --");
 		Integer p = null;
