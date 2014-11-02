@@ -53,11 +53,11 @@ public class Main {
 		switch (args[5]) {
 		case "-maxtime":
 			params[1] = args[6];
-			params[2] = "10000";
+			params[2] = "10";
 			break;
 		case "-depth":
 			params[2] = args[6];
-			params[1] = "10000";
+			params[1] = "10";
 			break;
 		default:
 			throw new InvalidAttributesException();

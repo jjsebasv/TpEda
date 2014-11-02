@@ -1,5 +1,10 @@
 package minimax;
 
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import code.Move;
 
 public class Node {
@@ -9,7 +14,16 @@ public class Node {
 	private int colour;
 	private Node chosenNext;
 	private boolean prune = false;
+	public Deque<Node> next = new LinkedList<>();
+	public String label;
 	
+	
+	
+	public void Next(Move m){
+		Node aux = new Node();
+		aux.move = m;
+		next.add(aux);
+	}
 	
 	public void setFigure(int i) {
 		// TODO Auto-generated method stub

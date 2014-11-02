@@ -22,6 +22,10 @@ public class Move {
 		return this.board;
 	}
 	
+	public void setValue(int v){
+		this.value = v;
+	}
+	
 	public String toString(){
 		String string = "";
 		for (int i = 0; i < board.getDimention(); i++) {

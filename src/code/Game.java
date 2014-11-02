@@ -29,16 +29,30 @@ public class Game {
 		this.prune = prune;
 		this.file = file;
 		this.turn = turn;
-		if ( turn == 2 ){
-			Integer pru = (prune)? new Integer(1) : 0;
-			board = minimax.miniMax(this, depth, pru, null, System.currentTimeMillis(), maxtime+System.currentTimeMillis());
+		this.board = new Board(file);
+		
+		System.out.println("DEPTH : " + this.depth);
+		System.out.println("MAXTIME: " + this.maxtime);
+		
+		
+		/*if ( turn == 2 ){
+			board = minimax.minMax(this, depth, prune,maxtime);
 		}
 		else{
 			board = new Board(file);
 		}
-		this.turn = 1;
+		this.turn = 1;*/
 	}
 
+	public Game(Board board,boolean visual, long maxtime, int depth, boolean tree, boolean prune, int turn){
+		this.visual = visual;
+		this.maxtime = maxtime;
+		this.depth = depth;
+		this.tree = tree;
+		this.prune = prune;
+		this.turn = turn;
+		this.board = board;
+	}
 	/*
 	//private void getTurn(String file) {
 		//try {
@@ -85,8 +99,17 @@ public class Game {
  	    }
 	}
 	
-	public Game duplicate(){
-		return new Game(file, visual,maxtime, depth, tree, prune,turn);
+	public Game duplicate(Board b){
+		int aTurn;
+		if( turn == 1 )
+			aTurn = 2;
+		else
+			aTurn = 1;
+		Game gm = new Game(b, visual,maxtime, depth, tree, prune,aTurn);
+		System.out.println("duplicate game");
+		gm.board.printBoard();
+		System.out.println("..................");
+		return gm;
 	}
 	
 	public void setTurn(int turn) {
@@ -99,12 +122,12 @@ public class Game {
 	
 
 	public void move(int fil, int col, int fil2, int col2) throws Exception {
-		board = board.move(board, fil,col,fil2, col2);	
+		Board aux = board.move( fil,col,fil2, col2);	
+		this.board = aux;
 		this.turn = 2;
 		board.printBoard();
 		System.out.println("-- LE TOCA MOVER A LA PC --");
-		Integer pru = (prune)? new Integer(1) : 0;
-		board = minimax.miniMax(this, depth, pru, null,System.currentTimeMillis(), maxtime+System.currentTimeMillis());
+		board = minimax.minMax(this, depth, prune, maxtime);
 		board.printBoard();
 		System.out.println("-------");
 		this.turn = 1;

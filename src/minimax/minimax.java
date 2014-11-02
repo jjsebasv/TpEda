@@ -8,19 +8,45 @@ import code.Move;
 
 public class minimax {
 	
-
-	public static Board miniMax(Game actualGame, int depth, Integer prune, Node actual, long current, long fin) {
-		System.out.println("final menos inicial "+(fin-current));
-		
-		if (depth == 0 || actualGame.getTurn() > 2) {
-			return actualGame.board;
-		}
+	
+	
+	public static Board minMax(Game actualGame, Integer depth, boolean prune, Long time){
 		Board board = actualGame.board;
+		
+		
+		
+		if( depth == null){
+			depth = Integer.parseInt(Long.toString(time % board.getDimention()));
+		}
+		Integer pru = (prune)? Integer.MAX_VALUE : null;
+		
+		Node first = new Node();
+		
+		Board auxBoard = minMaxR(board,actualGame, first, depth, System.currentTimeMillis() + time, Integer.MIN_VALUE, pru, board.getDimention()).getBoard();
+		if(auxBoard != null){
+			System.out.println("MINMAX");
+			board = auxBoard;
+		}
 		board.printBoard();
-		Move answer = new Move(board, Integer.MIN_VALUE); // A partir de aca,
-															// todos los moves
-															// son mejores
+		return board;
+	}
+	
+	private static Move minMaxR(Board board, Game game, Node actualNode, int depth, long finalTime, int bestChoise, Integer actualPrune, int dimention){
+		Game auxGame = game.duplicate(board);
+		System.out.println("------------- minmax");
+		board.printBoard();
+		System.out.println("------------- minmax");
+				
+		auxGame.board = board;
+		System.out.println((board == null));
+		Move answer = new Move (board, bestChoise);
+		Node nodeAnswer = null;
+		if( depth == 0 ){ 
+			return answer; 
+		}	
+			
 		List<Move> possibleMoves;
+<<<<<<< HEAD
 		Game auxGame = null;
 		Integer actualPrune = null; 
 		Node next = null, nodeAnswer = null; 
@@ -32,71 +58,71 @@ public class minimax {
 				if (current > fin){
 					System.out.println("tiempo agotado");
 					return null;
+=======
+		
+		
+		for(int i = 0; i < dimention; i++){
+			for(int j = 0; j < dimention; j++){
+				if(System.currentTimeMillis() > finalTime){ //si el tiempo se agota, devuelve lo mejor que encontro
+					nodeAnswer = actualNode;
+					return answer;
+>>>>>>> 51bc79016f4dc33016574d79075528cf168fc0a6
 				}
-				//System.out.println("board side"+board.getBox(i, j).getSide()+"   "+"actual game t"+ actualGame.getTurn());
-				if (board.getBox(i, j).getSide() == actualGame.getTurn()) {
-					System.out.println("i"+i+"j"+j);
+				if(board.getBox(i, j).getSide() == auxGame.getTurn() ){
+					System.out.println("entro aca");
 					possibleMoves = board.getMoves(i, j);
-					System.out.println("posible moves size "+possibleMoves.size());
 					for (Move m : possibleMoves) {
-						auxGame = actualGame.duplicate();
 						auxGame.exeMove(m);
-						boolean flag = (auxGame.board==null);
-						System.out.println(flag);
-						if (actual != null){ 
-							next = new Node();
-						}
-						System.out.println();
-						Board resp = miniMax(auxGame, depth - 1, actualPrune,
-								next, System.currentTimeMillis(),fin);
-						if (resp == null)
-							return null;
-						m.newValue(-next.move.getValue());
-						if (next != null) { 
-							if (depth % 2 == 0)
-								next.setFigure(1);
-							else
-								next.setFigure(2);
-							actual.setChosen(next);
-						}
+						actualNode.move = m;
+						System.out.println((auxGame.board == null) + " board ");
+						System.out.println((auxGame == null) + " auxGame ");
+						System.out.println((actualPrune == null) + " actualPrune ");
 						
-						if (m.getValue() > answer.getValue()) {
-							if (actual != null) { 
-								nodeAnswer = next;
-							}
-							answer = m;
-							if (answer.getValue() == Integer.MAX_VALUE) {
-								if (nodeAnswer != null)
-									nodeAnswer.setColour(1);
-								return answer.getBoard();
-							}
-						}
-						if (prune != null) { // poda
-							if (m.getValue() >= prune) {
-								if (nodeAnswer != null)
-									nodeAnswer.setColour(1);
-								if (actual != null) { 
-									next = new Node();
-									next.setPrune();
-									next.setColour(2);
-									if (depth % 2 == 0)
-										next.setFigure(1);
-									else
-										next.setFigure(2);
-									actual.setChosen(next);
-								}
-								return answer.getBoard();
+						Move resp = minMaxR(auxGame.board, auxGame, new Node(), depth - 1, finalTime, bestChoise, actualPrune, dimention);
+						
+						
+						actualNode.Next(resp);
+						m.setValue(- resp.getValue() );
+						
+						
+						if (actualPrune != null) { // si es con poda
+							if (m.getValue() >= actualPrune) {
+								nodeAnswer.setColour(1);
+								Node son = new Node();
+								son.label = "Poda";
+								son.setColour(2);
+								if (depth % 2 == 0)
+									son.setFigure(1);
+								else
+									son.setFigure(2);
+								actualNode.next.offerLast(son);
+								game.board = answer.getBoard();
+								return answer;
 							} else {
 								actualPrune = -answer.getValue();
 							}
 						}
+						
+						if (depth % 2 == 0)
+							actualNode.setFigure(1);
+						else
+							actualNode.setFigure(2);
+						
+						if(resp.getValue() > answer.getValue()){
+							bestChoise = resp.getValue();
+							answer = resp;
+							nodeAnswer = actualNode.next.getLast();
+						}
+						
+						
+							
 					}
 				}
 			}
 		}
-		if (nodeAnswer != null)
-			nodeAnswer.setColour(1);
-		return answer.getBoard();
+		nodeAnswer.setColour(1);
+		game.board = answer.getBoard();
+		return answer;
 	}
-
+	
 }
