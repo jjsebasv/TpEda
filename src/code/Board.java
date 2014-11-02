@@ -224,13 +224,28 @@ public class Board {
 			return false;
 		}
 
-		for (int i = iF; i < iT; i++) { // camino obstruido en la fila
+		
+		int auxF = iF;
+		int auxT = iT;
+		if ( iF < iT ){
+			auxF = iT;
+			auxT = iF;
+		}
+		for (int i = auxF; i < auxT; i++) { // camino obstruido en la fila
 			if ( i != iF && !getBox(i, jF).isEmpty()) {
 				//System.out.println("camino obs fila");
 				return false;
 			}
 		}
-		for (int j = jF; j <= jT; j++) { // camino obstruido en la columna
+		
+		int auxjF = jF;
+		int auxjT = jT;
+		if ( jF < jT ){
+			auxjF = jT;
+			auxjT = jF;
+		}
+		
+		for (int j = auxjF; j <= auxjT; j++) { // camino obstruido en la columna
 			if ( j != jF && !getBox(iT, j).isEmpty()) {
 				//System.out.println("camino obs col");
 				return false;

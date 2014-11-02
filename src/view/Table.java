@@ -167,6 +167,8 @@ public class Table extends JFrame {
 	
 	}
 	
+	
+	
 	public static void repaint(Board board){
 		Box casilla;
 		MyButton boton;
