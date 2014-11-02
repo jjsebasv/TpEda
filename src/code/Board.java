@@ -123,20 +123,17 @@ public class Board {
 		}
 	}
 
-	public Board move(Board board, int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
-		if ( board != null ){
+	public Board move( int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {	
-			swap(board, iFrom, jFrom, iTo, jTo);
-			board.board[iFrom][jFrom].setEmpty(true);
+			swap(this, iFrom, jFrom, iTo, jTo);
+			this.board[iFrom][jFrom].setEmpty(true);
 			if((iTo == 0 && jTo == 0) || (iTo == this.dimention -1 && jTo == 0) || (iTo == 0 && jTo == this.dimention - 1) || (iTo == this.dimention-1 && jTo == this.dimention-1)){
 				throw new WinGameException();
 			}
-			eat(board, iTo, jTo);
-			return board;
+			eat(this, iTo, jTo);
+			return this;
 		}
 		throw new InvalidMoveException();
-		}
-		return board;
 	}
 	
 	private void swap(Board board, int iF, int jF, int iT, int jT) {
@@ -153,14 +150,24 @@ public class Board {
 	}
 	
 	public Board duplicate(){
+		
+		
 		Box[][] aux = new Box[dimention][dimention];
 		for (int i = 0; i < this.getDimention(); i++) {
 			for (int j = 0; j < this.getDimention(); j++) {
-				aux[i][j] = board[i][j];
+				aux[i][j] = getBox(i, j);
 			}
 		}
 		Board auxBoard = new Board(this.getDimention());
 		auxBoard.setBoard(aux);
+		
+		System.out.println("-------- duplicate ---------");
+		System.out.println("auxBoard");
+		auxBoard.printBoard();
+		System.out.println();
+		System.out.println("------------------------------");
+		
+		
 		return auxBoard;
 	}
 
@@ -300,7 +307,8 @@ public class Board {
 				if( validateMove(x, y, i, j) ){
 					System.out.println("VALIDO EL MOVIMINETO");
 					try {
-						auxBoard = move(auxBoard, x, y, i, j);
+						auxBoard = move( x, y, i, j);
+						System.out.println(auxBoard == null);
 						l.add(new Move(auxBoard, getBox(i, j).getValue()));
 					} catch (EndGameException eg) {
 						// TODO Auto-generated catch block

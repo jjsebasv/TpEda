@@ -12,6 +12,9 @@ public class minimax {
 	
 	public static Board minMax(Game actualGame, Integer depth, boolean prune, Long time){
 		Board board = actualGame.board;
+		
+		
+		
 		if( depth == null){
 			depth = Integer.parseInt(Long.toString(time % board.getDimention()));
 		}
@@ -29,11 +32,16 @@ public class minimax {
 	}
 	
 	private static Move minMaxR(Board board, Game game, Node actualNode, int depth, long finalTime, int bestChoise, Integer actualPrune, int dimention){
-		Game auxGame = game.duplicate();
+		Game auxGame = game.duplicate(board);
+		System.out.println("------------- minmax");
+		board.printBoard();
+		System.out.println("------------- minmax");
+				
 		auxGame.board = board;
+		System.out.println((board == null));
 		Move answer = new Move (board, bestChoise);
 		Node nodeAnswer = null;
-		if( depth == 0 ){
+		if( depth == 0 ){ 
 			return answer; 
 		}	
 			
@@ -42,22 +50,23 @@ public class minimax {
 		
 		for(int i = 0; i < dimention; i++){
 			for(int j = 0; j < dimention; j++){
-				if(System.currentTimeMillis() > finalTime){
-					return null;
+				if(System.currentTimeMillis() > finalTime){ //si el tiempo se agota, devuelve lo mejor que encontro
+					nodeAnswer = actualNode;
+					return answer;
 				}
-				if(board == null)
-					return null;
 				if(board.getBox(i, j).getSide() == auxGame.getTurn() ){
+					System.out.println("entro aca");
 					possibleMoves = board.getMoves(i, j);
 					for (Move m : possibleMoves) {
 						auxGame.exeMove(m);
 						actualNode.move = m;
-		
+						System.out.println((auxGame.board == null) + " board ");
+						System.out.println((auxGame == null) + " auxGame ");
+						System.out.println((actualPrune == null) + " actualPrune ");
+						
 						Move resp = minMaxR(auxGame.board, auxGame, new Node(), depth - 1, finalTime, bestChoise, actualPrune, dimention);
 						
-						if(resp == null){ // si el tiempo se agota en el medio, devuelve el mejor valor que encontro
-							return null;
-						}
+						
 						actualNode.Next(resp);
 						m.setValue(- resp.getValue() );
 						
