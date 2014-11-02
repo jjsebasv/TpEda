@@ -111,7 +111,7 @@ public class Board {
 
 	public Board move( int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {	
-			swap(this, iFrom, jFrom, iTo, jTo);
+			swap(iFrom, jFrom, iTo, jTo);
 			this.board[iFrom][jFrom].setPiece(new Piece('0'));
 			if((iTo == 0 && jTo == 0) || (iTo == this.dimention -1 && jTo == 0) || (iTo == 0 && jTo == this.dimention - 1) || (iTo == this.dimention-1 && jTo == this.dimention-1)){
 				throw new WinGameException();
@@ -122,13 +122,11 @@ public class Board {
 		throw new InvalidMoveException();
 	}
 	
-	private void swap(Board board, int iF, int jF, int iT, int jT) throws IllegalPieceException {
-		if ( board != null ) {
-		Box from = board.getBox(iF, jF);
-		Box to = board.getBox(iT, jT);
+	private void swap(int iF, int jF, int iT, int jT) throws IllegalPieceException {
+		Box from = getBox(iF, jF);
+		Box to = getBox(iT, jT);
 		to.setPiece(from.getPiece());
 		from.setPiece(new Piece('0'));
-		}
 	}
 	
 	public Board duplicate(){
@@ -178,9 +176,15 @@ public class Board {
 			Box from = this.getBox(iF, jF);
 			Box to = this.getBox(iT, jT);
 			
+			// casillo vacio
+			if ( from.isEmpty()){
+				System.out.println("- ORIGEN VACIO");
+				return false;
+			}
+			
 			//mismo lugar
 			if ( iF == iT && jT == jF ){
-				System.out.print("mismo lugar");
+				System.out.print("- MISMO LUGAR");
 				return false;
 			}else{
 			}
@@ -188,25 +192,27 @@ public class Board {
 			// no es dentro del tablero
 			if ( iF > dimention || jF > dimention || iT > dimention || jT > dimention ||
 					 iF < 0 || jF < 0|| iT < 0 || jT < 0) {
-				System.out.print("mala dimension");
+				System.out.print("- MALA DIMENSION");
 				return false;
 			}
 
 			// no es en linea reacta
 			if ( iF != iT && jF != jT) {
-				System.out.println("no en linea R");
+				System.out.println(" - NO EN LINEA R ");
 				return false;
 			}
 
 			// destino castillo pieza no es rey
 			if (from.getPiece().getC() != 'K'
 					&& ( (iT == 0 && jT == 0 ) || (iT == 0 && jT == dimention-1 ) || (iT == dimention-1 && jT == 0 ) || (iT == dimention-1 && jT == dimention -1 ) )) {
+				System.out.print(" - DESTINO CASTILLO ");
 				return false;
 
 			}
 
 			// castilla trono -> solo rey
 			if (from.getPiece().getC() != 'K' && (iT == dimention/2 && jT == dimention/2 ) ) {
+				System.out.print("- CASILLA REY");
 				return false;
 			}
 
@@ -221,6 +227,7 @@ public class Board {
 						Box aux= board[fil][col];
 
 						if (aux.getPiece().getC() != '0' && fil != dimention /2 && col != dimention /2) {
+							System.out.println("- CAMINO BLOQUEADO");
 							return false;
 						}
 
@@ -229,6 +236,7 @@ public class Board {
 						 * puedan pasar por el trono
 						 */
 						if (dimention >= 13 && aux.getFila() != dimention / 2 && aux.getColumna() != dimention /2 && board[iF][jF].getPiece().getC() == 'G') {
+							System.out.println("- CAMINO BLOQUEADO");
 							return false;
 						}
 
@@ -335,13 +343,11 @@ public class Board {
 					System.out.println("- VALIDO EL MOVIMINETO");
 					try {
 						auxBoard = original;
-						auxBoard.move(x, y, i, j);
+						Box a = auxBoard.board[x][y];
+						auxBoard.board[x][y] = auxBoard.board[i][j];
+						auxBoard.board[i][j] = a;
 						auxBoard.printBoard();
 						l.add(new Move(auxBoard, value));
-					} catch (EndGameException eg) {
-						l.add(new Move(auxBoard, Integer.MAX_VALUE ) );
-					} catch (WinGameException wg) {
-						l.add(new Move(auxBoard, Integer.MIN_VALUE ) );
 					} catch (Exception e) { // no se a que exception hace referencia
 						System.out.println("invalid move");
 					};
