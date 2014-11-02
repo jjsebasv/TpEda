@@ -223,6 +223,10 @@ public class Board {
 
 		
 		if( iF < iT){ // significa que se mueve verticalmente de arriba hacia abajo
+			if( getBox(iF,jF).getCharacter() == 'G' && this.dimention > 12 ){
+				if(iF < this.dimention/2 && iT > this.dimention/2)
+					return false;
+			}
 			for(int i = iF+1; i <= iT; i++){
 				if(!getBox(i, jF).isEmpty()) //camino obstruido en columna
 					return false;
@@ -230,6 +234,10 @@ public class Board {
 		}
 		
 		if( iF > iT){ // significa que se mueve verticalmente de abajo hacia arriba
+			if( getBox(iF,jF).getCharacter() == 'G' && this.dimention > 12 ){
+				if(iF > this.dimention/2 && iT < this.dimention/2)
+					return false;
+			}			
 			for(int i = iF-1; i >= iT; i--){
 				if(!getBox(i,jF).isEmpty()) //camino obstruido en columna
 					return false;
@@ -237,6 +245,10 @@ public class Board {
 		}
 		
 		if( jF < jT){ // significa que se mueve horizontalmente de izquierda a derecha
+			if( getBox(iF,jF).getCharacter() == 'G' && this.dimention > 12 ){
+				if(jF < this.dimention/2 && jT > this.dimention/2)
+					return false;
+			}
 			for(int j = jF+1; j <= jT; j++){
 				if(!getBox(iF, j).isEmpty()) //camino obstruido en fila
 					return false;
@@ -244,10 +256,22 @@ public class Board {
 		}
 		
 		if( jF > jT){ // significa que se mueve horizontalmente de derecha a izquieda
+			if( getBox(iF,jF).getCharacter() == 'G' && this.dimention > 12 ){
+				if(jF > this.dimention/2 && jT < this.dimention/2)
+					return false;
+			}
 			for(int j = jF-1; j >= jT; j--){
 				if(!getBox(iF,j).isEmpty()) //camino obstruido en fila
 					return false;
 			}	
+		}
+		
+		if(getBox(iF, jF).getCharacter() != 'K'){ // movimientos invalidos
+			if( (iT == 0 && (jT == 0 || jT == this.dimention-1) )|| (iT == this.dimention - 1 && (jT == 0 || jT == this.dimention-1))){ 
+				return false;
+			}
+			if( iT == this.dimention/2 && jT == this.dimention/2 )
+				return false;
 		}
 		
 		return true;

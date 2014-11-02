@@ -133,31 +133,29 @@ public class Game {
 		if(this.board.getBox(fil, col).getSide() != this.turn){
 			throw new InvalidMoveException();
 		}else{
-		this.board = board.move( fil,col,fil2, col2);	
-		if(this.turn == 1){
-			this.setTurn(2);
-		}else if(this.turn == 2){
-			this.setTurn(1);
-		}
-		System.out.println("cabio de side: " + this.turn);
-
-		if(this.turn == 1)
-			this.turn = 2;
-		if(this.turn == 2)
-			this.turn = 1;
-		board.printBoard();
-		System.out.println("-- LE TOCA MOVER A LA PC --");
-		Integer p = null;
-		if ( prune){
-			p = 1;
-		}else{
-			p = 0;
-		}
-		board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
-		//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
-		System.out.println("-------");
-		//this.turn = 1;
+			this.board = board.move( fil,col,fil2, col2);	
+			
+			if(this.turn == 1){
+				this.setTurn(2);
+			}else if(this.turn == 2){
+				this.setTurn(1);
+			}
+			System.out.println("cabio de side: " + this.turn);
 	
+			
+			board.printBoard();
+			System.out.println("-- LE TOCA MOVER A LA PC --");
+			Integer p = null;
+			if ( prune){
+				p = 1;
+			}else{
+				p = 0;
+			}
+			//board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
+			//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
+			//System.out.println("-------");
+			//this.turn = 1;
+		
 		}
 	
 	}
