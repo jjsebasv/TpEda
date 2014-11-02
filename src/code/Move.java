@@ -22,4 +22,15 @@ public class Move {
 		return this.board;
 	}
 	
+	public String toString(){
+		String string = "";
+		for (int i = 0; i < board.getDimention(); i++) {
+			for (int j = 0; j < board.getDimention(); j++) {
+				string += board.getBoard()[i][j].getCharacter();
+			}
+			string += String.valueOf('\n');
+		}
+		return string;
+	}
+	
 }

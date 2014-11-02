@@ -51,4 +51,8 @@ public class Box {
 	public void setSide(int s){
 		this.side = s;
 	}
+	
+	public String toString(){
+		return this.character +" - "+ this.isEmpty();
+	}
 }

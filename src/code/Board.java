@@ -22,7 +22,12 @@ public class Board {
 
 
 	public Board(String file){
-		this.createBoard(file);
+			this.createBoard(file);
+	}
+	
+	public Board(int d ){
+		this.dimention = d;
+		this.board = new Box[dimention][dimention];
 	}
 
 	public Box getBox(int x, int y) {
@@ -118,18 +123,45 @@ public class Board {
 		}
 	}
 
-	public Board move(int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
+	public Board move(Board board, int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
+		if ( board != null ){
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {	
-			System.out.println("move validado");
-			swap(iFrom, jFrom, iTo, jTo);
+			swap(board, iFrom, jFrom, iTo, jTo);
+			board.board[iFrom][jFrom].setEmpty(true);
 			if((iTo == 0 && jTo == 0) || (iTo == this.dimention -1 && jTo == 0) || (iTo == 0 && jTo == this.dimention - 1) || (iTo == this.dimention-1 && jTo == this.dimention-1)){
 				throw new WinGameException();
 			}
-			eat(iTo, jTo);
-			return this;
+			eat(board, iTo, jTo);
+			return board;
 		}
 		throw new InvalidMoveException();
-		
+		}
+		return board;
+	}
+	
+	private void swap(Board board, int iF, int jF, int iT, int jT) {
+		if ( board != null ) {
+		Box from = board.getBox(iF, jF);
+		Box to = board.getBox(iT, jT);
+		to.setCharacter(from.getCharacter());
+		to.setSide(from.getSide());
+		to.setEmpty(false);
+		from.setCharacter('0');
+		from.setSide(0);
+		from.setEmpty(true);
+		}
+	}
+	
+	public Board duplicate(){
+		Box[][] aux = new Box[dimention][dimention];
+		for (int i = 0; i < this.getDimention(); i++) {
+			for (int j = 0; j < this.getDimention(); j++) {
+				aux[i][j] = board[i][j];
+			}
+		}
+		Board auxBoard = new Board(this.getDimention());
+		auxBoard.setBoard(aux);
+		return auxBoard;
 	}
 
 	public void printBoard() {
@@ -150,79 +182,84 @@ public class Board {
 		return (y < this.dimention && y >= 0);
 	}
 
-	private void swap(int iF, int jF, int iT, int jT) {
-		Box from = getBox(iF, jF);
-		Box to = getBox(iT, jT);
 
-		to.setCharacter(from.getCharacter());
-		to.setSide(from.getSide());
-		to.setEmpty(false);
-		from.setCharacter('0');
-		from.setSide(0);
-		from.setEmpty(true);
-
-	}
 	
 	private boolean validateMove(int iF, int jF, int iT, int jT){
+		
+		//System.out.println("-----------------");
+		//System.out.println("FROM ("+iF+","+jF+") TO ("+iT+","+jT+")");
+		//printBoard();
+		
 		if( iF != iT && jF != jT){// no son en linea recta
-			System.out.println("no son en linea R");
+			//System.out.println("no son en linea r");
 			return false;
 		}
 		if (iF == iT && jF == jT) { // mismo lugar
-			System.out.println("mismo lugar");
+			//System.out.println("mismo lugar");
 			return false;
 		}
 		if (!belongsToRows(iF) || !belongsToRows(iT)
 				|| !belongsToCols(jF) // celdas habilitadas
 				|| !belongsToCols(iT) || getBox(iF, jF).isEmpty()
 				|| !getBox(iT, jT).isEmpty()) {
-			System.out.println("fuera de las lineas o casillero ocupado");
+			if ( getBox(iF, jF).isEmpty()) {
+				//System.out.println("de donde vengo esta vacio");
+				//System.out.println("de donde vengo   "+ board[iF][jF]);
+				
+			}else{
+				//System.out.println("a donde voy no esta vacio");
+			}
+			//System.out.println("no esta vacio o fuera del rango");
+			return false;
+		}
+		if ( board[iF][jF].getCharacter() == 'N' && (iT == 0 || iT == dimention - 1)  && ( jT == 0 || jT == dimention - 1 ) ){
+			//System.out.println("castillo");
 			return false;
 		}
 
 		for (int i = iF; i < iT; i++) { // camino obstruido en la fila
 			if ( i != iF && !getBox(i, jF).isEmpty()) {
-				System.out.println("camino obstruido fila");
+				//System.out.println("camino obs fila");
 				return false;
 			}
 		}
 		for (int j = jF; j <= jT; j++) { // camino obstruido en la columna
 			if ( j != jF && !getBox(iT, j).isEmpty()) {
-				System.out.println("camino obstruido col");
+				//System.out.println("camino obs col");
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private void eat(int x, int y) throws Exception {
-		Box aux = getBox(x, y);
-		if (belongsToRows(x - 1) && getBox(x - 1, y).getSide() != aux.getSide()
-				&& getBox(x - 1, y).getSide() != 0 && !isKing(x - 1, y)) {
-			if (belongsToRows(x - 2)
-					&& getBox(x - 2, y).getSide() == aux.getSide()) {
-				eliminate(getBox(x - 1, y));
+	private void eat(Board board, int x, int y) throws Exception {
+		Box aux = board.getBox(x, y);
+		if (board.belongsToRows(x - 1) && board.getBox(x - 1, y).getSide() != aux.getSide()
+				&& board.getBox(x - 1, y).getSide() != 0 && !board.isKing(x - 1, y)) {
+			if (board.belongsToRows(x - 2)
+					&& board.getBox(x - 2, y).getSide() == aux.getSide()) {
+				eliminate(board.getBox(x - 1, y));
 			}
 		}
-		if (belongsToRows(x + 1) && getBox(x + 1, y).getSide() != aux.getSide()
-				&& getBox(x + 1, y).getSide() != 0 && !isKing(x + 1, y)) {
-			if (belongsToRows(x + 2)
-					&& getBox(x + 2, y).getSide() == aux.getSide()) {
-				eliminate(getBox(x + 1, y));
+		if (board.belongsToRows(x + 1) && board.getBox(x + 1, y).getSide() != aux.getSide()
+				&& board.getBox(x + 1, y).getSide() != 0 && !board.isKing(x + 1, y)) {
+			if (board.belongsToRows(x + 2)
+					&& board.getBox(x + 2, y).getSide() == aux.getSide()) {
+				eliminate(board.getBox(x + 1, y));
 			}
 		}
-		if (belongsToCols(y - 1) && getBox(x, y - 1).getSide() != aux.getSide()
-				&& getBox(x, y - 1).getSide() != 0 && !isKing(x, y - 1)) {
-			if (belongsToCols(y - 2)
-					&& getBox(x, y - 2).getSide() == aux.getSide()) {
-				eliminate(getBox(x, y - 1));
+		if (board.belongsToCols(y - 1) && board.getBox(x, y - 1).getSide() != aux.getSide()
+				&& board.getBox(x, y - 1).getSide() != 0 && !board.isKing(x, y - 1)) {
+			if (board.belongsToCols(y - 2)
+					&& board.getBox(x, y - 2).getSide() == aux.getSide()) {
+				eliminate(board.getBox(x, y - 1));
 			}
 		}
-		if (belongsToCols(y + 1) && getBox(x, y + 1).getSide() != aux.getSide()
-				&& getBox(x, y + 1).getSide() != 0 && !isKing(x, y + 1)) {
-			if (belongsToCols(y + 2)
-					&& getBox(x, y + 2).getSide() == aux.getSide()) {
-				eliminate(getBox(x, y + 1));
+		if (board.belongsToCols(y + 1) && board.getBox(x, y + 1).getSide() != aux.getSide()
+				&& board.getBox(x, y + 1).getSide() != 0 && !board.isKing(x, y + 1)) {
+			if (board.belongsToCols(y + 2)
+					&& board.getBox(x, y + 2).getSide() == aux.getSide()) {
+				eliminate(board.getBox(x, y + 1));
 			}
 		}
 	}
@@ -257,11 +294,13 @@ public class Board {
 	
 	public List<Move> getMoves(int x, int y){
 		List<Move> l = new ArrayList<>();
+		Board auxBoard = null;
 		for(int i = 0; i < this.dimention; i++){
 			for(int j = 0; j < this.dimention; j++){
 				if( validateMove(x, y, i, j) ){
+					System.out.println("VALIDO EL MOVIMINETO");
 					try {
-						Board auxBoard = move(x, y, i, j);
+						auxBoard = move(auxBoard, x, y, i, j);
 						l.add(new Move(auxBoard, getBox(i, j).getValue()));
 					} catch (EndGameException eg) {
 						// TODO Auto-generated catch block
@@ -279,6 +318,9 @@ public class Board {
 				}
 			}
 		}
+		//System.out.println("posibles movimientos");
+		//System.out.println(l);
+		//System.out.println("--------");
 		return l;
 	}
 	

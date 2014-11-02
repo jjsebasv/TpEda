@@ -31,7 +31,7 @@ public class Game {
 		this.turn = turn;
 		if ( turn == 2 ){
 			Integer pru = (prune)? new Integer(1) : 0;
-			board = minimax.miniMax(this, depth, pru, null, maxtime);
+			board = minimax.miniMax(this, depth, pru, null, System.currentTimeMillis(), maxtime+System.currentTimeMillis());
 		}
 		else{
 			board = new Board(file);
@@ -89,18 +89,22 @@ public class Game {
 		return new Game(file, visual,maxtime, depth, tree, prune,turn);
 	}
 	
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
+
 	public void exeMove(Move m){
 		this.board = m.getBoard();
 	}
 	
 
 	public void move(int fil, int col, int fil2, int col2) throws Exception {
-		board = board.move(fil,col,fil2, col2);	
+		board = board.move(board, fil,col,fil2, col2);	
 		this.turn = 2;
 		board.printBoard();
-		System.out.println("-------");
+		System.out.println("-- LE TOCA MOVER A LA PC --");
 		Integer pru = (prune)? new Integer(1) : 0;
-		board = minimax.miniMax(this, depth, pru, null, maxtime);
+		board = minimax.miniMax(this, depth, pru, null,System.currentTimeMillis(), maxtime+System.currentTimeMillis());
 		board.printBoard();
 		System.out.println("-------");
 		this.turn = 1;
