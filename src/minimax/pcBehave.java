@@ -11,16 +11,19 @@ public class pcBehave {
 	
 	
 	public static Board minimax(Game game, int depth, boolean prune, long time) {
+		System.out.println("ENTRO");
+		System.out.println(mm(game, game.board, depth, game.getTurn())==null);
+		System.out.println(mm(game, game.board, depth, game.getTurn()).getBoard()==null);
 		
-		return mm(game, game.board, depth, game.getTurn()).getBoard();
-		
+		return null;
 	}
 	
 	private static Move mm(Game game, Board board, int depth, int turn ) {
+		System.out.println(depth);
 		Move answer = null;
 		
 		if(depth == 0){
-			return null;
+			return answer;
 		}
 		
 		for(int i = 0; i < board.getDimention(); i++){
