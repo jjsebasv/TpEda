@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
+import java.awt.Dimension;
 
 public class Table extends JFrame {
 
@@ -75,6 +76,8 @@ public class Table extends JFrame {
 		label.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		label.setForeground(Color.RED);
 		label.setBackground(Color.WHITE);
+		//label.setMaximumSize(new Dimension(30,30));
+		//label.setMinimumSize(new Dimension(30,30));
 		label.setVisible(true);
 		contentPane.add(label,BorderLayout.WEST);
 		
