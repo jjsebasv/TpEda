@@ -22,17 +22,18 @@ public class Board {
 	private int dimention;
 	private Box board[][];
 
+	
+	public Board(int dimention){
+		this.board = new Box[dimention][dimention];
+		this.dimention = dimention;
+	}
 
 	public Board(String file){
 			if (file != null ){
 				this.createBoard(file);
 			}
 	}
-	
-	public Board(int d ){
-		this.dimention = d;
-		this.board = new Box[dimention][dimention];
-	}
+
 
 	public Box getBox(int x, int y) {
 		if (!belongsToRows(x) || !belongsToCols(y))
@@ -179,6 +180,12 @@ public class Board {
 			// casillo vacio
 			if ( from.isEmpty()){
 				System.out.println("- ORIGEN VACIO");
+				return false;
+			}
+			
+			// destino ocupado
+			if ( !to.isEmpty()){
+				System.out.println(" - DESTINO OCUPADO ");
 				return false;
 			}
 			
@@ -342,7 +349,7 @@ public class Board {
 				if( validateMove(x, y, i, j) ){
 					System.out.println("- VALIDO EL MOVIMINETO");
 					try {
-						auxBoard = original;
+						auxBoard = createBoard(original);
 						Box a = auxBoard.board[x][y];
 						auxBoard.board[x][y] = auxBoard.board[i][j];
 						auxBoard.board[i][j] = a;
@@ -359,6 +366,17 @@ public class Board {
 		return l;
 	}
 	
+	private Board createBoard(Board original) throws IllegalPieceException {
+		Board answer = new Board(original.getDimention());
+		for (int i = 0; i < original.getDimention(); i++) {
+			for (int j = 0; j < original.getDimention(); j++) {
+				Box a = new Box(original.board[i][j].getValue(),i,j,original.board[i][j].getPiece().getC());
+				answer.board[i][j] = a;
+			}
+		}
+		return answer;
+	}
+
 	public void printBoardValues() {
 		for (int i = 0; i < this.dimention; i++) {
 			for (int j = 0; j < this.dimention; j++) {
