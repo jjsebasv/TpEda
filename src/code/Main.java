@@ -16,6 +16,7 @@ public class Main {
 		
 
 		String[] params = parser(args);
+		//System.out.println(params[0]);
 		int turn = getTurn(params[0]);
 		System.out.println("TURN: MAIN: " + turn);
 		Game game = new Game(params[0],Boolean.valueOf(params[3]),Integer.valueOf(params[1]), Integer.valueOf(params[2]), Boolean.valueOf(params[5]), Boolean.valueOf(params[6]),turn  );
@@ -118,7 +119,6 @@ public class Main {
 			BufferedReader br = new BufferedReader(fr);
 			String l = br.readLine();
 			turn = Integer.valueOf(l.toCharArray()[0]-'0');
-			
 			if ( turn < 1 && turn > 2 ){
 				System.out.println("f");
 				br.close();

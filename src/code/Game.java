@@ -139,6 +139,11 @@ public class Game {
 			this.setTurn(1);
 		}
 		System.out.println("cabio de side: " + this.turn);
+
+		if(this.turn == 1)
+			this.turn = 2;
+		if(this.turn == 2)
+			this.turn = 1;
 		board.printBoard();
 		System.out.println("-- LE TOCA MOVER A LA PC --");
 		Integer p = null;

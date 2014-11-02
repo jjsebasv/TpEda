@@ -82,16 +82,21 @@ public class Board {
 				for (int j = 0; j < dimention; j++) {
 					int indexi = ( i <= dimention/2 )? i : dimention-i-1;
 					int indexj = ( j <= dimention/2 )? j : dimention-j-1;
-					board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j]);
 					switch (line[j]) {
 					case 'N':
+						board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j],2,false);
 						n++;
 						break;
 					case 'K':
+						board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j], 1, false);
 						k++;
 						break;
 					case 'G':
+						board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j],1,false);
 						g++;
+						break;
+					default:
+						board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j],0,true);
 						break;
 					}
 				}
