@@ -171,7 +171,7 @@ public class Board {
 
 
 	
-	private boolean validateMove(int iF, int jF, int iT, int jT) throws InvalidMoveException, BoardOutOfBoundsException{
+	private boolean validateMove(int iF, int jF, int iT, int jT){
 
 			Box from = this.getBox(iF, jF);
 			Box to = this.getBox(iT, jT);
@@ -323,7 +323,7 @@ public class Board {
 		return acum;
 	}
 	
-	public List<Move> getMoves(int x, int y) throws InvalidMoveException, BoardOutOfBoundsException{
+	public List<Move> getMoves(int x, int y) {
 		List<Move> l = new ArrayList<>();
 		Board original = this;
 		Board auxBoard = new Board(null);
