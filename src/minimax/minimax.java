@@ -31,9 +31,7 @@ public class minimax {
 	
 	private static Move minMaxR(Board board, Game game, Node actualNode, int depth, long finalTime, int bestChoise, Integer actualPrune, int dimention){
 		Game auxGame = game.duplicate(board);
-		System.out.println("------------- minmax");
-		board.printBoard();
-		System.out.println("------------- minmax");
+
 				
 		auxGame.board = board;
 		System.out.println((board == null));
@@ -103,6 +101,8 @@ public class minimax {
 				}
 			}
 		}
+		if(nodeAnswer == null)
+			nodeAnswer = actualNode;
 		nodeAnswer.setColour(1);
 		game.board = answer.getBoard();
 		return answer;

@@ -111,9 +111,6 @@ public class Game {
 		else
 			aTurn = 1;
 		Game gm = new Game(b, visual,maxtime, depth, tree, prune,aTurn);
-		System.out.println("duplicate game");
-		gm.board.printBoard();
-		System.out.println("..................");
 		return gm;
 	}
 	
@@ -124,6 +121,7 @@ public class Game {
 	public void exeMove(Move m){
 		System.out.println((m.getBoard()== null) + " exeMove");
 		this.board = m.getBoard();
+		
 	}
 	
 
@@ -142,8 +140,8 @@ public class Game {
 			}
 			System.out.println("cabio de side: " + this.turn);
 	
-			
 			board.printBoard();
+	
 			System.out.println("-- LE TOCA MOVER A LA PC --");
 			Integer p = null;
 			if ( prune){
@@ -151,9 +149,11 @@ public class Game {
 			}else{
 				p = 0;
 			}
-			//board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
+			board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
 			//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
-			//System.out.println("-------");
+			System.out.println("-------");
+			board.printBoard();
+			System.out.println("-------");
 			//this.turn = 1;
 		
 		}

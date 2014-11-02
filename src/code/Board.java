@@ -354,7 +354,7 @@ public class Board {
 	
 	public List<Move> getMoves(int x, int y){
 		List<Move> l = new ArrayList<>();
-		Board auxBoard = null;
+		Board auxBoard = this;
 		for(int i = 0; i < this.dimention; i++){
 			for(int j = 0; j < this.dimention; j++){
 				int value;
@@ -368,15 +368,15 @@ public class Board {
 					System.out.println("VALIDO EL MOVIMINETO");
 					try {
 						auxBoard = move( x, y, i, j);
-						System.out.println(auxBoard == null);
+						System.out.println((auxBoard == null) + " lala " + x + y);
 						l.add(new Move(auxBoard, value));
 					} catch (EndGameException eg) {
 						// TODO Auto-generated catch block
-						l.add(new Move(null, Integer.MAX_VALUE ) );
+						l.add(new Move(auxBoard, Integer.MAX_VALUE ) );
 						continue;
 					} catch (WinGameException wg) {
 						// TODO Auto-generated catch block
-						l.add(new Move(null, Integer.MIN_VALUE ) );
+						l.add(new Move(auxBoard, Integer.MIN_VALUE ) );
 						continue;
 					} catch (Exception e) { // no se a que exception hace referencia
 						// TODO Auto-generated catch block
