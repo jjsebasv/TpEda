@@ -298,12 +298,34 @@ public class Board {
 		return false;
 	}
 	
+	private int enemies(int x, int y){
+		int acum = 0;
+		Box cell = getBox(x, y);
+		ArrayList<Box> neig = new ArrayList<>();
+		neig.addAll(Arrays.asList(getBox(x - 1, y), getBox(x + 1, y),
+				getBox(x, y - 1), getBox(x, y + 1)));
+		for (Box box : neig) {
+			if (box != null && box.getSide() != cell.getSide()
+					&& box.getSide() != 0) {
+				acum++;
+			}
+		}
+		
+		return acum;
+	}
 	
 	public List<Move> getMoves(int x, int y){
 		List<Move> l = new ArrayList<>();
 		Board auxBoard = null;
 		for(int i = 0; i < this.dimention; i++){
 			for(int j = 0; j < this.dimention; j++){
+				int value;
+				if( getBox(x, y).getCharacter() == 'K' )
+					value = getBox(i, j).getValue();
+				else if( getBox(x,y).getCharacter() == 'G')
+					value = enemies(i,j);
+				else 
+					value = getBox(i,i).getValue();
 				if( validateMove(x, y, i, j) ){
 					System.out.println("VALIDO EL MOVIMINETO");
 					try {
@@ -320,7 +342,8 @@ public class Board {
 						continue;
 					} catch (Exception e) { // no se a que exception hace referencia
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						//e.printStackTrace();
+						System.out.println("invalid move");
 						continue;
 					};
 				}
