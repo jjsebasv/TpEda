@@ -11,7 +11,9 @@ import java.util.List;
 
 import javax.naming.directory.InvalidAttributesException;
 
+import exceptions.BoardOutOfBoundsException;
 import exceptions.EndGameException;
+import exceptions.IllegalPieceException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
 
@@ -53,15 +55,9 @@ public class Board {
 		this.board = board;
 	}
 
-	public void addBoard(){
-		
-	}
 
 	private void createBoard(String file) {
 		try {
-			int k = 0;
-			int g = 0;
-			int n = 0;
 			
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
@@ -84,27 +80,22 @@ public class Board {
 					int indexj = ( j <= dimention/2 )? j : dimention-j-1;
 					switch (line[j]) {
 					case 'N':
-						board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j],2,false);
-						n++;
+						board[i][j] = new Box(dimention*indexi + dimention * indexj,i,j,line[j]);
 						break;
 					case 'K':
-						board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j], 1, false);
-						k++;
+						board[i][j] = new Box(dimention*indexi + dimention * indexj,i,j,line[j]);
 						break;
 					case 'G':
-						board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j],1,false);
-						g++;
+						board[i][j] = new Box(dimention*indexi + dimention * indexj,i,j,line[j]);
 						break;
 					default:
-						board[i][j] = new Box(dimention*indexi + dimention * indexj,line[j],0,true);
+						board[i][j] = new Box(dimention*indexi + dimention * indexj,i,j,line[j]);
 						break;
 					}
 				}
 				l = br.readLine();
 			}
-			
-			//valido el tablero
-			validateBoard(k,n,g);
+
 			br.close();
 			fr.close();
 			
@@ -115,23 +106,11 @@ public class Board {
 		
 	}
 
-	private void validateBoard(int k, int n, int g) throws InvalidAttributesException{	
-		if ( k != 1 ){
-			throw new InvalidAttributesException();
-		}
-		
-		if ( (dimention <= 11 && ( g != 8 || n != 16))){
-			throw new InvalidAttributesException();
-		}
-		else if ( dimention > 11 && (g != 12 || n != 24) ) {
-			throw new InvalidAttributesException();
-		}
-	}
 
 	public Board move( int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {	
 			swap(this, iFrom, jFrom, iTo, jTo);
-			this.board[iFrom][jFrom].setEmpty(true);
+			this.board[iFrom][jFrom].setPiece(new Piece('0'));
 			if((iTo == 0 && jTo == 0) || (iTo == this.dimention -1 && jTo == 0) || (iTo == 0 && jTo == this.dimention - 1) || (iTo == this.dimention-1 && jTo == this.dimention-1)){
 				throw new WinGameException();
 			}
@@ -141,16 +120,12 @@ public class Board {
 		throw new InvalidMoveException();
 	}
 	
-	private void swap(Board board, int iF, int jF, int iT, int jT) {
+	private void swap(Board board, int iF, int jF, int iT, int jT) throws IllegalPieceException {
 		if ( board != null ) {
 		Box from = board.getBox(iF, jF);
 		Box to = board.getBox(iT, jT);
-		to.setCharacter(from.getCharacter());
-		to.setSide(from.getSide());
-		to.setEmpty(false);
-		from.setCharacter('0');
-		from.setSide(0);
-		from.setEmpty(true);
+		to.setPiece(from.getPiece());
+		from.setPiece(new Piece('0'));
 		}
 	}
 	
@@ -179,7 +154,7 @@ public class Board {
 	public void printBoard() {
 		for (int i = 0; i < this.dimention; i++) {
 			for (int j = 0; j < this.dimention; j++) {
-				System.out.print(getBox(i, j).getCharacter() + " ");
+				System.out.print(getBox(i, j).getPiece().getC() + " ");
 			}
 			System.out.println();
 		}
@@ -196,135 +171,120 @@ public class Board {
 
 
 	
-	private boolean validateMove(int iF, int jF, int iT, int jT){
-		
-		//System.out.println("-----------------");
-		//System.out.println("FROM ("+iF+","+jF+") TO ("+iT+","+jT+")");
-		//printBoard();
-		
-		if( iF != iT && jF != jT){// no son en linea recta
-			//System.out.println("no son en linea r");
-			return false;
-		}
-		if (iF == iT && jF == jT) { // mismo lugar
-			//System.out.println("mismo lugar");
-			return false;
-		}
-		if (!belongsToRows(iF) || !belongsToRows(iT)
-				|| !belongsToCols(jF) // celdas habilitadas
-				|| !belongsToCols(iT) || getBox(iF, jF).isEmpty()
-				|| !getBox(iT, jT).isEmpty()) {
-			return false;
-		}
-		if ( board[iF][jF].getCharacter() == 'N' && (iT == 0 || iT == dimention - 1)  && ( jT == 0 || jT == dimention - 1 ) ){
-			//System.out.println("castillo");
-			return false;
-		}
+	private boolean validateMove(int iF, int jF, int iT, int jT) throws InvalidMoveException, BoardOutOfBoundsException{
 
-		
-		if( iF < iT){ // significa que se mueve verticalmente de arriba hacia abajo
-			if( getBox(iF,jF).getCharacter() == 'G' && this.dimention > 12 ){
-				if(iF < this.dimention/2 && iT > this.dimention/2)
-					return false;
+			Box from = this.getBox(iF, jF);
+			Box to = this.getBox(iT, jT);
+			
+			//mismo lugar
+			if ( iF == iT && jT == jF ){
+				throw new InvalidMoveException();
 			}
-			for(int i = iF+1; i <= iT; i++){
-				if(!getBox(i, jF).isEmpty()) //camino obstruido en columna
-					return false;
+			// no es dentro del tablero
+			if ( iF > dimention || jF > dimention || iT > dimention || jT > dimention ||
+					 iF < 0 || jF < 0|| iT < 0 || jT < 0) {
+				throw new BoardOutOfBoundsException();
 			}
-		}
-		
-		if( iF > iT){ // significa que se mueve verticalmente de abajo hacia arriba
-			if( getBox(iF,jF).getCharacter() == 'G' && this.dimention > 12 ){
-				if(iF > this.dimention/2 && iT < this.dimention/2)
-					return false;
-			}			
-			for(int i = iF-1; i >= iT; i--){
-				if(!getBox(i,jF).isEmpty()) //camino obstruido en columna
-					return false;
-			}	
-		}
-		
-		if( jF < jT){ // significa que se mueve horizontalmente de izquierda a derecha
-			if( getBox(iF,jF).getCharacter() == 'G' && this.dimention > 12 ){
-				if(jF < this.dimention/2 && jT > this.dimention/2)
-					return false;
+
+			// no es en linea reacta
+			if ( iF != iT && jF != jT) {
+				throw new InvalidMoveException();
 			}
-			for(int j = jF+1; j <= jT; j++){
-				if(!getBox(iF, j).isEmpty()) //camino obstruido en fila
-					return false;
+
+			if (from.isEnemy()) {
+				throw new InvalidMoveException();
 			}
-		}
-		
-		if( jF > jT){ // significa que se mueve horizontalmente de derecha a izquieda
-			if( getBox(iF,jF).getCharacter() == 'G' && this.dimention > 12 ){
-				if(jF > this.dimention/2 && jT < this.dimention/2)
-					return false;
+
+			// destino castillo pieza no es rey
+			if (from.getPiece().getC() != 'K'
+					&& ( (iT == 0 && jT == 0 ) || (iT == 0 && jT == dimention-1 ) || (iT == dimention-1 && jT == 0 ) || (iT == dimention-1 && jT == dimention -1 ) )) {
+				throw new InvalidMoveException();
+
 			}
-			for(int j = jF-1; j >= jT; j--){
-				if(!getBox(iF,j).isEmpty()) //camino obstruido en fila
-					return false;
-			}	
-		}
-		
-		if(getBox(iF, jF).getCharacter() != 'K'){ // movimientos invalidos
-			if( (iT == 0 && (jT == 0 || jT == this.dimention-1) )|| (iT == this.dimention - 1 && (jT == 0 || jT == this.dimention-1))){ 
-				return false;
+
+			// castilla trono -> solo rey
+			if (from.getPiece().getC() != 'K' && (iT == dimention/2 && jT == dimention/2 ) ) {
+				throw new InvalidMoveException();
 			}
-			if( iT == this.dimention/2 && jT == this.dimention/2 )
-				return false;
-		}
-		
+
+
+			// camino vacio
+			for (int fil = iF; iF < iT ? fil <= iT : fil >= iT; fil += (iF < iT ? 1 : -1)) {
+
+				for (int col = jF; jF < jT ? col <= jT : col >= jT; col += jF < jT ? 1 : -1) {
+
+					if (fil != iF && col != jF) {
+
+						Box aux= board[fil][col];
+
+						if (aux.getPiece().getC() != '0' && fil != dimention /2 && col != dimention /2) {
+							throw new InvalidMoveException();
+						}
+
+						/*
+						 * Verifica que el tablero sea largo y los guardias no
+						 * puedan pasar por el trono
+						 */
+						if (dimention >= 13 && aux.getFila() != dimention / 2 && aux.getColumna() != dimention /2 && board[iF][jF].getPiece().getC() == 'G') {
+							throw new InvalidMoveException();
+						}
+
+					}
+
+				}
+
+			}
+
+
 		return true;
 	}
 
 	private void eat(Board board, int x, int y) throws Exception {
 		Box aux = board.getBox(x, y);
-		if (board.belongsToRows(x - 1) && board.getBox(x - 1, y).getSide() != aux.getSide()
-				&& board.getBox(x - 1, y).getSide() != 0 && !board.isKing(x - 1, y)) {
+		if (board.belongsToRows(x - 1) && board.getBox(x - 1, y).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
+				&& board.getBox(x - 1, y).getPiece().getPlayer().getTurn() != 0 && !board.isKing(x - 1, y)) {
 			if (board.belongsToRows(x - 2)
-					&& board.getBox(x - 2, y).getSide() == aux.getSide()) {
+					&& board.getBox(x - 2, y).getPiece().getPlayer().getTurn() == aux.getPiece().getPlayer().getTurn()) {
 				eliminate(board.getBox(x - 1, y));
 			}
 		}
-		if (board.belongsToRows(x + 1) && board.getBox(x + 1, y).getSide() != aux.getSide()
-				&& board.getBox(x + 1, y).getSide() != 0 && !board.isKing(x + 1, y)) {
+		if (board.belongsToRows(x + 1) && board.getBox(x + 1, y).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
+				&& board.getBox(x + 1, y).getPiece().getPlayer().getTurn() != 0 && !board.isKing(x + 1, y)) {
 			if (board.belongsToRows(x + 2)
-					&& board.getBox(x + 2, y).getSide() == aux.getSide()) {
+					&& board.getBox(x + 2, y).getPiece().getPlayer().getTurn() == aux.getPiece().getPlayer().getTurn()) {
 				eliminate(board.getBox(x + 1, y));
 			}
 		}
-		if (board.belongsToCols(y - 1) && board.getBox(x, y - 1).getSide() != aux.getSide()
-				&& board.getBox(x, y - 1).getSide() != 0 && !board.isKing(x, y - 1)) {
+		if (board.belongsToCols(y - 1) && board.getBox(x, y - 1).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
+				&& board.getBox(x, y - 1).getPiece().getPlayer().getTurn() != 0 && !board.isKing(x, y - 1)) {
 			if (board.belongsToCols(y - 2)
-					&& board.getBox(x, y - 2).getSide() == aux.getSide()) {
+					&& board.getBox(x, y - 2).getPiece().getPlayer().getTurn() == aux.getPiece().getPlayer().getTurn()) {
 				eliminate(board.getBox(x, y - 1));
 			}
 		}
-		if (board.belongsToCols(y + 1) && board.getBox(x, y + 1).getSide() != aux.getSide()
-				&& board.getBox(x, y + 1).getSide() != 0 && !board.isKing(x, y + 1)) {
+		if (board.belongsToCols(y + 1) && board.getBox(x, y + 1).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
+				&& board.getBox(x, y + 1).getPiece().getPlayer().getTurn() != 0 && !board.isKing(x, y + 1)) {
 			if (board.belongsToCols(y + 2)
-					&& board.getBox(x, y + 2).getSide() == aux.getSide()) {
+					&& board.getBox(x, y + 2).getPiece().getPlayer().getTurn() == aux.getPiece().getPlayer().getTurn()) {
 				eliminate(board.getBox(x, y + 1));
 			}
 		}
 	}
 
-	private void eliminate(Box other) {
-		other.setCharacter('0');
-		other.setEmpty(true);
-		other.setSide(0);
+	private void eliminate(Box other) throws IllegalPieceException {
+		other.setPiece(new Piece('0'));;
 	}
 
 	private boolean isKing(int x, int y) throws Exception {
 		Box cell = getBox(x, y);
-		if (cell.getCharacter() == 'K') {
+		if ( cell.getPiece().getC() == 'K') {
 			int count = 0;
 			ArrayList<Box> neig = new ArrayList<>();
 			neig.addAll(Arrays.asList(getBox(x - 1, y), getBox(x + 1, y),
 					getBox(x, y - 1), getBox(x, y + 1)));
 			for (Box box : neig) {
-				if (box != null && box.getSide() != cell.getSide()
-						&& box.getSide() != 0) {
+				if (box != null && box.getPiece().getPlayer().getTurn() != cell.getPiece().getPlayer().getTurn()
+						&& box.getPiece().getPlayer().getTurn() != 0) {
 					count++;
 				}
 			}
@@ -343,8 +303,8 @@ public class Board {
 		neig.addAll(Arrays.asList(getBox(x - 1, y), getBox(x + 1, y),
 				getBox(x, y - 1), getBox(x, y + 1)));
 		for (Box box : neig) {
-			if (box != null && box.getSide() != cell.getSide()
-					&& box.getSide() != 0) {
+			if (box != null && box.getPiece().getPlayer() != cell.getPiece().getPlayer()
+					&& box.getPiece().getPlayer().getTurn() != 0) {
 				acum++;
 			}
 		}
@@ -352,15 +312,15 @@ public class Board {
 		return acum;
 	}
 	
-	public List<Move> getMoves(int x, int y){
+	public List<Move> getMoves(int x, int y) throws InvalidMoveException, BoardOutOfBoundsException{
 		List<Move> l = new ArrayList<>();
 		Board auxBoard = this;
 		for(int i = 0; i < this.dimention; i++){
 			for(int j = 0; j < this.dimention; j++){
 				int value;
-				if( getBox(x, y).getCharacter() == 'K' )
+				if( getBox(x, y).getPiece().getC() == 'K' )
 					value = getBox(i, j).getValue();
-				else if( getBox(x,y).getCharacter() == 'G')
+				else if( getBox(x, y).getPiece().getC() == 'G')
 					value = enemies(i,j);
 				else 
 					value = getBox(i,i).getValue();

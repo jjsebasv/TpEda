@@ -5,12 +5,14 @@ import java.util.List;
 import code.Board;
 import code.Game;
 import code.Move;
+import exceptions.BoardOutOfBoundsException;
+import exceptions.InvalidMoveException;
 
 public class minimax {
 	
 	
 	
-	public static Board minMax(Game actualGame, Integer depth, boolean prune, Long time){
+	public static Board minMax(Game actualGame, Integer depth, boolean prune, Long time) throws InvalidMoveException, BoardOutOfBoundsException{
 		Board board = actualGame.board;
 		
 		if( depth == null){
@@ -23,13 +25,13 @@ public class minimax {
 		Board auxBoard = minMaxR(board,actualGame, first, depth, System.currentTimeMillis() + time, Integer.MIN_VALUE, pru, board.getDimention()).getBoard();
 		if(auxBoard != null){
 			System.out.println("MINMAX");
-			board = auxBoard;
+			actualGame.board = auxBoard;
 		}
 		board.printBoard();
 		return board;
 	}
 	
-	private static Move minMaxR(Board board, Game game, Node actualNode, int depth, long finalTime, int bestChoise, Integer actualPrune, int dimention){
+	private static Move minMaxR(Board board, Game game, Node actualNode, int depth, long finalTime, int bestChoise, Integer actualPrune, int dimention) throws InvalidMoveException, BoardOutOfBoundsException{
 		Game auxGame = game.duplicate(board);
 		auxGame.board = board;
 		
@@ -48,7 +50,7 @@ public class minimax {
 					nodeAnswer = actualNode;
 					return answer;
 				}
-				if(board.getBox(i, j).getSide() == auxGame.getTurn() ){
+				if(board.getBox(i, j).getPiece().getPlayer().getTurn() == auxGame.getTurn() ){
 
 					possibleMoves = board.getMoves(i, j);
 					for (Move m : possibleMoves) {

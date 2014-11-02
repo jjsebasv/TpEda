@@ -91,7 +91,7 @@ public class Game {
  	        
  	        for (int i = 0; i < board.getDimention(); i++) {
  				for (int j = 0; j < board.getDimention(); j++) {
- 					fw.write(board.getBox(i, j).getCharacter());
+ 					fw.write(board.getBox(i, j).getPiece().getC());
  				}
  				fw.write("\n");
  			}
@@ -128,7 +128,7 @@ public class Game {
 	public void move(int fil, int col, int fil2, int col2) throws Exception {
 		System.out.println("turno del game: " + this.turn);
 		
-		if(this.board.getBox(fil, col).getSide() != this.turn){
+		if(this.board.getBox(fil, col).getPiece().getPlayer().getTurn() != this.turn){
 			throw new InvalidMoveException();
 		}else{
 			this.board = board.move( fil,col,fil2, col2);	

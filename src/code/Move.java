@@ -30,7 +30,7 @@ public class Move {
 		String string = "";
 		for (int i = 0; i < board.getDimention(); i++) {
 			for (int j = 0; j < board.getDimention(); j++) {
-				string += board.getBoard()[i][j].getCharacter();
+				string += board.getBoard()[i][j].getPiece().getC();
 			}
 			string += String.valueOf('\n');
 		}

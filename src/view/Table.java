@@ -102,7 +102,7 @@ public class Table extends JFrame {
 		                   	MyButton button = new MyButton(i,j,' '); 	                   	
 		                    button.setBackground(Color.WHITE);
 		             
-		                    char c = game.board.getBoard()[i][j].getCharacter() ;
+		                    char c = game.board.getBoard()[i][j].getPiece().getC() ;
 		                    ImageIcon image = new ImageIcon();
 		                    switch (c) {
 							case 'K':
@@ -174,7 +174,7 @@ public class Table extends JFrame {
 	           for (int j=0; j < board.getDimention(); j++){ 
 	        	   casilla =board.getBoard()[i][j];
 	        	   boton = visualBoard[i][j];
-	        	   switch (casilla.getCharacter()) {
+	        	   switch (casilla.getPiece().getC()) {
 					case 'K':
 						image = new ImageIcon("./images/king.png");
 						visualBoard[i][j].setIcon(image);
