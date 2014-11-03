@@ -24,9 +24,6 @@ public class pcBehave {
 		System.out.println(depth);
 		Move answer = null;
 		
-		if(me == null){
-			me = new NodeII(board);
-		}
 		
 		if(depth == 0){
 			return answer;
@@ -45,6 +42,10 @@ public class pcBehave {
 							turn = 2;
 						else if(turn == 2)
 							turn = 1;
+						
+						if(me == null){
+							me = new NodeII(aGame.board);
+						}
 						
 						if(me.chosen == null){
 							me.chosen = new NodeII(aGame.board,m.getValue());
@@ -67,10 +68,8 @@ public class pcBehave {
 							}
 						}
 						System.out.println(me.chosen == null);
-						if(me.chosen == null){
-							me.chosen = new NodeII(answer.getBoard(),answer.getValue());
-						}
-						
+						me.chosen.board = answer.getBoard();
+						me.chosen.value = answer.getValue();
 					}
 					me.value = me.chosen.value;
 				}
