@@ -178,8 +178,8 @@ public class Board {
 			Box to = this.getBox(iT, jT);
 			
 			// casillo vacio
-			if ( from.isEmpty()){
-				//System.out.println("- ORIGEN VACIO");
+
+			if ( from.isEmpty() ){
 				return false;
 			}
 			
@@ -377,8 +377,8 @@ public class Board {
 				//else 
 					value = getBox(i,j).getValue();	
 				if( validateMove(x, y, i, j)){
-					
-					//System.out.println("- VALIDO EL MOVIMINETO");
+					value = getBox(i,j).getValue();
+					//System.out.print("get move para: ("+x+","+y+")("+i+","+j+")");
 					try {
 						auxBoard = createBoard(original);
 						Box a = auxBoard.board[x][y];
@@ -389,8 +389,7 @@ public class Board {
 					} catch (Exception e) { // no se a que exception hace referencia
 						//System.out.println("invalid move");
 					};
-
-				}	
+				}
 			}
 			/*System.out.println("-------------- GET MOVES ("+x+","+y+")----------");
 			for (Move move : l) {
