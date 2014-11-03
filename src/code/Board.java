@@ -19,6 +19,7 @@ import exceptions.WinGameException;
 
 public class Board {
 
+	public int value;
 	private int dimention;
 	private Box board[][];
 
@@ -376,54 +377,17 @@ public class Board {
 						Box a = auxBoard.board[x][y];
 						auxBoard.board[x][y] = auxBoard.board[i][j];
 						auxBoard.board[i][j] = a;
-						//auxBoard.printBoard();
 						l.add(new Move(auxBoard, value));
 					} catch (Exception e) { // no se a que exception hace referencia
-						//System.out.println("invalid move");
+						//do nothing
 					};
-				}
-			}
-			//System.out.println("-------------- GET MOVES ("+x+","+y+")----------");
-			//for (Move move : l) {
-			//	move.getBoard().printBoard();
-			//	System.out.println("--");
-			//}
-			//System.out.println("---------------------------------");
-			
-		}
-		return l;
-	}
-	
-	
-	public List<Move> getMoves2(int x, int y){
-		List<Move> l = new ArrayList<>();
-		for(int i = 0; i < getDimention(); i++){
-			for(int j = 0; j < getDimention(); j++){
-				if(validateMove(x, y, i, j)){
-					Board aux = newBoard();
-					try {
-						aux.move(x, y, i, j);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					};
-					
-					l.add(new Move(aux, aux.getBox(i, j).getValue()));
 				}
 			}
 		}
 		return l;
 	}
 	
-	private Board newBoard(){
-		Board aux = new Board(dimention);
-		for(int i = 0; i < dimention; i++){
-			for(int j = 0; j < dimention; j++){
-				aux.board[i][j] = getBox(i, j);
-			}
-		}
-		return aux;
-	}
+
 	
 	public boolean myPiece(int i, int j, int turn) {
 		return getBox(i,j).getPiece().getPlayer().getTurn() == turn;

@@ -23,19 +23,44 @@ public class pcBehave {
 		
 		return aux;
 		*/
-		return mm2(game, game.board, depth, game.getTurn()).getBoard();
+		
+		Board aux = mm2(game, game.board, depth, game.getTurn()).getBoard();
+		
+		game.setTurn(1);
+		return aux;
 	}
 	
 	
 	private static Move mm2(Game game, Board board, int depth, int turn){
 		List<Move> l = null;
+		Move answer = null;
 		for(int i = 0; i < board.getDimention(); i++){
 			for( int j = 0; j < board.getDimention(); j++){
-				if( board.getBox(i, j).getPiece().getPlayer().getTurn() == game.getTurn())
+				if( board.getBox(i, j).getPiece().getPlayer().getTurn() == game.getTurn()){
 					l = board.getMoves(i, j);
+					System.out.println(l.size());
+					System.out.println("entro al PRIMER if");
+					for(int m = 0; m < l.size(); m++ ){
+						System.out.println("entro al FOR");
+						if(answer == null){
+							System.out.println("entro al if");
+							answer = l.get(m);
+						}else{
+							if(game.getTurn() == 1){
+								if(answer.getValue()>l.get(m).getValue()){
+									answer = l.get(m);
+								}
+							}else{
+								if(answer.getValue()<l.get(m).getValue()){
+									answer = l.get(m);
+								}
+							}
+						}
+					}
+				}
 			}
 		}
-		return l.get(0);
+		return answer;
 	}
 	
 	private static Move mm(Game game, Board board, int depth, int turn) {
@@ -54,7 +79,7 @@ public class pcBehave {
 				
 				if(board.getBox(i, j).getPiece().getPlayer().getTurn() == turn ){
 					
-					for (Move m : board.getMoves2(i, j)) {
+					for (Move m : board.getMoves(i, j)) {
 						Game aGame = game.duplicate( board );
 						aGame.exeMove(m);
 
