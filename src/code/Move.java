@@ -10,6 +10,10 @@ public class Move {
 		this.board = board;
 	}
 	
+	public Move(int value){
+		this.value = value;
+	}
+	
 	public Move(){
 		
 	}
