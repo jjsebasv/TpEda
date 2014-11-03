@@ -4,10 +4,28 @@ public class Move {
 	
 	private int value;
 	private Board board;
+	private Box from;
+	private Box to;
+	private int turn;
 	
-	public Move(Board board, int value){
+	public Move(Board board, int value, Box from, Box to, int turn){
 		this.value = value;
 		this.board = board;
+		this.from = from;
+		this.to = to;
+		this.turn = turn;
+	}
+	
+	public Box getFrom(){
+		return this.from;
+	}
+	
+	public Box getTo(){
+		return this.to;
+	}
+	
+	public int getTurn(){
+		return this.turn;
 	}
 	
 	public Move(int value){
