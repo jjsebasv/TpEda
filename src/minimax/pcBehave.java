@@ -23,18 +23,27 @@ public class pcBehave {
 		
 		return aux;
 		*/
+		NodeII me = new NodeII(game.board);
 		
-		Board aux = mm2(game, game.board, depth, game.getTurn()).getBoard();
+		Board aux = mm2(game, game.board, depth, game.getTurn(),me).getBoard();
+		Move auxMove = null;
+		for(NodeII n:me.children){
+			if(auxMove == null)
+				auxMove = n.move;
+			else{
+				if(n.move.getValue() > auxMove.getValue())
+					auxMove = n.move;
+			}
+		}
 		
-		game.setTurn(1);
-		return aux;
+		return auxMove.getBoard();
 	}
 	
 	
-	private static Move mm2(Game game, Board board, int depth, int turn){
-		NodeII node = new NodeII(board);
+	private static Move mm2(Game game, Board board, int depth, int turn,NodeII me){
 		List<Move> l = null;
 		Move answer = null;
+		NodeII nAns = null;
 		
 		if(depth == 0)
 			return answer;
@@ -48,30 +57,58 @@ public class pcBehave {
 							turn = 2;
 						else 
 							turn = 1;
-						Move resp = mm2(aGame,aGame.board,depth-1,turn);
+						
+						aGame.exeMove(l.get(m));
+						nAns = new NodeII(l.get(m));
+						
+						Move resp = mm2(aGame,aGame.board,depth-1,turn,nAns);
 						
 						if(answer == null){
 							answer = l.get(m);
-						}else{
-							if(resp == null){
-								resp = l.get(m);
+						}
+						if(resp == null){
+							resp = l.get(m);
+						}
+						nAns.value = resp.getValue();
+							
+						me.link(nAns);
+						
+						
+						if(game.getTurn() == 2){
+							if(answer.getValue()>resp.getValue()){
+								answer = resp;
 							}
-							if(game.getTurn() == 2){
-								if(answer.getValue()>resp.getValue()){
-									answer = resp;
-								}
-							}else{
-								if(answer.getValue()<resp.getValue()){
-									answer = resp;
-								}
+						}else{
+							if(answer.getValue()<resp.getValue()){
+								answer = resp;
 							}
 						}
+						
+						
 						
 					}
 				}
 			}
 		}
-		return answer;
+		for (NodeII n : me.children) {
+			if(me.chosen == null)
+				me.chosen = n;
+			if(game.getTurn() == 2){
+				if(me.chosen.value>n.move.getValue()){
+					me.chosen = n;
+				}
+			}else{
+				if(me.chosen.value<n.move.getValue()){
+					me.chosen = n;
+				}
+			}
+		}
+		if(turn == 1)
+			turn = 2;
+		else
+			turn = 1;
+		
+		return me.chosen.move;
 	}
 	
 	private static Move mm(Game game, Board board, int depth, int turn) {

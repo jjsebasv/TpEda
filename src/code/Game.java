@@ -160,8 +160,9 @@ public class Game {
 			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
 			//board.printBoard();
 			//System.out.println("-- YA JUGO LA PC ---");
-			//this.turn = 1;
+			this.turn = 1;
 	
+			
 		}
 	
 	}
