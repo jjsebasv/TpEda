@@ -171,7 +171,7 @@ public class Board {
 		return (y < this.dimention && y >= 0);
 	}
 
-	/*
+
 	
 	private boolean validateMove(int iF, int jF, int iT, int jT){
 
@@ -286,8 +286,6 @@ public class Board {
 
 		return true;
 	}
-	
-	*/
 
 	private void eat(Board board, int x, int y) throws Exception {
 		Box aux = board.getBox(x, y);
@@ -390,11 +388,7 @@ public class Board {
 		return l;
 	}
 	
-<<<<<<< HEAD
-=======
-	
 
->>>>>>> 292e306330bf2082ba968b7f9f35fd70fccd0f64
 	
 	// -------------------------- METODOS NOWI -------------------------- //
 	public List<Move> getPossibleMoves(int x, int y) throws IllegalPieceException{
@@ -486,12 +480,12 @@ public class Board {
 	
 	// ------------------------------------------------------------------------------ //
 	
-<<<<<<< HEAD
+
 	public List<Move> getMoves2(int x, int y){
 		List<Move> l = new ArrayList<>();
 		for(int i = 0; i < getDimention(); i++){
 			for(int j = 0; j < getDimention(); j++){
-				if(validateTheMove(x, y, i, j)){
+				if(validateMove(x, y, i, j)){
 					Board aux = newBoard();
 					try {
 						aux.move(x, y, i, j);
@@ -517,8 +511,7 @@ public class Board {
 		return aux;
 	}
 
-=======
->>>>>>> 292e306330bf2082ba968b7f9f35fd70fccd0f64
+
 	
 	public boolean myPiece(int i, int j, int turn) {
 		return getBox(i,j).getPiece().getPlayer().getTurn() == turn;

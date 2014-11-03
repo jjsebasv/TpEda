@@ -32,12 +32,10 @@ public class pcBehave {
 	}
 	
 	
-<<<<<<< HEAD
+
 	private static Move mm2(Game game, Board board, int depth, int turn) throws IllegalPieceException{
-=======
-	private static Move mm2(Game game, Board board, int depth, int turn){
+
 		NodeII node = new NodeII(board);
->>>>>>> 292e306330bf2082ba968b7f9f35fd70fccd0f64
 		List<Move> l = null;
 		Move answer = null;
 		
@@ -46,13 +44,11 @@ public class pcBehave {
 		for(int i = 0; i < board.getDimention(); i++){
 			for( int j = 0; j < board.getDimention(); j++){
 				if( board.getBox(i, j).getPiece().getPlayer().getTurn() == game.getTurn()){
-<<<<<<< HEAD
+
 					l = board.getMoves2(i, j);
 					System.out.println(l.size());
 					System.out.println("entro al PRIMER if");
-=======
-					l = board.getMoves(i, j);
->>>>>>> 292e306330bf2082ba968b7f9f35fd70fccd0f64
+
 					for(int m = 0; m < l.size(); m++ ){
 						Game aGame = game.duplicate(l.get(m).getBoard());
 						if(turn == 1)
