@@ -19,7 +19,7 @@ import exceptions.WinGameException;
 
 public class Board {
 
-	public int value;
+	public int value = 0;
 	private int dimention;
 	private Box board[][];
 
@@ -116,9 +116,22 @@ public class Board {
 			swap(iFrom, jFrom, iTo, jTo);
 			this.board[iFrom][jFrom].setPiece(new Piece('0'));
 			if((iTo == 0 && jTo == 0) || (iTo == this.dimention -1 && jTo == 0) || (iTo == 0 && jTo == this.dimention - 1) || (iTo == this.dimention-1 && jTo == this.dimention-1)){
+				if(getBox(iTo, jTo).getPiece().getPlayer().getTurn() == 2){
+					value = Integer.MIN_VALUE;
+				}
+				else
+					value = Integer.MAX_VALUE;
 				throw new WinGameException();
 			}
-			eat(this, iTo, jTo);
+			int num = eat(this, iTo, jTo);
+			int num2 = enemies(iTo,jTo);
+			if(getBox(iTo, jTo).getPiece().getPlayer().getTurn() == 1){
+				num2 = (-num2);
+				num = (-num);
+			}
+			value += num;
+			value += num2;
+			
 			return this;
 		}
 		throw new InvalidMoveException();
@@ -287,13 +300,15 @@ public class Board {
 		return true;
 	}
 
-	private void eat(Board board, int x, int y) throws Exception {
+	private int eat(Board board, int x, int y) throws Exception {
 		Box aux = board.getBox(x, y);
+		int acum = 0;
 		if (board.belongsToRows(x - 1) && board.getBox(x - 1, y).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
 				&& board.getBox(x - 1, y).getPiece().getPlayer().getTurn() != 0 && !board.isKing(x - 1, y)) {
 			if (board.belongsToRows(x - 2)
 					&& board.getBox(x - 2, y).getPiece().getPlayer().getTurn() == aux.getPiece().getPlayer().getTurn()) {
 				eliminate(board.getBox(x - 1, y));
+				acum ++;
 			}
 		}
 		if (board.belongsToRows(x + 1) && board.getBox(x + 1, y).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
@@ -301,6 +316,7 @@ public class Board {
 			if (board.belongsToRows(x + 2)
 					&& board.getBox(x + 2, y).getPiece().getPlayer().getTurn() == aux.getPiece().getPlayer().getTurn()) {
 				eliminate(board.getBox(x + 1, y));
+				acum ++;
 			}
 		}
 		if (board.belongsToCols(y - 1) && board.getBox(x, y - 1).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
@@ -308,6 +324,7 @@ public class Board {
 			if (board.belongsToCols(y - 2)
 					&& board.getBox(x, y - 2).getPiece().getPlayer().getTurn() == aux.getPiece().getPlayer().getTurn()) {
 				eliminate(board.getBox(x, y - 1));
+				acum ++;
 			}
 		}
 		if (board.belongsToCols(y + 1) && board.getBox(x, y + 1).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
@@ -315,8 +332,10 @@ public class Board {
 			if (board.belongsToCols(y + 2)
 					&& board.getBox(x, y + 2).getPiece().getPlayer().getTurn() == aux.getPiece().getPlayer().getTurn()) {
 				eliminate(board.getBox(x, y + 1));
+				acum ++;
 			}
 		}
+		return acum;
 	}
 
 	private void eliminate(Box other) throws IllegalPieceException {
@@ -338,6 +357,7 @@ public class Board {
 			}
 			if (count >= 3) {
 				eliminate(cell);
+				value = Integer.MAX_VALUE;
 				throw new EndGameException();
 			}
 		}
@@ -353,6 +373,12 @@ public class Board {
 		for (Box box : neig) {
 			if (box != null && box.getPiece().getPlayer() != cell.getPiece().getPlayer()
 					&& box.getPiece().getPlayer().getTurn() != 0) {
+				if(box.getPiece().getC() == 'K'){
+					acum += 10;
+				}
+				if((box.getFila() == 0 && (box.getColumna() == 0 || box.getColumna() == dimention-1))||(box.getFila() == dimention-1 && (box.getColumna() == 0 || box.getColumna() == dimention-1))){
+					acum -= 10;
+				}
 				acum++;
 			}
 		}
@@ -375,10 +401,11 @@ public class Board {
 					//System.out.println("("+x+","+y+")("+i+","+j+")"+getBox(x,y).getPiece().getC());
 					try {
 						auxBoard = copyBoard(original);
-						Box a = auxBoard.board[x][y];
-						auxBoard.board[x][y] = auxBoard.board[i][j];
-						auxBoard.board[i][j] = a;
-						l.add(new Move(auxBoard, value));
+						auxBoard.move(x,y, i, j);
+						//Box a = auxBoard.board[x][y];
+						//auxBoard.board[x][y] = auxBoard.board[i][j];
+						//auxBoard.board[i][j] = a;
+						l.add(new Move(auxBoard, auxBoard.value));
 					} catch (Exception e) { // no se a que exception hace referencia
 						//do nothing
 					};
@@ -387,11 +414,7 @@ public class Board {
 		}
 		return l;
 	}
-	
 
-	
-	
-	
 
 	public List<Move> getMoves2(int x, int y){
 		List<Move> l = new ArrayList<>();
