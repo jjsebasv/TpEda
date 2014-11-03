@@ -12,15 +12,21 @@ public class pcBehave {
 	
 	public static Board minimax(Game game, int depth, boolean prune, long time) {
 		System.out.println("ENTRO");
-		System.out.println(mm(game, game.board, depth, game.getTurn())==null);
-		System.out.println(mm(game, game.board, depth, game.getTurn()).getBoard()==null);
 		
-		return null;
+		Board aux = mm(game, game.board, depth, game.getTurn(), null).getBoard();
+		System.out.println("este x");
+		aux.printBoard();
+		return aux;
+		
 	}
 	
-	private static Move mm(Game game, Board board, int depth, int turn ) {
+	private static Move mm(Game game, Board board, int depth, int turn, NodeII me) {
 		System.out.println(depth);
 		Move answer = null;
+		
+		if(me == null){
+			me = new NodeII(board);
+		}
 		
 		if(depth == 0){
 			return answer;
@@ -34,13 +40,17 @@ public class pcBehave {
 					for (Move m : board.getMoves(i, j)) {
 						Game aGame = game.duplicate( board );
 						aGame.exeMove(m);
-						System.out.println(board == aGame.board);
+
 						if(turn == 1)
 							turn = 2;
 						else if(turn == 2)
 							turn = 1;
 						
-						Move aux = mm(aGame,aGame.board, depth-1, turn);
+						if(me.chosen == null){
+							me.chosen = new NodeII(aGame.board,m.getValue());
+						}
+						
+						Move aux = mm(aGame,m.getBoard(), depth-1, turn, me.chosen);
 						
 						if(answer == null || aux == null){ //primera vez que compara
 							answer = m;
@@ -48,6 +58,7 @@ public class pcBehave {
 							if(turn == 1){ // estoy parado en el movimiento de 2 -- Pc -- tengo que elegir el maximo
 								if(answer.getValue() < aux.getValue()){
 									answer = aux;
+									
 								}
 							}else{ // estoy parado en el movimiento de 1 -- H -- tengo que elegir el minimo
 								if(answer.getValue() > aux.getValue()){
@@ -55,14 +66,17 @@ public class pcBehave {
 								}
 							}
 						}
+						System.out.println(me.chosen == null);
+						if(me.chosen == null){
+							me.chosen = new NodeII(answer.getBoard(),answer.getValue());
+						}
 						
-					}					
+					}
+					me.value = me.chosen.value;
 				}
-				
-				
 			}
 		}
-		
+		answer.setBoard(me.board);
 		return answer;
 	}
 	

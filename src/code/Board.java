@@ -178,13 +178,13 @@ public class Board {
 			
 			// casillo vacio
 			if ( from.isEmpty()){
-				System.out.println("- ORIGEN VACIO");
+				//System.out.println("- ORIGEN VACIO");
 				return false;
 			}
 			
 			//mismo lugar
 			if ( iF == iT && jT == jF ){
-				System.out.print("- MISMO LUGAR");
+				//System.out.print("- MISMO LUGAR");
 				return false;
 			}else{
 			}
@@ -192,27 +192,27 @@ public class Board {
 			// no es dentro del tablero
 			if ( iF > dimention || jF > dimention || iT > dimention || jT > dimention ||
 					 iF < 0 || jF < 0|| iT < 0 || jT < 0) {
-				System.out.print("- MALA DIMENSION");
+				//System.out.print("- MALA DIMENSION");
 				return false;
 			}
 
 			// no es en linea reacta
 			if ( iF != iT && jF != jT) {
-				System.out.println(" - NO EN LINEA R ");
+				//System.out.println(" - NO EN LINEA R ");
 				return false;
 			}
 
 			// destino castillo pieza no es rey
 			if (from.getPiece().getC() != 'K'
 					&& ( (iT == 0 && jT == 0 ) || (iT == 0 && jT == dimention-1 ) || (iT == dimention-1 && jT == 0 ) || (iT == dimention-1 && jT == dimention -1 ) )) {
-				System.out.print(" - DESTINO CASTILLO ");
+				//System.out.print(" - DESTINO CASTILLO ");
 				return false;
 
 			}
 
 			// castilla trono -> solo rey
 			if (from.getPiece().getC() != 'K' && (iT == dimention/2 && jT == dimention/2 ) ) {
-				System.out.print("- CASILLA REY");
+				//System.out.print("- CASILLA REY");
 				return false;
 			}
 
@@ -367,9 +367,9 @@ public class Board {
 				//	value = enemies(i,j);
 				//else 
 					value = getBox(i,j).getValue();
-					System.out.print("get move para: ("+x+","+y+")("+i+","+j+")");
+					//System.out.print("get move para: ("+x+","+y+")("+i+","+j+")");
 				if( validateMove(x, y, i, j) ){
-					System.out.println("- VALIDO EL MOVIMINETO");
+					//System.out.println("- VALIDO EL MOVIMINETO");
 					try {
 						auxBoard = original;
 						Box a = auxBoard.board[x][y];
@@ -378,10 +378,10 @@ public class Board {
 						auxBoard.printBoard();
 						l.add(new Move(auxBoard, value));
 					} catch (Exception e) { // no se a que exception hace referencia
-						System.out.println("invalid move");
+						//System.out.println("invalid move");
 					};
 				}else{
-					System.out.println(" - NO VALIDO");
+					//System.out.println(" - NO VALIDO");
 				}
 			}
 		}

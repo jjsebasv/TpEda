@@ -16,6 +16,7 @@ public class Node {
 	private boolean prune = false;
 	public Deque<Node> next = new LinkedList<>();
 	public String label;
+	public int value;
 	
 	
 	
