@@ -17,6 +17,13 @@ public class Node {
 	public Deque<Node> next = new LinkedList<>();
 	public String label;
 	
+	public Node(){
+		
+	}
+	
+	public Node(Move m){
+		this.move = move;
+	}
 	
 	
 	public void Next(Move m){
