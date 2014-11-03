@@ -22,7 +22,6 @@ public class pcBehave {
 		System.out.println("este x");
 		aux.printBoard();
 		
-		return aux;
 		*/
 		NodeII me = new NodeII(game.board);
 		
@@ -75,7 +74,7 @@ public class pcBehave {
 						if(resp == null){
 							resp = l.get(m);
 						}
-						nAns.value = resp.getValue();
+						nAns.setValue(resp.getValue());
 							
 						me.link(nAns);
 						
@@ -100,11 +99,11 @@ public class pcBehave {
 			if(me.chosen == null)
 				me.chosen = n;
 			if(game.getTurn() == 2){
-				if(me.chosen.value>n.move.getValue()){
+				if(me.chosen.getValue()>n.move.getValue()){
 					me.chosen = n;
 				}
 			}else{
-				if(me.chosen.value<n.move.getValue()){
+				if(me.chosen.getValue()<n.move.getValue()){
 					me.chosen = n;
 				}
 			}
