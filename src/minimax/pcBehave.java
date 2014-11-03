@@ -32,30 +32,41 @@ public class pcBehave {
 	
 	
 	private static Move mm2(Game game, Board board, int depth, int turn){
+		NodeII node = new NodeII(board);
 		List<Move> l = null;
 		Move answer = null;
+		
+		if(depth == 0)
+			return answer;
 		for(int i = 0; i < board.getDimention(); i++){
 			for( int j = 0; j < board.getDimention(); j++){
 				if( board.getBox(i, j).getPiece().getPlayer().getTurn() == game.getTurn()){
 					l = board.getMoves(i, j);
-					System.out.println(l.size());
-					System.out.println("entro al PRIMER if");
 					for(int m = 0; m < l.size(); m++ ){
-						System.out.println("entro al FOR");
+						Game aGame = game.duplicate(l.get(m).getBoard());
+						if(turn == 1)
+							turn = 2;
+						else 
+							turn = 1;
+						Move resp = mm2(aGame,aGame.board,depth-1,turn);
+						
 						if(answer == null){
-							System.out.println("entro al if");
 							answer = l.get(m);
 						}else{
-							if(game.getTurn() == 1){
-								if(answer.getValue()>l.get(m).getValue()){
-									answer = l.get(m);
+							if(resp == null){
+								resp = l.get(m);
+							}
+							if(game.getTurn() == 2){
+								if(answer.getValue()>resp.getValue()){
+									answer = resp;
 								}
 							}else{
-								if(answer.getValue()<l.get(m).getValue()){
-									answer = l.get(m);
+								if(answer.getValue()<resp.getValue()){
+									answer = resp;
 								}
 							}
 						}
+						
 					}
 				}
 			}
