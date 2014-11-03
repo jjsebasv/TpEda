@@ -40,7 +40,7 @@ public class minimax {
 		auxGame.board = board;
 		
 		Move answer = new Move (board, bestChoise);
-		Node nodeAnswer = null;
+		Node nodeAnswer = new Node();
 			
 		List<Move> posibleMoves;
 		
@@ -60,6 +60,9 @@ public class minimax {
 					System.out.println("posible moves ("+i+","+j+") : "+posibleMoves.size());
 					for (Move m : posibleMoves) {
 						auxGame.exeMove(m);
+						if ( current == null ){
+							current = new Node();
+						}
 						current.move = m;
 				
 						Move resp = minMaxTimeR(auxGame.board, auxGame, new Node(), finalTime, bestChoise, actualPrune, dimention);

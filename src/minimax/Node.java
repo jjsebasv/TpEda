@@ -18,6 +18,13 @@ public class Node {
 	public String label;
 	public int value;
 	
+	public Node(){
+		
+	}
+	
+	public Node(Move m){
+		this.move = move;
+	}
 	
 	
 	public void Next(Move m){
