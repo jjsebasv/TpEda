@@ -12,6 +12,7 @@ import exceptions.EndGameException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
 import minimax.minimax;
+import minimax.pcBehave;
 
 
 public class Game {
@@ -150,7 +151,7 @@ public class Game {
 				p = 0;
 			}
 
-			board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
+			board = pcBehave.minimax(this, depth, prune, System.currentTimeMillis()+maxtime);
 			//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
 			//board.printBoard();
 			System.out.println("-- YA JUGO LA PC ---");
