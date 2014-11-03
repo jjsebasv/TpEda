@@ -218,34 +218,63 @@ public class Board {
 
 
 			// camino vacio
-			for (int fil = iF; iF < iT ? fil <= iT : fil >= iT; fil += (iF < iT ? 1 : -1)) {
-
-				for (int col = jF; jF < jT ? col <= jT : col >= jT; col += jF < jT ? 1 : -1) {
-
-					if (fil != iF && col != jF) {
-
-						Box aux= board[fil][col];
-
-						if (aux.getPiece().getC() != '0' && fil != dimention /2 && col != dimention /2) {
-							System.out.println("- CAMINO BLOQUEADO");
+			
+			if( iF < iT){ // verticalmente de arriba a abajo
+				if( dimention >= 13){
+					if(getBox(iF, jF).getPiece().getC() == 'G'){
+						if( iF< dimention/2 && iT> dimention/2)
 							return false;
-						}
-
-						/*
-						 * Verifica que el tablero sea largo y los guardias no
-						 * puedan pasar por el trono
-						 */
-						if (dimention >= 13 && aux.getFila() != dimention / 2 && aux.getColumna() != dimention /2 && board[iF][jF].getPiece().getC() == 'G') {
-							System.out.println("- CAMINO BLOQUEADO");
-							return false;
-						}
-
 					}
-
 				}
-
+				
+				for(int fil = iF+1; fil <= iT; fil++ ){
+					if(!getBox(fil, jF).isEmpty())
+						return false;
+				}
 			}
-
+			
+			if( iF > iT){ // verticalmente de abajo a arriba
+				if( dimention >= 13){
+					if(getBox(iF, jF).getPiece().getC() == 'G'){
+						if( iF> dimention/2 && iT< dimention/2)
+							return false;
+					}
+				}
+				
+				for(int fil = iT-1; fil >= iF; fil-- ){
+					if(!getBox(fil, jF).isEmpty())
+						return false;
+				}
+			}
+			
+			if( jF < jT){ // horizontalmente de izquierda a derecha
+				if( dimention >= 13){
+					if(getBox(iF, jF).getPiece().getC() == 'G'){
+						if( jF< dimention/2 && jT> dimention/2)
+							return false;
+					}
+				}
+				
+				for(int col = jF+1; col <= jT; col++ ){
+					if(!getBox(iF, col).isEmpty())
+						return false;
+				}
+			}
+			
+			if( jF > jT){ // horizontalmente de derecha a izquierda
+				if( dimention >= 13){
+					if(getBox(iF, jF).getPiece().getC() == 'G'){
+						if( jF> dimention/2 && jT< dimention/2)
+							return false;
+					}
+				}
+				
+				for(int col = jF-1; col >= jT; col-- ){
+					if(!getBox(iF, col).isEmpty())
+						return false;
+				}
+			}
+			
 
 		return true;
 	}
