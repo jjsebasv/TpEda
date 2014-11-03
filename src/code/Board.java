@@ -388,102 +388,42 @@ public class Board {
 		return l;
 	}
 	
-	
 
 	
-	// -------------------------- METODOS NOWI -------------------------- //
-	public List<Move> getPossibleMoves(int x, int y) throws IllegalPieceException{
-		List<Move> l = new ArrayList<Move>();
-		for (int i = 0; i <dimention; i++) {
-			for (int j = 0; j < dimention; j++) {
-				if ( validateMove(x,y,i,j) ){
-					Board aux = copyBoard(this);
+	
+	
+
+	public List<Move> getMoves2(int x, int y){
+		List<Move> l = new ArrayList<>();
+		for(int i = 0; i < getDimention(); i++){
+			for(int j = 0; j < getDimention(); j++){
+				if(validateMove(x, y, i, j)){
+					Board aux = newBoard();
 					try {
 						aux.move(x, y, i, j);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					};
+					
 					l.add(new Move(aux, aux.getBox(i, j).getValue()));
 				}
 			}
-			
 		}
-		
-		return l ;
+		return l;
 	}
 	
-	public boolean bigBoard(){
-		return dimention >= 13;
+	private Board newBoard(){
+		Board aux = new Board(dimention);
+		for(int i = 0; i < dimention; i++){
+			for(int j = 0; j < dimention; j++){
+				aux.board[i][j] = getBox(i, j);
+			}
+		}
+		return aux;
 	}
-	
-	
-	public boolean validateTheMove(int x, int y, int i, int j){
-		
-		Box from = board[x][i];
-		Box to = board[i][j];
-		int middle = dimention / 2;
-		
-		// origen vacio o destino ocupado
-		if ( from.isEmpty() || !to.isEmpty() ){
-			return false;
-		}
-		
-		// mismo lugar
-		if ( from.equals(to) ){
-			return false;
-		}
-		
-		// no es en linea recta
-		if ( i != x && j != y){
-			return false;
-		}
-		
-		// destino casilla castillo y origen distinto del rey
-		if ( (i==0 && j==0 ) || (i==dimention-1 && j==0 ) || (i==0 && j==dimention-1 ) || (i==dimention-1 && j==dimention-1 ) ){
-			if ( from.getPiece().getC() != 'K'){
-				return false;
-			}
-		}
-		
-		// casilla trono, origen distinto del rey
-		if ( i == middle && j == middle && from.getPiece().getC() != 'K'){
-			return false;
-		}
-		
-		int step;
-		// camino libre vertical
-		if ( j == y ) {
-			step = (x>i)? -1 : 1;
-			for (int k = x; k <= i ; k += step) {
-				if ( k != x && !getBox(k, j).isEmpty() ){
-					return false;
-				}
-			}
-		}else{
-			// camino horizontal
-			step = (y>j)? -1 : 1;
-			for (int k = y; k < j; k += step) {
-				if ( k != y && !getBox(i,k).isEmpty() ){
-					return false;
-				}
-			}
-			
-		}
-		// falta validar pasar atraves del trono
-		
-		return true;
-		
-		
-	}
-		
-		
-		// 
-		
-		
-	
-	// ------------------------------------------------------------------------------ //
-	
+
+
 	
 	public boolean myPiece(int i, int j, int turn) {
 		return getBox(i,j).getPiece().getPlayer().getTurn() == turn;

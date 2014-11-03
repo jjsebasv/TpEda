@@ -156,6 +156,7 @@ public class Game {
 			
 			System.out.println("-- LE TOCA MOVER A LA PC --");
 
+			//board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
 			//board = MyMinimax.minimax(this, depth,p,null, System.currentTimeMillis()+maxtime).getBoard();
 			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
 			//board.printBoard();
@@ -163,6 +164,7 @@ public class Game {
 			this.turn = 1;
 	
 			
+
 		}
 	
 	}
