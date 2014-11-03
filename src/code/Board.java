@@ -371,9 +371,9 @@ public class Board {
 				
 				int value = getBox(i,j).getValue();	
 				if(validateMove(x, y, i, j) ){
-					System.out.println("("+x+","+y+")("+i+","+j+")"+getBox(x,y).getPiece().getC());
+					//System.out.println("("+x+","+y+")("+i+","+j+")"+getBox(x,y).getPiece().getC());
 					try {
-						auxBoard = createBoard(original);
+						auxBoard = copyBoard(original);
 						Box a = auxBoard.board[x][y];
 						auxBoard.board[x][y] = auxBoard.board[i][j];
 						auxBoard.board[i][j] = a;
@@ -393,7 +393,7 @@ public class Board {
 		return getBox(i,j).getPiece().getPlayer().getTurn() == turn;
 	}
 
-	private Board createBoard(Board original) throws IllegalPieceException {
+	public Board copyBoard(Board original) throws IllegalPieceException {
 		Board answer = new Board(original.getDimention());
 		for (int i = 0; i < original.getDimention(); i++) {
 			for (int j = 0; j < original.getDimention(); j++) {
