@@ -405,7 +405,7 @@ public class Board {
 						//Box a = auxBoard.board[x][y];
 						//auxBoard.board[x][y] = auxBoard.board[i][j];
 						//auxBoard.board[i][j] = a;
-						l.add(new Move(auxBoard, auxBoard.value));
+						l.add(new Move(auxBoard, auxBoard.value, getBox(x,y), getBox(i,j), getBox(i,j).getPiece().getPlayer().getTurn()));
 					} catch (Exception e) { // no se a que exception hace referencia
 						//do nothing
 					};
@@ -416,25 +416,7 @@ public class Board {
 	}
 
 
-	public List<Move> getMoves2(int x, int y){
-		List<Move> l = new ArrayList<>();
-		for(int i = 0; i < getDimention(); i++){
-			for(int j = 0; j < getDimention(); j++){
-				if(validateMove(x, y, i, j)){
-					Board aux = newBoard();
-					try {
-						aux.move(x, y, i, j);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					};
-					
-					l.add(new Move(aux, aux.getBox(i, j).getValue()));
-				}
-			}
-		}
-		return l;
-	}
+	
 	
 	private Board newBoard(){
 		Board aux = new Board(dimention);
