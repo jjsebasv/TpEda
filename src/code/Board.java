@@ -362,7 +362,7 @@ public class Board {
 		return acum;
 	}
 	
-	/*
+	
 	public List<Move> getMoves(int x, int y) {
 		
 		List<Move> l = new ArrayList<>();
@@ -389,8 +389,12 @@ public class Board {
 		}
 		return l;
 	}
-	*/
 	
+<<<<<<< HEAD
+=======
+	
+
+>>>>>>> 292e306330bf2082ba968b7f9f35fd70fccd0f64
 	
 	// -------------------------- METODOS NOWI -------------------------- //
 	public List<Move> getPossibleMoves(int x, int y) throws IllegalPieceException{
@@ -482,6 +486,7 @@ public class Board {
 	
 	// ------------------------------------------------------------------------------ //
 	
+<<<<<<< HEAD
 	public List<Move> getMoves2(int x, int y){
 		List<Move> l = new ArrayList<>();
 		for(int i = 0; i < getDimention(); i++){
@@ -512,6 +517,8 @@ public class Board {
 		return aux;
 	}
 
+=======
+>>>>>>> 292e306330bf2082ba968b7f9f35fd70fccd0f64
 	
 	public boolean myPiece(int i, int j, int turn) {
 		return getBox(i,j).getPiece().getPlayer().getTurn() == turn;

@@ -32,31 +32,52 @@ public class pcBehave {
 	}
 	
 	
+<<<<<<< HEAD
 	private static Move mm2(Game game, Board board, int depth, int turn) throws IllegalPieceException{
+=======
+	private static Move mm2(Game game, Board board, int depth, int turn){
+		NodeII node = new NodeII(board);
+>>>>>>> 292e306330bf2082ba968b7f9f35fd70fccd0f64
 		List<Move> l = null;
 		Move answer = null;
+		
+		if(depth == 0)
+			return answer;
 		for(int i = 0; i < board.getDimention(); i++){
 			for( int j = 0; j < board.getDimention(); j++){
 				if( board.getBox(i, j).getPiece().getPlayer().getTurn() == game.getTurn()){
+<<<<<<< HEAD
 					l = board.getMoves2(i, j);
 					System.out.println(l.size());
 					System.out.println("entro al PRIMER if");
+=======
+					l = board.getMoves(i, j);
+>>>>>>> 292e306330bf2082ba968b7f9f35fd70fccd0f64
 					for(int m = 0; m < l.size(); m++ ){
-						System.out.println("entro al FOR");
+						Game aGame = game.duplicate(l.get(m).getBoard());
+						if(turn == 1)
+							turn = 2;
+						else 
+							turn = 1;
+						Move resp = mm2(aGame,aGame.board,depth-1,turn);
+						
 						if(answer == null){
-							System.out.println("entro al if");
 							answer = l.get(m);
 						}else{
-							if(game.getTurn() == 1){
-								if(answer.getValue()>l.get(m).getValue()){
-									answer = l.get(m);
+							if(resp == null){
+								resp = l.get(m);
+							}
+							if(game.getTurn() == 2){
+								if(answer.getValue()>resp.getValue()){
+									answer = resp;
 								}
 							}else{
-								if(answer.getValue()<l.get(m).getValue()){
-									answer = l.get(m);
+								if(answer.getValue()<resp.getValue()){
+									answer = resp;
 								}
 							}
 						}
+						
 					}
 				}
 			}
