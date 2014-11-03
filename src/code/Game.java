@@ -12,7 +12,6 @@ import exceptions.EndGameException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
 import minimax.minimax;
-import minimax.pcBehave;
 
 
 public class Game {
@@ -140,7 +139,6 @@ public class Game {
 			}else if(this.turn == 2){
 				this.setTurn(1);
 			}
-			System.out.println("cabio de side: " + this.turn);
 	
 			board.printBoard();
 			
@@ -152,12 +150,12 @@ public class Game {
 				p = 0;
 			}
 
-			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
+			board = minimax.minMax(this, depth, prune, System.currentTimeMillis()+maxtime);
 			//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
 			//board.printBoard();
 			System.out.println("-- YA JUGO LA PC ---");
 			this.turn = 1;
-		
+	
 		}
 	
 	}

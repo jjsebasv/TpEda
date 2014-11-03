@@ -19,7 +19,7 @@ public class minimax {
 		
 		Integer pru = (prune)? 1 : 0;
 		if( depth == 0 ){
-			auxBoard =  minMaxTimeR(game.board,game,null,time,Integer.MAX_VALUE,pru,game.board.getDimention()).getBoard();
+			auxBoard =  minMaxTimeR(game.board,game,null,time,Integer.MAX_VALUE,pru,game.board.getDimention(), 2).getBoard();
 		}else{
 			System.out.println("con depth");
 			//auxBoard = minMaxDepthR()
@@ -35,7 +35,7 @@ public class minimax {
 	}
 	
 	
-	private static Move minMaxTimeR(Board board, Game game, Node current, long finalTime, int bestChoise, Integer actualPrune, int dimention) throws InvalidMoveException, BoardOutOfBoundsException{
+	private static Move minMaxTimeR(Board board, Game game, Node current, long finalTime, int bestChoise, Integer actualPrune, int dimention, int turn) throws InvalidMoveException, BoardOutOfBoundsException{
 		Game auxGame = game.duplicate(board);
 		auxGame.board = board;
 		
@@ -54,7 +54,6 @@ public class minimax {
 				
 
 				if( board.getBoard()[i][j].getPiece().getC() == 'N' ){
-					System.out.println("juega pc");
 
 					posibleMoves = board.getMoves(i, j);
 					System.out.println("posible moves ("+i+","+j+") : "+posibleMoves.size());
@@ -65,11 +64,13 @@ public class minimax {
 						}
 						current.move = m;
 				
-						Move resp = minMaxTimeR(auxGame.board, auxGame, new Node(), finalTime, bestChoise, actualPrune, dimention);
+						System.out.println("------------- OTRA RECURSIVA --------------------");
+						int turno = (turn == 1)? 2 : 1;
+						Move resp = minMaxTimeR(auxGame.board, auxGame, new Node(), finalTime, bestChoise, actualPrune, dimention, turn);
 						current.Next(resp);
 						m.setValue(- resp.getValue() );
 						
-						if (actualPrune != null) { // si es con poda
+						if (actualPrune != 0) { // si es con poda
 							if (m.getValue() >= actualPrune) {
 								nodeAnswer.setColour(1);
 							Node son = new Node();

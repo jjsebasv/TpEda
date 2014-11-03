@@ -178,20 +178,20 @@ public class Board {
 			Box to = this.getBox(iT, jT);
 			
 			// casillo vacio
-			if ( from.isEmpty()){
-				System.out.println("- ORIGEN VACIO");
+			if ( from.isEmpty() ){
+				//System.out.println("- ORIGEN VACIO");
 				return false;
 			}
 			
 			// destino ocupado
 			if ( !to.isEmpty()){
-				System.out.println(" - DESTINO OCUPADO ");
+				//System.out.println(" - DESTINO OCUPADO ");
 				return false;
 			}
 			
 			//mismo lugar
 			if ( iF == iT && jT == jF ){
-				System.out.print("- MISMO LUGAR");
+				//System.out.print("- MISMO LUGAR");
 				return false;
 			}else{
 			}
@@ -199,27 +199,27 @@ public class Board {
 			// no es dentro del tablero
 			if ( iF > dimention || jF > dimention || iT > dimention || jT > dimention ||
 					 iF < 0 || jF < 0|| iT < 0 || jT < 0) {
-				System.out.print("- MALA DIMENSION");
+				//System.out.print("- MALA DIMENSION");
 				return false;
 			}
 
 			// no es en linea reacta
 			if ( iF != iT && jF != jT) {
-				System.out.println(" - NO EN LINEA R ");
+				//System.out.println(" - NO EN LINEA R ");
 				return false;
 			}
 
 			// destino castillo pieza no es rey
 			if (from.getPiece().getC() != 'K'
 					&& ( (iT == 0 && jT == 0 ) || (iT == 0 && jT == dimention-1 ) || (iT == dimention-1 && jT == 0 ) || (iT == dimention-1 && jT == dimention -1 ) )) {
-				System.out.print(" - DESTINO CASTILLO ");
+				//System.out.print(" - DESTINO CASTILLO ");
 				return false;
 
 			}
 
 			// castilla trono -> solo rey
 			if (from.getPiece().getC() != 'K' && (iT == dimention/2 && jT == dimention/2 ) ) {
-				System.out.print("- CASILLA REY");
+				//System.out.print("- CASILLA REY");
 				return false;
 			}
 
@@ -360,10 +360,14 @@ public class Board {
 	}
 	
 	public List<Move> getMoves(int x, int y) {
+		
+		if ( board[x][y].getPiece().getC() != 'N' ){
+			return null;
+		}
+			
 		List<Move> l = new ArrayList<>();
 		Board original = this;
 		Board auxBoard = new Board(null);
-		
 		for(int i = 0; i < this.dimention; i++){
 			for(int j = 0; j < this.dimention; j++){
 				
@@ -373,25 +377,32 @@ public class Board {
 				//else if( getBox(x, y).getPiece().getC() == 'G')
 				//	value = enemies(i,j);
 				//else 
-					value = getBox(i,j).getValue();
-					System.out.print("get move para: ("+x+","+y+")("+i+","+j+")");
-				if( validateMove(x, y, i, j) ){
-					System.out.println("- VALIDO EL MOVIMINETO");
+					value = getBox(i,j).getValue();	
+				if( validateMove(x, y, i, j)){
+					
+					//System.out.println("- VALIDO EL MOVIMINETO");
 					try {
 						auxBoard = createBoard(original);
 						Box a = auxBoard.board[x][y];
 						auxBoard.board[x][y] = auxBoard.board[i][j];
 						auxBoard.board[i][j] = a;
-						auxBoard.printBoard();
+						//auxBoard.printBoard();
 						l.add(new Move(auxBoard, value));
 					} catch (Exception e) { // no se a que exception hace referencia
 						System.out.println("invalid move");
 					};
-				}else{
-					System.out.println(" - NO VALIDO");
-				}
+				}//else{
+					//System.out.println(" - NO VALIDO");
+				//}
 			}
 		}
+		System.out.println("-------------- GET MOVES ("+x+","+y+")----------");
+		for (Move move : l) {
+			move.getBoard().printBoard();
+			System.out.println("--");
+			
+		}
+		System.out.println("---------------------------------");
 		return l;
 	}
 	
