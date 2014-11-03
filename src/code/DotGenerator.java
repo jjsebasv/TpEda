@@ -16,40 +16,58 @@ public class DotGenerator {
 	
 	public static int nodeCounter;
 	public static Map<NodeII,Integer> nodes;
+	public static File fr;
+	public static FileWriter fw;
 	
 	public DotGenerator(){
 		this.nodeCounter = 0;
 		nodes = new HashMap<NodeII,Integer>();
+		fr = new File("graph.txt");
+		try {
+			fw = new FileWriter(fr);
+			fw.append("digraph {\n");
+		} catch (IOException e) {
+			System.out.println("-------- NO PUDE ESCRIBIR ------------");
+			e.printStackTrace();
+		}
+		
 	}
 
 	
 	public static void export(NodeII node){
-		File fr = openFile();
+		
+		if ( node == null ){
+			System.out.println("node era null");
+			return;
+		}
 		
 		try {
-			 FileWriter fw = new FileWriter(fr);
-	 	        fw.write("digraph {\n");
-	 	        if ( nodes.containsKey(node)){
+	 	     
+				System.out.println(node.getMove());
+	 	        if ( !nodes.containsKey(node)){
+	 	        	System.out.println("no contiene la key");
 	 	        	nodes.put(node, nodeCounter);
+	 	        	fw.append(labelNode(node));
 	 	        	nodeCounter++;
 	 	        } 	  
-	 	        
-	 	        fw.write(labelNode(node));
+
 	 	        for (NodeII child : node.children) {
 					if ( !nodes.containsKey(child) ){
 						nodes.put(child, nodeCounter++);
-						fw.write(labelNode(child));
+						fw.append(labelNode(child));
 					}
-					fw.write(setRelation(node,child));
-					fw.write(setColour(node,child));
-					fw.write(setShape(child));
+					System.out.println(child.getMove());
+					fw.append(setRelation(node,child));
+					fw.append(setColour(node,child));
+					fw.append(setShape(child));
 				}	
 	 	        
-	 	       fw.write("}\n");
 	 	       fw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println(nodes);
+		System.out.println(nodes.size());
  	}
     
 	private static String setColour(NodeII father, NodeII son){
@@ -64,7 +82,7 @@ public class DotGenerator {
 	}
 	
 	private static String setShape(NodeII node){
-		switch (node.getTurn()) {
+		switch (node.getMove().getTurn()) {
 		case 1:
 			return nodes.get(node)+ "[shape=box]"+"\n";
 		case 2:
@@ -75,8 +93,14 @@ public class DotGenerator {
 	}
 	
 	private static String labelNode(NodeII node) {
-		String coordenadas = "("+node.getFrom().getFila()+","+node.getFrom().getColumna()+")("+node.getTo().getFila()+","+node.getTo().getColumna()+")";
+		if ( node.getMove().getFrom() == null || node.getMove().getTo() == null || nodeCounter == 0){
+			return "START";
+		}
+		
+		String coordenadas = "("+node.getMove().getFrom().getFila()+","+node.getMove().getFrom().getColumna()+")("+node.getMove().getTo().getFila()+","+node.getMove().getTo().getColumna()+")";
+		//System.out.println("coordenadas"+coordenadas);
 		String label = nodeCounter+" "+"[label="+coordenadas+"]"+"\n";
+		//System.out.println("label: "+label);
 		return label;
 	}
 
@@ -85,8 +109,4 @@ public class DotGenerator {
 		return label;
 	}
 	
-	private static File openFile(){
-		File fr = null ;
-		return fr;
-	}
 }

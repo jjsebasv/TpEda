@@ -23,6 +23,7 @@ public class Board {
 	private int dimention;
 	private Box board[][];
 
+	// ------------------------------------ CONSTRUCTORES ------------------------------------ // 
 	
 	public Board(int dimention){
 		this.board = new Box[dimention][dimention];
@@ -36,29 +37,7 @@ public class Board {
 	}
 
 
-	public Box getBox(int x, int y) {
-		if (!belongsToRows(x) || !belongsToCols(y))
-			return null;
-		return board[x][y];	
-	}
-	
-	
-	public int getDimention() {
-		return dimention;
-	}
-
-	public void setDimention(int dimention) {
-		this.dimention = dimention;
-	}
-
-	public Box[][] getBoard() {
-		return board;
-	}
-
-	public void setBoard(Box[][] board) {
-		this.board = board;
-	}
-
+	// ------------------------------------ METODOS  ------------------------------------ // 
 
 	private void createBoard(String file) {
 		try {
@@ -405,7 +384,8 @@ public class Board {
 						//Box a = auxBoard.board[x][y];
 						//auxBoard.board[x][y] = auxBoard.board[i][j];
 						//auxBoard.board[i][j] = a;
-						l.add(new Move(auxBoard, auxBoard.value, getBox(x,y), getBox(i,j), getBox(i,j).getPiece().getPlayer().getTurn()));
+						int newturn = (getBox(i,j).getPiece().getPlayer().getTurn()==1)? 2 : 1; 
+						l.add(new Move(auxBoard, auxBoard.value, getBox(x,y), getBox(i,j),newturn));
 					} catch (Exception e) { // no se a que exception hace referencia
 						//do nothing
 					};
@@ -456,6 +436,30 @@ public class Board {
 	}
 	
 	
+	// ------------------------------------ GETTERS Y SETTERS ------------------------------------ // 
 	
+
+	public Box getBox(int x, int y) {
+		if (!belongsToRows(x) || !belongsToCols(y))
+			return null;
+		return board[x][y];	
+	}
+	
+	
+	public int getDimention() {
+		return dimention;
+	}
+
+	public void setDimention(int dimention) {
+		this.dimention = dimention;
+	}
+
+	public Box[][] getBoard() {
+		return board;
+	}
+
+	public void setBoard(Box[][] board) {
+		this.board = board;
+	}
 }
 

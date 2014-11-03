@@ -12,7 +12,6 @@ import exceptions.EndGameException;
 import exceptions.IllegalPieceException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
-
 import minimax.pcBehave;
 
 
@@ -26,6 +25,8 @@ public class Game {
 	private int depth;
 	private int turn;
 	private String file;
+	
+	// ------------------------------------ CONSTRUCTORES ------------------------------------ // 
 	
 	public Game(Board board, boolean visual, long maxtime, int depth, boolean tree, boolean prune, int turn){
 		this.board = board;
@@ -63,6 +64,8 @@ public class Game {
 	}
 
 
+	// ------------------------------------ METODOS  ------------------------------------ // 
+	
 	/*
 	//private void getTurn(String file) {
 		//try {
@@ -83,10 +86,6 @@ public class Game {
 	}
 	*/
 	
-	public int getTurn(){
-		return this.turn;
-	}
-
 	public void saveGame(){
 		File fpw = new File(System.currentTimeMillis()+".txt");
 		try {
@@ -120,10 +119,7 @@ public class Game {
 		Game gm = new Game(b, visual,maxtime, depth, tree, prune,aTurn);
 		return gm;
 	}
-	
-	public void setTurn(int turn) {
-		this.turn = turn;
-	}
+
 
 	public void exeMove(Move m){
 		this.board = m.getBoard();
@@ -153,20 +149,42 @@ public class Game {
 				p = 0;
 			}
 			
-			
-			System.out.println("-- LE TOCA MOVER A LA PC --");
 
-			//board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
-			//board = MyMinimax.minimax(this, depth,p,null, System.currentTimeMillis()+maxtime).getBoard();
 			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
-			//board.printBoard();
-			//System.out.println("-- YA JUGO LA PC ---");
 			this.turn = 1;
 	
 			
 
 		}
 	
+	}
+
+
+	public Game copy() throws IllegalPieceException {
+		Board newBoard = board.copyBoard(board);
+		return new Game(board, this.visual,this.maxtime, this.depth, this.tree, this.prune, this.turn);
+	}
+	
+	public void parserMove(String string){
+		if ( string.length() != 10 ){
+			System.out.println("Argumentos Invalidos. Ingresar: (0,0)(0,0)");
+		}
+		int x = Integer.valueOf(string.charAt(1));
+		int y = Integer.valueOf(string.charAt(3));
+		int i = Integer.valueOf(string.charAt(6));
+		int j = Integer.valueOf(string.charAt(8));
+		try {
+			move(x,y,i,j);
+		} catch (Exception e) {
+			System.out.println("Movimiento Invalido");
+		}
+	}
+	
+	// ------------------------------------ GETTERS Y SETTERS ------------------------------------ // 
+	
+	
+	public void setTurn(int turn) {
+		this.turn = turn;
 	}
 
 	public Board getBoard() {
@@ -224,10 +242,11 @@ public class Game {
 	public void setFile(String file) {
 		this.file = file;
 	}
+	
 
-	public Game copy() throws IllegalPieceException {
-		Board newBoard = board.copyBoard(board);
-		return new Game(board, this.visual,this.maxtime, this.depth, this.tree, this.prune, this.turn);
+	public int getTurn(){
+		return this.turn;
 	}
+
 	
 }

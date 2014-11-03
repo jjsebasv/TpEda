@@ -61,6 +61,7 @@ public class Table extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
+		/*
 		JButton btnSaveGame = new JButton("GUARDAR PARTIDA");
 		btnSaveGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -71,15 +72,15 @@ public class Table extends JFrame {
 		btnSaveGame.setForeground(new Color(0, 0, 0));
 		btnSaveGame.setBackground(Color.WHITE);
 		contentPane.add(btnSaveGame, BorderLayout.EAST);
+		*/
 		
 		label = new JLabel("");
 		label.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		label.setForeground(Color.RED);
 		label.setBackground(Color.WHITE);
-		//label.setMaximumSize(new Dimension(30,30));
-		//label.setMinimumSize(new Dimension(30,30));
 		label.setVisible(true);
-		contentPane.add(label,BorderLayout.WEST);
+		label.setText("TU TURNO");
+		contentPane.add(label,BorderLayout.SOUTH);
 		
 		
 		from = new MyButton(0,0,' ');
@@ -135,7 +136,7 @@ public class Table extends JFrame {
 		            						System.out.print("ACA ("+from.getFil()+","+from.getCol()+")("+to.getFil()+","+to.getCol()+")");
 		            						try {
 		            							game.move(from.getFil(),from.getCol(),to.getFil(),to.getCol());
-		            							label.setText("                   ");
+		            							label.setText("TU TURNO");
 												//game.board.printBoard();
 											} catch (WinGameException e1) {
 												label.setText("  GANASTE EL JUEGO ");

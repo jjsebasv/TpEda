@@ -8,6 +8,8 @@ public class Move {
 	private Box to;
 	private int turn;
 	
+	// ------------------------------------ CONSTRUCTORES ------------------------------------ //
+	
 	public Move(Board board, int value, Box from, Box to, int turn){
 		this.value = value;
 		this.board = board;
@@ -15,6 +17,24 @@ public class Move {
 		this.to = to;
 		this.turn = turn;
 	}
+	
+	
+	// ------------------------------------ METODOS  ------------------------------------ //
+	
+	/*
+	public String toString(){
+		String string = "";
+		for (int i = 0; i < board.getDimention(); i++) {
+			for (int j = 0; j < board.getDimention(); j++) {
+				string += board.getBoard()[i][j].getPiece().getC();
+			}
+			string += String.valueOf('\n');
+		}
+		return string;
+	}
+	*/
+	
+	// ------------------------------------ GETTERS Y SETTERS ------------------------------------ //
 	
 	public Box getFrom(){
 		return this.from;
@@ -31,10 +51,7 @@ public class Move {
 	public Move(int value){
 		this.value = value;
 	}
-	
-	public Move(){
-		
-	}
+
 
 	public int getValue(){
 		return this.value;
@@ -52,19 +69,15 @@ public class Move {
 		this.value = v;
 	}
 	
-	public String toString(){
-		String string = "";
-		for (int i = 0; i < board.getDimention(); i++) {
-			for (int j = 0; j < board.getDimention(); j++) {
-				string += board.getBoard()[i][j].getPiece().getC();
-			}
-			string += String.valueOf('\n');
-		}
-		return string;
-	}
-	
-	
 	public void setBoard(Board board){
 		this.board = board;
+	}
+	
+	public String toString(){
+		int x = (from==null)? (-1) : from.getFila();
+		int y = (from==null)? (-1) : from.getColumna();
+		int i = (to==null)? (-1) : from.getFila();
+		int j = (to==null)? (-1) : from.getColumna();
+		return "turn: "+turn+"("+x+","+y+")("+i+","+j+")";
 	}
 }

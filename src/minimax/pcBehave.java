@@ -3,6 +3,7 @@ package minimax;
 import java.util.List;
 
 import code.Board;
+import code.DotGenerator;
 import code.Game;
 import code.Move;
 import exceptions.IllegalPieceException;
@@ -25,15 +26,17 @@ public class pcBehave {
 		*/
 		NodeII me = new NodeII(game.board);
 		
+		me.setMove(new Move(game.board,Integer.MIN_VALUE,null,null,1));
 		
 		Board aux = mm2(game, game.board, depth, game.getTurn(),me).getBoard();
 		Move auxMove = null;
+		DotGenerator.export(me);
 		for(NodeII n:me.children){
 			if(auxMove == null)
-				auxMove = n.move;
+				auxMove = n.getMove();
 			else{
-				if(n.move.getValue() > auxMove.getValue())
-					auxMove = n.move;
+				if(n.getMove().getValue() > auxMove.getValue())
+					auxMove = n.getMove();
 			}
 		}
 		
@@ -54,8 +57,6 @@ public class pcBehave {
 				if( board.getBox(i, j).getPiece().getPlayer().getTurn() == game.getTurn()){
 
 					l = board.getMoves(i, j);
-					System.out.println(l.size());
-					System.out.println("entro al PRIMER if");
 
 					for(int m = 0; m < l.size(); m++ ){
 						Game aGame = game.duplicate(l.get(m).getBoard());
@@ -100,11 +101,11 @@ public class pcBehave {
 			if(me.chosen == null)
 				me.chosen = n;
 			if(game.getTurn() == 2){
-				if(me.chosen.getValue()>n.move.getValue()){
+				if(me.chosen.getValue()>n.getMove().getValue()){
 					me.chosen = n;
 				}
 			}else{
-				if(me.chosen.getValue()<n.move.getValue()){
+				if(me.chosen.getValue()<n.getMove().getValue()){
 					me.chosen = n;
 				}
 			}
@@ -114,7 +115,7 @@ public class pcBehave {
 		else
 			turn = 1;
 		
-		return me.chosen.move;
+		return me.chosen.getMove();
 	}
 	
 	
