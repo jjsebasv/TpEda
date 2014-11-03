@@ -19,6 +19,7 @@ import exceptions.WinGameException;
 
 public class Board {
 
+	public int value;
 	private int dimention;
 	private Box board[][];
 
@@ -377,25 +378,18 @@ public class Board {
 						Box a = auxBoard.board[x][y];
 						auxBoard.board[x][y] = auxBoard.board[i][j];
 						auxBoard.board[i][j] = a;
-						//auxBoard.printBoard();
 						l.add(new Move(auxBoard, value));
 					} catch (Exception e) { // no se a que exception hace referencia
-						//System.out.println("invalid move");
+						//do nothing
 					};
 				}
 			}
-			//System.out.println("-------------- GET MOVES ("+x+","+y+")----------");
-			//for (Move move : l) {
-			//	move.getBoard().printBoard();
-			//	System.out.println("--");
-			//}
-			//System.out.println("---------------------------------");
-			
 		}
 		return l;
 	}
 	*/
 	
+<<<<<<< HEAD
 	
 	// -------------------------- METODOS NOWI -------------------------- //
 	public List<Move> getPossibleMoves(int x, int y) throws IllegalPieceException{
@@ -519,6 +513,9 @@ public class Board {
 		}
 		return aux;
 	}
+=======
+
+>>>>>>> e82b5bb682e0d1267fdade99443f1082374524a1
 	
 	public boolean myPiece(int i, int j, int turn) {
 		return getBox(i,j).getPiece().getPlayer().getTurn() == turn;
