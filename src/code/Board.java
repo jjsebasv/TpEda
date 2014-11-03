@@ -317,24 +317,37 @@ public class Board {
 		return acum;
 	}
 
-	private void eliminate(Box other) throws IllegalPieceException {
+	private void eliminate(Box other) throws IllegalPieceException, EndGameException {
+		if(other.getPiece().getC() == 'K')
+			throw new EndGameException();
 		other.setPiece(new Piece('0'));;
 	}
 
 	private boolean isKing(int x, int y) throws EndGameException, IllegalPieceException  {
 		Box cell = getBox(x, y);
+		ArrayList<Box> neig = new ArrayList<>();
 		if ( cell.getPiece().getC() == 'K') {
-			int count = 0;
-			ArrayList<Box> neig = new ArrayList<>();
+			int countEnemy = 0;
+			int countSpecial = 0;
+			int countGuard = 0;
+			int countOut = 0;
 			neig.addAll(Arrays.asList(getBox(x - 1, y), getBox(x + 1, y),
 					getBox(x, y - 1), getBox(x, y + 1)));
 			for (Box box : neig) {
-				if (box != null && box.getPiece().getPlayer().getTurn() != cell.getPiece().getPlayer().getTurn()
-						&& box.getPiece().getPlayer().getTurn() != 0) {
-					count++;
-				}
+				if(box == null)
+					countOut++;
+				else if(box.getFila() == dimention/2 && box.getColumna() == dimention/2)
+					countSpecial++;
+				else if( (box.getFila() == 0 && (box.getColumna() == 0 || box.getColumna() == dimention-1) ) || (box.getFila() == dimention-1 && (box.getColumna() == 0 || box.getColumna() == dimention-1) ) )
+					countSpecial++;
+				else if( box.getPiece().getPlayer().getTurn() == 1)
+					countGuard++;
+				else if( box.getPiece().getPlayer().getTurn() == 2)
+					countEnemy++;
+						
 			}
-			if (count >= 3) {
+			if ( (countEnemy == 3 && (countSpecial == 1 || countOut == 1 || countGuard == 1)) || (countEnemy == 4) || (countEnemy == 2 && countOut == 1 && countSpecial == 1)  ) {
+				System.out.println("cE: "+ countEnemy + " cS: " + countSpecial + " cO: " + countOut + " cG: " + countGuard);
 				eliminate(cell);
 				value = Integer.MAX_VALUE;
 				throw new EndGameException();
@@ -342,6 +355,7 @@ public class Board {
 		}
 		return false;
 	}
+	
 	
 	private int enemies(int x, int y){
 		int acum = 0;
@@ -375,37 +389,20 @@ public class Board {
 		for(int i = 0; i < this.dimention; i++){
 			for(int j = 0; j < this.dimention; j++){
 				
-				int value = getBox(i,j).getValue();	
+				
 				if(validateMove(x, y, i, j) ){
-					//System.out.println("("+x+","+y+")("+i+","+j+")"+getBox(x,y).getPiece().getC());
 					try {
 						auxBoard = copyBoard(original);
 						auxBoard.move(x,y, i, j);
-						//Box a = auxBoard.board[x][y];
-						//auxBoard.board[x][y] = auxBoard.board[i][j];
-						//auxBoard.board[i][j] = a;
 						int newturn = (getBox(i,j).getPiece().getPlayer().getTurn()==1)? 2 : 1; 
 						l.add(new Move(auxBoard, auxBoard.value, getBox(x,y), getBox(i,j),newturn));
-					} catch (Exception e) { // no se a que exception hace referencia
+					} catch (Exception e) { 
 						//do nothing
 					};
 				}
 			}
 		}
 		return l;
-	}
-
-
-	
-	
-	private Board newBoard(){
-		Board aux = new Board(dimention);
-		for(int i = 0; i < dimention; i++){
-			for(int j = 0; j < dimention; j++){
-				aux.board[i][j] = getBox(i, j);
-			}
-		}
-		return aux;
 	}
 
 
