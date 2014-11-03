@@ -12,10 +12,7 @@ import exceptions.EndGameException;
 import exceptions.IllegalPieceException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
-<<<<<<< HEAD
-=======
 
->>>>>>> e82b5bb682e0d1267fdade99443f1082374524a1
 import minimax.pcBehave;
 
 
@@ -158,7 +155,7 @@ public class Game {
 			
 			
 			System.out.println("-- LE TOCA MOVER A LA PC --");
-<<<<<<< HEAD
+
 			//board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
 			//board = MyMinimax.minimax(this, depth,p,null, System.currentTimeMillis()+maxtime).getBoard();
 			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
@@ -166,13 +163,13 @@ public class Game {
 			board.printBoard();
 			System.out.println("-- YA JUGO LA PC ---");
 			this.turn = 1;
-=======
+
 			//board = MyMinimax.minimax(this, depth,p,null, System.currentTimeMillis()+maxtime).getBoard();
 			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
 			//board.printBoard();
 			//System.out.println("-- YA JUGO LA PC ---");
 			//this.turn = 1;
->>>>>>> e82b5bb682e0d1267fdade99443f1082374524a1
+
 	
 		}
 	

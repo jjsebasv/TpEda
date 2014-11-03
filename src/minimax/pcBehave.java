@@ -5,12 +5,13 @@ import java.util.List;
 import code.Board;
 import code.Game;
 import code.Move;
+import exceptions.IllegalPieceException;
 
 
 public class pcBehave {
 	
 	
-	public static Board minimax(Game game, int depth, boolean prune, long time) {
+	public static Board minimax(Game game, int depth, boolean prune, long time) throws IllegalPieceException {
 		/*
 		NodeII nAux = new NodeII(game.board);
 		Move move = mm(game, game.board, depth, game.getTurn());
@@ -31,13 +32,13 @@ public class pcBehave {
 	}
 	
 	
-	private static Move mm2(Game game, Board board, int depth, int turn){
+	private static Move mm2(Game game, Board board, int depth, int turn) throws IllegalPieceException{
 		List<Move> l = null;
 		Move answer = null;
 		for(int i = 0; i < board.getDimention(); i++){
 			for( int j = 0; j < board.getDimention(); j++){
 				if( board.getBox(i, j).getPiece().getPlayer().getTurn() == game.getTurn()){
-					l = board.getMoves(i, j);
+					l = board.getMoves2(i, j);
 					System.out.println(l.size());
 					System.out.println("entro al PRIMER if");
 					for(int m = 0; m < l.size(); m++ ){
@@ -63,7 +64,7 @@ public class pcBehave {
 		return answer;
 	}
 	
-	private static Move mm(Game game, Board board, int depth, int turn) {
+	private static Move mm(Game game, Board board, int depth, int turn) throws IllegalPieceException {
 		Move answer = null;
 		
 /*		if(me == null){
@@ -79,7 +80,7 @@ public class pcBehave {
 				
 				if(board.getBox(i, j).getPiece().getPlayer().getTurn() == turn ){
 					
-					for (Move m : board.getMoves(i, j)) {
+					for (Move m : board.getMoves2(i, j)) {
 						Game aGame = game.duplicate( board );
 						aGame.exeMove(m);
 
