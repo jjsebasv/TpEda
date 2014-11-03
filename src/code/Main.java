@@ -13,7 +13,7 @@ import view.Table;
 public class Main {
 	
 	public static void main(String[] args) throws Exception {
-		
+		DotGenerator graphviz = new DotGenerator();
 
 		String[] params = parser(args);
 		//System.out.println(params[0]);

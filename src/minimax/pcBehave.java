@@ -25,6 +25,7 @@ public class pcBehave {
 		*/
 		NodeII me = new NodeII(game.board);
 		
+		
 		Board aux = mm2(game, game.board, depth, game.getTurn(),me).getBoard();
 		Move auxMove = null;
 		for(NodeII n:me.children){
