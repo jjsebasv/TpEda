@@ -90,7 +90,7 @@ public class Board {
 	}
 
 
-	public Board move( int iFrom, int jFrom, int iTo, int jTo) throws Exception{ 
+	public Board move( int iFrom, int jFrom, int iTo, int jTo) throws WinGameException, InvalidMoveException, IllegalPieceException, EndGameException { 
 		if ( validateMove(iFrom, jFrom, iTo, jTo)) {	
 			swap(iFrom, jFrom, iTo, jTo);
 			this.board[iFrom][jFrom].setPiece(new Piece('0'));
@@ -279,7 +279,7 @@ public class Board {
 		return true;
 	}
 
-	private int eat(Board board, int x, int y) throws Exception {
+	private int eat(Board board, int x, int y) throws IllegalPieceException, EndGameException {
 		Box aux = board.getBox(x, y);
 		int acum = 0;
 		if (board.belongsToRows(x - 1) && board.getBox(x - 1, y).getPiece().getPlayer().getTurn() != aux.getPiece().getPlayer().getTurn()
@@ -321,7 +321,7 @@ public class Board {
 		other.setPiece(new Piece('0'));;
 	}
 
-	private boolean isKing(int x, int y) throws Exception {
+	private boolean isKing(int x, int y) throws EndGameException, IllegalPieceException  {
 		Box cell = getBox(x, y);
 		if ( cell.getPiece().getC() == 'K') {
 			int count = 0;

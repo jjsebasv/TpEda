@@ -10,6 +10,7 @@ import javax.naming.directory.InvalidAttributesException;
 
 import exceptions.EndGameException;
 import exceptions.IllegalPieceException;
+import exceptions.InvalidArgumentsException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
 import minimax.pcBehave;
@@ -25,13 +26,15 @@ public class Game {
 	private int depth;
 	private int turn;
 	private String file;
+	private boolean finished;
 	
 	// ------------------------------------ CONSTRUCTORES ------------------------------------ // 
 	
 	public Game(Board board, boolean visual, long maxtime, int depth, boolean tree, boolean prune, int turn){
+		this.finished = false;
 		this.board = board;
 		this.visual = visual;
-		this.maxtime = maxtime;
+		this.maxtime = maxtime * 1000;
 		this.depth = depth;
 		this.tree = tree;
 		this.prune = prune;
@@ -47,9 +50,9 @@ public class Game {
 		this.prune = prune;
 		this.file = file;
 		this.turn = turn;
+		this.finished = false;
 		this.board = new Board(file);
-		System.out.println("GAME: "+ turn);
-		
+		System.out.println("GAME: "+ turn);	
 		System.out.println("DEPTH : " + this.depth);
 		System.out.println("MAXTIME: " + this.maxtime);
 		
@@ -127,7 +130,7 @@ public class Game {
 	}
 	
 
-	public void move(int fil, int col, int fil2, int col2) throws Exception {
+	public void move(int fil, int col, int fil2, int col2) throws InvalidMoveException, WinGameException, IllegalPieceException, EndGameException {
 		System.out.println("turno del game: " + this.turn);
 		
 		if(this.board.getBox(fil, col).getPiece().getPlayer().getTurn() != this.turn){
@@ -152,7 +155,7 @@ public class Game {
 
 			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
 			this.turn = 1;
-	
+
 			
 
 		}
@@ -165,19 +168,16 @@ public class Game {
 		return new Game(board, this.visual,this.maxtime, this.depth, this.tree, this.prune, this.turn);
 	}
 	
-	public void parserMove(String string){
+	public void parserMove(String string) throws InvalidMoveException, WinGameException, IllegalPieceException, EndGameException, InvalidArgumentsException{
 		if ( string.length() != 10 ){
-			System.out.println("Argumentos Invalidos. Ingresar: (0,0)(0,0)");
+			throw new InvalidArgumentsException();
 		}
-		int x = Integer.valueOf(string.charAt(1));
-		int y = Integer.valueOf(string.charAt(3));
-		int i = Integer.valueOf(string.charAt(6));
-		int j = Integer.valueOf(string.charAt(8));
-		try {
-			move(x,y,i,j);
-		} catch (Exception e) {
-			System.out.println("Movimiento Invalido");
-		}
+		int x = Integer.valueOf(string.charAt(1)-'0');
+		int y = Integer.valueOf(string.charAt(3)-'0');
+		int i = Integer.valueOf(string.charAt(6)-'0');
+		int j = Integer.valueOf(string.charAt(8)-'0');
+		System.out.println("a mover "+x+y+" "+i+j);
+		move(x,y,i,j);
 	}
 	
 	// ------------------------------------ GETTERS Y SETTERS ------------------------------------ // 
@@ -246,6 +246,10 @@ public class Game {
 
 	public int getTurn(){
 		return this.turn;
+	}
+
+	public boolean isFinished() {
+		return this.finished;
 	}
 
 	

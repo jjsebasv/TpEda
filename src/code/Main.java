@@ -8,6 +8,10 @@ import java.io.InputStreamReader;
 
 import javax.naming.directory.InvalidAttributesException;
 
+import exceptions.EndGameException;
+import exceptions.InvalidArgumentsException;
+import exceptions.InvalidMoveException;
+import exceptions.WinGameException;
 import view.Table;
 
 public class Main {
@@ -24,28 +28,29 @@ public class Main {
 		if ( Boolean.valueOf(params[3]) ){
 			Table gameView = new Table(game);
 			gameView.setVisible(true);
-		}
-		
-		// leer hasta que se acabe el juego
-		if ( !Boolean.valueOf(params[3]) ) {
-		Exception e = new Exception();
-			while ( e == null ){
+		}else{
+			BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
+			while ( !game.isFinished() ){
 				try {
-					readMove(game);
-				} catch (Exception e2) {
-					e = e2;
+					game.parserMove(buffer.readLine());
+					game.board.printBoard();
+				} catch (InvalidMoveException e) {
+					System.out.println("Movimiento invalido");
+				} catch (WinGameException e2) {
+					System.out.println("Ganaste el juego");
+				} catch (EndGameException e) {
+					System.out.println("Perdiste el juego");
+				} catch (InvalidArgumentsException e) {
+					System.out.println("Argumentos Invalidos. Ingresar (0,0)(0,0)");
 				}
 			}
 		}
 		
+		
+		
 	}
 	
-	private static void readMove(Game game) throws Exception {
-		BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
-		String line=buffer.readLine();
-		char[] array = line.toCharArray();
-		game.move(Integer.valueOf(array[1]), Integer.valueOf(array[2]), Integer.valueOf(array[5]), Integer.valueOf(array[6]));
-	}
+
 
 	public static String[] parser(String[] args) throws InvalidAttributesException{
 		int size = args.length;
