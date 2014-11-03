@@ -37,4 +37,8 @@ public class Move {
 		return string;
 	}
 	
+	
+	public void setBoard(Board board){
+		this.board = board;
+	}
 }
