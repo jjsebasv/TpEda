@@ -10,6 +10,7 @@ import exceptions.IllegalPieceException;
 public class MyMinimax {
 
 	
+<<<<<<< HEAD
 	public static Move minimax(Game state, int depth, Integer prune, Node me, Long timeBound) throws IllegalPieceException {
 		//if (depth == 0 || state.getTurn() > 2) {
 			//return new Move(state.value());
@@ -56,6 +57,52 @@ public class MyMinimax {
 								//if (nodeAnswer != null)
 									//nodeAnswer.setColor("salmon");
 								return answer;
+=======
+	public static Board minimax(Game game, int depth, boolean prune, long time){
+		Move aux = new Move();
+		if ( depth == 0 ){
+			System.out.println("POOOOOOOOOOOOR TIEMPOOOOOOOOOO");
+			aux = minimaxTime(game,prune, time,2);
+		}else{
+			//aux = minimaxDepth(game,prune,depth);
+			System.out.println("por depth");
+		}
+		return aux.getBoard();
+	}
+
+
+	private static Move minimaxTime(Game game, boolean prune, long time, int turn) {
+		
+		Move answer = null;
+		MyNode node = null;
+		
+		
+		if (time < System.currentTimeMillis()){
+			System.out.println("MEEEEEEEEE QUEDE SINNNNN TIEMPO");
+			return answer;
+		}
+		
+		for (int i = 0; i < game.board.getDimention(); i++) {
+			for (int j = 0; j < game.board.getDimention(); j++) {
+			
+				if ( game.board.myPiece(i, j, turn) ){
+					for (Move move : game.board.getMoves(i,j)) {
+						node = new MyNode(move);
+						Game auxGame = game;
+						auxGame.board = move.getBoard();
+						int newturn = (turn==2)? 1 : 2;
+						node.setNext(new MyNode(minimaxTime(auxGame,prune,time,newturn)));
+					}
+					
+					if ( answer == null && node != null ) {
+						answer = node.move;
+					}
+					else{
+						// elijo min
+						if ( turn == 1 ){
+							if ( answer.getValue() > node.move.getValue() ){
+								answer = node.getMove();
+>>>>>>> d393a110e9bd32140115fe39f2df950fbef1f691
 							}
 						}
 						if (prune != null) { // si es con poda
