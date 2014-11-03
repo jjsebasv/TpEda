@@ -11,20 +11,24 @@ public class pcBehave {
 	
 	
 	public static Board minimax(Game game, int depth, boolean prune, long time) {
-		System.out.println("ENTRO");
 		
-		Board aux = mm(game, game.board, depth, game.getTurn(), null).getBoard();
+		NodeII nAux = new NodeII(game.board);
+		Board aux = mm(game, game.board, depth, game.getTurn()).getBoard();
+		
 		System.out.println("este x");
 		aux.printBoard();
+		
 		return aux;
 		
 	}
 	
-	private static Move mm(Game game, Board board, int depth, int turn, NodeII me) {
-		System.out.println(depth);
+	private static Move mm(Game game, Board board, int depth, int turn) {
 		Move answer = null;
 		
-		
+/*		if(me == null){
+			me = new NodeII(game.board);
+		}
+*/	
 		if(depth == 0){
 			return answer;
 		}
@@ -43,15 +47,10 @@ public class pcBehave {
 						else if(turn == 2)
 							turn = 1;
 						
-						if(me == null){
-							me = new NodeII(aGame.board);
-						}
 						
-						if(me.chosen == null){
-							me.chosen = new NodeII(aGame.board,m.getValue());
-						}
-						
-						Move aux = mm(aGame,m.getBoard(), depth-1, turn, me.chosen);
+					
+						Move aux = mm(aGame,m.getBoard(), depth-1, turn);
+												
 						
 						if(answer == null || aux == null){ //primera vez que compara
 							answer = m;
@@ -59,23 +58,23 @@ public class pcBehave {
 							if(turn == 1){ // estoy parado en el movimiento de 2 -- Pc -- tengo que elegir el maximo
 								if(answer.getValue() < aux.getValue()){
 									answer = aux;
-									
 								}
 							}else{ // estoy parado en el movimiento de 1 -- H -- tengo que elegir el minimo
 								if(answer.getValue() > aux.getValue()){
 									answer = aux;
 								}
 							}
-						}
+						}/*
 						System.out.println(me.chosen == null);
-						me.chosen.board = answer.getBoard();
-						me.chosen.value = answer.getValue();
+						me.board = answer.getBoard();
+						me.value = answer.getValue();
+						*/
 					}
-					me.value = me.chosen.value;
+					
 				}
 			}
 		}
-		answer.setBoard(me.board);
+		
 		return answer;
 	}
 	

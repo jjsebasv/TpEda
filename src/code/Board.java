@@ -178,11 +178,7 @@ public class Board {
 			Box to = this.getBox(iT, jT);
 			
 			// casillo vacio
-<<<<<<< HEAD
-			if ( from.isEmpty() ){
-=======
 			if ( from.isEmpty()){
->>>>>>> d6b398265559ef962109f31350ae9668e3739fba
 				//System.out.println("- ORIGEN VACIO");
 				return false;
 			}
@@ -365,9 +361,7 @@ public class Board {
 	
 	public List<Move> getMoves(int x, int y) {
 		
-		if ( board[x][y].getPiece().getC() != 'N' ){
-			return null;
-		}
+		
 			
 		List<Move> l = new ArrayList<>();
 		Board original = this;
@@ -381,15 +375,9 @@ public class Board {
 				//else if( getBox(x, y).getPiece().getC() == 'G')
 				//	value = enemies(i,j);
 				//else 
-<<<<<<< HEAD
 					value = getBox(i,j).getValue();	
 				if( validateMove(x, y, i, j)){
 					
-=======
-					value = getBox(i,j).getValue();
-					//System.out.print("get move para: ("+x+","+y+")("+i+","+j+")");
-				if( validateMove(x, y, i, j) ){
->>>>>>> d6b398265559ef962109f31350ae9668e3739fba
 					//System.out.println("- VALIDO EL MOVIMINETO");
 					try {
 						auxBoard = createBoard(original);
@@ -401,24 +389,17 @@ public class Board {
 					} catch (Exception e) { // no se a que exception hace referencia
 						//System.out.println("invalid move");
 					};
-<<<<<<< HEAD
-				}//else{
-					//System.out.println(" - NO VALIDO");
-				//}
-=======
-				}else{
-					//System.out.println(" - NO VALIDO");
-				}
->>>>>>> d6b398265559ef962109f31350ae9668e3739fba
+
+				}	
 			}
+			/*System.out.println("-------------- GET MOVES ("+x+","+y+")----------");
+			for (Move move : l) {
+				move.getBoard().printBoard();
+				System.out.println("--");
+			}
+			System.out.println("---------------------------------");
+			*/
 		}
-		System.out.println("-------------- GET MOVES ("+x+","+y+")----------");
-		for (Move move : l) {
-			move.getBoard().printBoard();
-			System.out.println("--");
-			
-		}
-		System.out.println("---------------------------------");
 		return l;
 	}
 	
