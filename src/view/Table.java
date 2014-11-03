@@ -132,7 +132,7 @@ public class Table extends JFrame {
 		            					//validatePiece();
 		            					to = (MyButton) e.getSource();
 		            					try {
-		            						System.out.print("("+from.getFil()+","+from.getCol()+")("+to.getFil()+","+to.getCol()+")");
+		            						System.out.print("ACA ("+from.getFil()+","+from.getCol()+")("+to.getFil()+","+to.getCol()+")");
 		            						try {
 		            							game.move(from.getFil(),from.getCol(),to.getFil(),to.getCol());
 		            							label.setText("                   ");

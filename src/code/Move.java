@@ -9,6 +9,10 @@ public class Move {
 		this.value = value;
 		this.board = board;
 	}
+	
+	public Move(){
+		
+	}
 
 	public int getValue(){
 		return this.value;

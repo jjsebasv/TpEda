@@ -3,8 +3,6 @@ package minimax;
 import code.Board;
 import code.Game;
 import code.Move;
-import exceptions.BoardOutOfBoundsException;
-import exceptions.InvalidMoveException;
 
 
 public class pcBehave {
@@ -13,7 +11,10 @@ public class pcBehave {
 	public static Board minimax(Game game, int depth, boolean prune, long time) {
 		
 		NodeII nAux = new NodeII(game.board);
-		Board aux = mm(game, game.board, depth, game.getTurn()).getBoard();
+		Move move = mm(game, game.board, depth, game.getTurn());
+		boolean f = (move==null);
+		System.out.println("move null?"+f);
+		Board aux = move.getBoard();
 		
 		System.out.println("este x");
 		aux.printBoard();

@@ -361,24 +361,16 @@ public class Board {
 	
 	public List<Move> getMoves(int x, int y) {
 		
-		
-			
 		List<Move> l = new ArrayList<>();
 		Board original = this;
 		Board auxBoard = new Board(null);
+		
 		for(int i = 0; i < this.dimention; i++){
 			for(int j = 0; j < this.dimention; j++){
 				
-				int value;
-				//if( getBox(x, y).getPiece().getC() == 'K' )
-				//	value = getBox(i, j).getValue();
-				//else if( getBox(x, y).getPiece().getC() == 'G')
-				//	value = enemies(i,j);
-				//else 
-					value = getBox(i,j).getValue();	
-				if( validateMove(x, y, i, j)){
-					value = getBox(i,j).getValue();
-					//System.out.print("get move para: ("+x+","+y+")("+i+","+j+")");
+				int value = getBox(i,j).getValue();	
+				if(validateMove(x, y, i, j) ){
+					System.out.println("("+x+","+y+")("+i+","+j+")"+getBox(x,y).getPiece().getC());
 					try {
 						auxBoard = createBoard(original);
 						Box a = auxBoard.board[x][y];
@@ -391,17 +383,21 @@ public class Board {
 					};
 				}
 			}
-			/*System.out.println("-------------- GET MOVES ("+x+","+y+")----------");
-			for (Move move : l) {
-				move.getBoard().printBoard();
-				System.out.println("--");
-			}
-			System.out.println("---------------------------------");
-			*/
+			//System.out.println("-------------- GET MOVES ("+x+","+y+")----------");
+			//for (Move move : l) {
+			//	move.getBoard().printBoard();
+			//	System.out.println("--");
+			//}
+			//System.out.println("---------------------------------");
+			
 		}
 		return l;
 	}
 	
+	public boolean myPiece(int i, int j, int turn) {
+		return getBox(i,j).getPiece().getPlayer().getTurn() == turn;
+	}
+
 	private Board createBoard(Board original) throws IllegalPieceException {
 		Board answer = new Board(original.getDimention());
 		for (int i = 0; i < original.getDimention(); i++) {

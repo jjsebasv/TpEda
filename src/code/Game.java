@@ -11,7 +11,7 @@ import javax.naming.directory.InvalidAttributesException;
 import exceptions.EndGameException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
-import minimax.minimax;
+import minimax.MyMinimax;
 import minimax.pcBehave;
 
 
@@ -144,20 +144,9 @@ public class Game {
 			board.printBoard();
 			
 			System.out.println("-- LE TOCA MOVER A LA PC --");
-			Integer p = null;
-			if ( prune){
-				p = 1;
-			}else{
-				p = 0;
-			}
-
-<<<<<<< HEAD
-			board = pcBehave.minimax(this, depth, prune, System.currentTimeMillis()+maxtime);
-=======
-			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
->>>>>>> cf8621ebae3e998d12b40b7a979d6b14af2b6a75
-			//board = minimax2.miniMax(this, this.depth,p, null, System.currentTimeMillis(), System.currentTimeMillis()+maxtime);
-			//board.printBoard();
+			//board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
+			board = MyMinimax.minimax(this, depth, prune, System.currentTimeMillis()+maxtime);
+			board.printBoard();
 			System.out.println("-- YA JUGO LA PC ---");
 			this.turn = 1;
 	
