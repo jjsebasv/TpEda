@@ -11,7 +11,7 @@ public class MyMinimax {
 		Move aux = new Move();
 		if ( depth == 0 ){
 			System.out.println("POOOOOOOOOOOOR TIEMPOOOOOOOOOO");
-			aux = minimaxTime(game,prune, null, time,2);
+			aux = minimaxTime(game,prune, time,2);
 		}else{
 			//aux = minimaxDepth(game,prune,depth);
 			System.out.println("por depth");

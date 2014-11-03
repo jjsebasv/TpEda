@@ -144,8 +144,8 @@ public class Game {
 			board.printBoard();
 			
 			System.out.println("-- LE TOCA MOVER A LA PC --");
-			//board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
-			board = MyMinimax.minimax(this, depth, prune, System.currentTimeMillis()+maxtime);
+			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
+			//board = MyMinimax.minimax(this, depth, prune, System.currentTimeMillis()+maxtime);
 			board.printBoard();
 			System.out.println("-- YA JUGO LA PC ---");
 			this.turn = 1;
