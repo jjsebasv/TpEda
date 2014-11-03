@@ -29,26 +29,60 @@ public class DotGenerator {
 		try {
 			 FileWriter fw = new FileWriter(fr);
 	 	        fw.write("digraph {\n");
-	 	        fw.write(labelNode(node));
-	 	        //for (NodeII node : node.children) {
-				//	
-				//}	
+	 	        if ( nodes.containsKey(node)){
+	 	        	nodes.put(node, nodeCounter);
+	 	        	nodeCounter++;
+	 	        } 	  
 	 	        
+	 	        fw.write(labelNode(node));
+	 	        for (NodeII child : node.children) {
+					if ( !nodes.containsKey(child) ){
+						nodes.put(child, nodeCounter++);
+						fw.write(labelNode(child));
+					}
+					fw.write(setRelation(node,child));
+					fw.write(setColour(node,child));
+					fw.write(setShape(child));
+				}	
+	 	        
+	 	       fw.write("}\n");
+	 	       fw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
  	}
     
+	private static String setColour(NodeII father, NodeII son){
+		if (son.children == null || (son.children != null && son.children.size() == 0) ){
+			return nodes.get(son)+ "[color=grey style=filled] "+"\n";
+		}
+		else if ( father.chosen.equals(son) ){
+			return nodes.get(son)+ "[color=yellow style=filled] "+"\n";
+		}else{
+			return nodes.get(son)+ "[color=white style=filled] "+"\n";
+		}
+	}
+	
+	private static String setShape(NodeII node){
+		switch (node.getTurn()) {
+		case 1:
+			return nodes.get(node)+ "[shape=box]"+"\n";
+		case 2:
+			return nodes.get(node)+ "[shape=ellipse]"+"\n";
+		default:
+			return "\n";
+		}
+	}
 	
 	private static String labelNode(NodeII node) {
 		String coordenadas = "("+node.getFrom().getFila()+","+node.getFrom().getColumna()+")("+node.getTo().getFila()+","+node.getTo().getColumna()+")";
-		String label = nodeCounter+" "+"[label="+coordenadas+"]";
-		nodeCounter++;
+		String label = nodeCounter+" "+"[label="+coordenadas+"]"+"\n";
 		return label;
 	}
 
-	private static String labelSon(NodeII father, NodeII son){
-		
+	private static String setRelation(NodeII father, NodeII son){
+		String label = nodes.get(father)+" -> "+nodes.get(son)+"\n";
+		return label;
 	}
 	
 	private static File openFile(){
