@@ -44,7 +44,7 @@ public class Game {
 	
 	public Game(String file, boolean visual, long maxtime, int depth, boolean tree, boolean prune, int turn){
 		this.visual = visual;
-		this.maxtime = maxtime;
+		this.maxtime = maxtime * 1000;
 		this.depth = depth;
 		this.tree = tree;
 		this.prune = prune;
