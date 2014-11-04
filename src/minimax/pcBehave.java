@@ -31,11 +31,13 @@ public class pcBehave {
 			if(auxMove == null)
 				auxMove = n.getMove();
 			else{
-				if(n.getMove().getValue() > auxMove.getValue())
+				if(n.getMove().getValue() > auxMove.getValue()){
 					auxMove = n.getMove();
+					me.chosen = n;
+				}
 			}
 		}
-		
+		me.chosen.colour = "red";
 		return auxMove.getBoard();
 	}
 	
