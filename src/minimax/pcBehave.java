@@ -131,7 +131,7 @@ public class pcBehave {
 							else
 								turn = 1;
 							
-							DotGenerator.export(me);
+							//DotGenerator.export(me);
 							return me.chosen.getMove();
 						}
 						
@@ -159,7 +159,7 @@ public class pcBehave {
 		else
 			turn = 1;
 		
-		DotGenerator.export(me);
+		//DotGenerator.export(me);
 		me.chosen.colour = "red";
 		return me.chosen.getMove();
 	}
