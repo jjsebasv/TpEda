@@ -18,7 +18,7 @@ public class DotGenerator {
 	public DotGenerator(){
 		this.nodeCounter = 0;
 		nodes = new HashMap<NodeII,Integer>();
-		fr = new File("graph.txt");
+		fr = new File("tree.dot");
 		try {
 			fw = new FileWriter(fr);
 			fw.write("digraph {\n");
@@ -29,6 +29,46 @@ public class DotGenerator {
 	}
 
 	
+	public static int getNodeCounter() {
+		return nodeCounter;
+	}
+
+
+	public static void setNodeCounter(int nodeCounter) {
+		DotGenerator.nodeCounter = nodeCounter;
+	}
+
+
+	public static Map<NodeII, Integer> getNodes() {
+		return nodes;
+	}
+
+
+	public static void setNodes(Map<NodeII, Integer> nodes) {
+		DotGenerator.nodes = nodes;
+	}
+
+
+	public static File getFr() {
+		return fr;
+	}
+
+
+	public static void setFr(File fr) {
+		DotGenerator.fr = fr;
+	}
+
+
+	public static FileWriter getFw() {
+		return fw;
+	}
+
+
+	public static void setFw(FileWriter fw) {
+		DotGenerator.fw = fw;
+	}
+
+
 	public static void export(NodeII node){
 		
 		if ( node == null ){
@@ -60,11 +100,25 @@ public class DotGenerator {
  	}
     
 	private static String setColour(NodeII father, NodeII son){
-		return nodes.get(son)+ "[color=white style=filled] "+"\n";
+		String color = (son.getColour()==null)? "white" : son.getColour();
+		return nodes.get(son)+ "[color="+color+" style=filled] "+"\n";
 	}
 	
 	private static String setShape(NodeII node){
-		return nodes.get(node)+ "[shape="+node.getShape()+"]"+"\n";
+		String shape = "";
+		switch (node.getMove().getTurn()) {
+		case 1:
+			shape = "box";
+			break;
+		case 2:
+			shape = "ellipse";
+			break;
+		default:
+			shape = "OTRO CASO";
+			
+		}
+
+		return nodes.get(node)+ "[shape="+shape+"]"+"\n";
 	}
 	
 	private static String labelNode(NodeII node) {

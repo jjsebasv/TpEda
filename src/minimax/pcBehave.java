@@ -12,7 +12,7 @@ import exceptions.IllegalPieceException;
 public class pcBehave {
 	
 	
-	public static Board minimax(Game game, Integer depth, boolean prune, long time) throws IllegalPieceException {
+	public static Board minimax(Game game, Integer depth, boolean prune, long time,boolean tree) throws IllegalPieceException {
 
 		NodeII me = new NodeII(game.board);
 		
@@ -25,7 +25,7 @@ public class pcBehave {
 			p = 0;
 		}
 		
-		Board aux = mm2(game, game.board, depth, game.getTurn(),me,time+System.currentTimeMillis(), p).getBoard();
+		Board aux = mm2(game, game.board, depth, game.getTurn(),me,time+System.currentTimeMillis(), p, tree).getBoard();
 		Move auxMove = null;
 		for(NodeII n:me.children){
 			if(auxMove == null)
@@ -42,7 +42,7 @@ public class pcBehave {
 	}
 	
 	
-	private static Move mm2(Game game, Board board, int depth, int turn,NodeII me,long fTime, int bestChoise){
+	private static Move mm2(Game game, Board board, int depth, int turn,NodeII me,long fTime, int bestChoise, boolean tree){
 
 		List<Move> l = null;
 		Move answer = null;
@@ -86,7 +86,7 @@ public class pcBehave {
 							}							
 						}
 						
-						Move resp = mm2(aGame,aGame.board,depth-1,turn,nAns, fTime, bestChoise);
+						Move resp = mm2(aGame,aGame.board,depth-1,turn,nAns, fTime, bestChoise,tree);
 						
 						if(answer == null){
 							answer = l.get(m);
@@ -131,7 +131,10 @@ public class pcBehave {
 							else
 								turn = 1;
 							
-							//DotGenerator.export(me);
+							if ( tree ){
+								DotGenerator.export(me);
+							}
+							
 							return me.chosen.getMove();
 						}
 						
@@ -159,13 +162,10 @@ public class pcBehave {
 		else
 			turn = 1;
 		
-
-		DotGenerator.export(me);
 		me.chosen.setColour("red");
+		DotGenerator.export(me);
 		return me.chosen.getMove();
 	}
-	
-	
-	
+
 
 }

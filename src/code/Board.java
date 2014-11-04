@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.naming.directory.InvalidAttributesException;
+
 import exceptions.EndGameException;
 import exceptions.IllegalPieceException;
 import exceptions.InvalidMoveException;
@@ -134,12 +136,23 @@ public class Board {
 
 	public void printBoard() {
 		for (int i = 0; i < this.dimention; i++) {
+			if ( i == 0 ){
+				System.out.print("   ");
+				for (int k = 0; k < this.dimention; k++) {
+					System.out.print(k+" ");
+				}
+				System.out.println();
+				System.out.println();
+			}
 			for (int j = 0; j < this.dimention; j++) {
+				if (j == 0) {
+					System.out.print(i+"  ");
+				}
 				System.out.print(getBox(i, j).getPiece().getC() + " ");
 			}
 			System.out.println();
 		}
-
+		
 	}
 
 	private boolean belongsToRows(int x) {

@@ -20,9 +20,11 @@ public class Main {
 		int turn = getTurn(params[0]);
 		Game game = new Game(params[0],Boolean.valueOf(params[3]),Integer.valueOf(params[1]), Integer.valueOf(params[2]), Boolean.valueOf(params[5]), Boolean.valueOf(params[6]),turn  );
 		boolean tree =  Boolean.valueOf(params[5]);
-		//if ( tree ){
-			DotGenerator graphviz = new DotGenerator();
-		//}
+
+		DotGenerator graphviz = null;
+		if ( tree ){
+			graphviz = new DotGenerator();
+		}
 
 		
 		if ( Boolean.valueOf(params[3]) ){
@@ -45,8 +47,10 @@ public class Main {
 					System.out.println("Movimiento invalido");
 				} catch (WinGameException e2) {
 					System.out.println("Ganaste el juego");
+					graphviz.getFw().close();
 				} catch (EndGameException e) {
 					System.out.println("Perdiste el juego");
+					graphviz.getFw().close();
 				} catch (InvalidArgumentsException e) {
 					System.out.println("Argumentos Invalidos. Ingresar (0,0)(0,0)");
 				}

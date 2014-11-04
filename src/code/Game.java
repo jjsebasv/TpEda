@@ -34,6 +34,9 @@ public class Game {
 		this.tree = tree;
 		this.prune = prune;
 		this.turn = turn;
+		if ( visual ){
+			this.tree = false;
+		}
 	}
 	
 	public Game(String file, boolean visual, long maxtime, int depth, boolean tree, boolean prune, int turn){
@@ -46,6 +49,9 @@ public class Game {
 		this.turn = turn;
 		this.finished = false;
 		this.board = new Board(file);
+		if ( visual ){
+			this.tree = false;
+		}
 	}
 
 
@@ -104,15 +110,13 @@ public class Game {
 			}else if(this.turn == 2){
 				this.setTurn(1);
 			}
-	
-			
+
 			if(depth == 0)
 				depth = 2;
 			if(maxtime == 0)
 				maxtime = 1000000000;
-			board = pcBehave.minimax(this, depth, prune, maxtime);
+			board = pcBehave.minimax(this, depth, prune, maxtime,tree);
 			this.turn = 1;
-
 		}
 	
 	}
