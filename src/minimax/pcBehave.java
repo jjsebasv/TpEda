@@ -31,11 +31,13 @@ public class pcBehave {
 			if(auxMove == null)
 				auxMove = n.getMove();
 			else{
-				if(n.getMove().getValue() > auxMove.getValue())
+				if(n.getMove().getValue() > auxMove.getValue()){
 					auxMove = n.getMove();
+					me.chosen = n;
+				}
 			}
 		}
-		
+		me.chosen.setColour("red");
 		return auxMove.getBoard();
 	}
 	
@@ -129,7 +131,7 @@ public class pcBehave {
 							else
 								turn = 1;
 							
-							DotGenerator.export(me);
+							//DotGenerator.export(me);
 							return me.chosen.getMove();
 						}
 						
@@ -157,6 +159,7 @@ public class pcBehave {
 		else
 			turn = 1;
 		
+
 		DotGenerator.export(me);
 		me.chosen.setColour("red");
 		return me.chosen.getMove();
