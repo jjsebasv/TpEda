@@ -30,7 +30,7 @@ public class Game {
 	
 	// ------------------------------------ CONSTRUCTORES ------------------------------------ // 
 	
-	public Game(Board board, boolean visual, long maxtime, int depth, boolean tree, boolean prune, int turn){
+	public Game(Board board, boolean visual, long maxtime, Integer depth, boolean tree, boolean prune, int turn){
 		this.finished = false;
 		this.board = board;
 		this.visual = visual;
@@ -151,9 +151,11 @@ public class Game {
 			}else{
 				p = 0;
 			}
-			
-
-			board = pcBehave.minimax(this, 2, prune, System.currentTimeMillis()+maxtime);
+			if(depth == 0)
+				depth = 2;
+			if(maxtime == 0)
+				maxtime = 1000000000;
+			board = pcBehave.minimax(this, depth, prune, maxtime);
 			this.turn = 1;
 
 			

@@ -12,23 +12,13 @@ import exceptions.IllegalPieceException;
 public class pcBehave {
 	
 	
-	public static Board minimax(Game game, int depth, boolean prune, long time) throws IllegalPieceException {
-		/*
-		NodeII nAux = new NodeII(game.board);
-		Move move = mm(game, game.board, depth, game.getTurn());
-		boolean f = (move==null);
-		System.out.println("move null?"+f);
-		Board aux = move.getBoard();
-		
-		System.out.println("este x");
-		aux.printBoard();
-		
-		*/
+	public static Board minimax(Game game, Integer depth, boolean prune, long time) throws IllegalPieceException {
+
 		NodeII me = new NodeII(game.board);
 		
 		me.setMove(new Move(game.board,Integer.MIN_VALUE,null,null,1));
 		
-		Board aux = mm2(game, game.board, depth, game.getTurn(),me).getBoard();
+		Board aux = mm2(game, game.board, depth, game.getTurn(),me,time+System.currentTimeMillis()).getBoard();
 		Move auxMove = null;
 		for(NodeII n:me.children){
 			if(auxMove == null)
@@ -43,7 +33,7 @@ public class pcBehave {
 	}
 	
 	
-	private static Move mm2(Game game, Board board, int depth, int turn,NodeII me){
+	private static Move mm2(Game game, Board board, int depth, int turn,NodeII me,long fTime){
 
 		List<Move> l = null;
 		Move answer = null;
@@ -51,8 +41,8 @@ public class pcBehave {
 		
 		if(depth == 0)
 			return answer;
-		for(int i = 0; i < board.getDimention(); i++){
-			for( int j = 0; j < board.getDimention(); j++){
+		for(int i = 0; i < board.getDimention() ; i++){
+			for( int j = 0; j < board.getDimention() ; j++){
 				if( board.getBox(i, j).getPiece().getPlayer().getTurn() == game.getTurn()){
 
 					l = board.getMoves(i, j);
@@ -67,7 +57,7 @@ public class pcBehave {
 						aGame.exeMove(l.get(m));
 						nAns = new NodeII(l.get(m));
 						
-						Move resp = mm2(aGame,aGame.board,depth-1,turn,nAns);
+						Move resp = mm2(aGame,aGame.board,depth-1,turn,nAns, fTime);
 						
 						if(answer == null){
 							answer = l.get(m);
@@ -90,7 +80,28 @@ public class pcBehave {
 							}
 						}
 						
-						
+						if( System.currentTimeMillis() > fTime){ //es como si terminara aca
+							for (NodeII n : me.children) {
+								if(me.chosen == null)
+									me.chosen = n;
+								if(game.getTurn() == 2){
+									if(me.chosen.getValue()>n.getMove().getValue()){
+										me.chosen = n;
+									}
+								}else{
+									if(me.chosen.getValue()<n.getMove().getValue()){
+										me.chosen = n;
+									}
+								}
+							}
+							if(turn == 1)
+								turn = 2;
+							else
+								turn = 1;
+							
+							DotGenerator.export(me);
+							return me.chosen.getMove();
+						}
 						
 					}
 				}

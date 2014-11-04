@@ -395,6 +395,7 @@ public class Board {
 						auxBoard = copyBoard(original);
 						auxBoard.move(x,y, i, j);
 						int newturn = (getBox(i,j).getPiece().getPlayer().getTurn()==1)? 2 : 1; 
+						System.out.println(getBox(x,y) == null);
 						l.add(new Move(auxBoard, auxBoard.value, getBox(x,y), getBox(i,j),newturn));
 					} catch (Exception e) { 
 						//do nothing
