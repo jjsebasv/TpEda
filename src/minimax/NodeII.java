@@ -14,6 +14,8 @@ public class NodeII {
 	private int value; //el valor que tengo
 	public Board board; //el board que tengo
 	public List<NodeII> children;
+	public String colour;
+	public String shape;
 	
 	
 	

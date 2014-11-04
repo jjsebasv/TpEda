@@ -145,12 +145,7 @@ public class Game {
 			}
 	
 			board.printBoard();
-			Integer p = new Integer(0);
-			if ( prune ){
-				p = 1;
-			}else{
-				p = 0;
-			}
+			
 			if(depth == 0)
 				depth = 2;
 			if(maxtime == 0)

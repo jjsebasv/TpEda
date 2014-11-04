@@ -18,7 +18,14 @@ public class pcBehave {
 		
 		me.setMove(new Move(game.board,Integer.MIN_VALUE,0,0,0,0,1));
 		
-		Board aux = mm2(game, game.board, depth, game.getTurn(),me,time+System.currentTimeMillis()).getBoard();
+		Integer p = new Integer(0);
+		if ( prune ){
+			p = 1;
+		}else{
+			p = 0;
+		}
+		
+		Board aux = mm2(game, game.board, depth, game.getTurn(),me,time+System.currentTimeMillis(), p).getBoard();
 		Move auxMove = null;
 		for(NodeII n:me.children){
 			if(auxMove == null)
@@ -33,7 +40,7 @@ public class pcBehave {
 	}
 	
 	
-	private static Move mm2(Game game, Board board, int depth, int turn,NodeII me,long fTime){
+	private static Move mm2(Game game, Board board, int depth, int turn,NodeII me,long fTime, int bestChoise){
 
 		List<Move> l = null;
 		Move answer = null;
@@ -57,10 +64,33 @@ public class pcBehave {
 						aGame.exeMove(l.get(m));
 						nAns = new NodeII(l.get(m));
 						
-						Move resp = mm2(aGame,aGame.board,depth-1,turn,nAns, fTime);
+						if(bestChoise != 0){
+							if(game.getTurn() == 2){
+								if(bestChoise>l.get(m).getValue()){
+									nAns.colour = "grey";
+									me.link(nAns);
+									continue;
+								}else{
+									bestChoise = l.get(m).getValue();
+								}
+							}else{
+								if(bestChoise<l.get(m).getValue()){
+									nAns.colour = "grey";
+									me.link(nAns);
+									continue;
+								}else{
+									bestChoise = l.get(m).getValue();
+								}
+							}							
+						}
+						
+						Move resp = mm2(aGame,aGame.board,depth-1,turn,nAns, fTime, bestChoise);
 						
 						if(answer == null){
 							answer = l.get(m);
+							if(bestChoise != 0){ //que estoy con poda
+								bestChoise = l.get(m).getValue();
+							}
 						}
 						if(resp == null){
 							resp = l.get(m);
@@ -111,10 +141,12 @@ public class pcBehave {
 			if(me.chosen == null)
 				me.chosen = n;
 			if(game.getTurn() == 2){
+				me.chosen.shape = "circle";
 				if(me.chosen.getValue()>n.getMove().getValue()){
 					me.chosen = n;
 				}
 			}else{
+				me.chosen.shape = "square";
 				if(me.chosen.getValue()<n.getMove().getValue()){
 					me.chosen = n;
 				}
@@ -126,6 +158,7 @@ public class pcBehave {
 			turn = 1;
 		
 		DotGenerator.export(me);
+		me.chosen.colour = "red";
 		return me.chosen.getMove();
 	}
 	
