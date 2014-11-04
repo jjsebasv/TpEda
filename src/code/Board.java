@@ -135,13 +135,6 @@ public class Board {
 		Board auxBoard = new Board(this.getDimention());
 		auxBoard.setBoard(aux);
 		
-		System.out.println("-------- duplicate ---------");
-		System.out.println("auxBoard");
-		auxBoard.printBoard();
-		System.out.println();
-		System.out.println("------------------------------");
-		
-		
 		return auxBoard;
 	}
 
@@ -178,13 +171,11 @@ public class Board {
 			
 			// destino ocupado
 			if ( !to.isEmpty()){
-				//System.out.println(" - DESTINO OCUPADO ");
 				return false;
 			}
 			
 			//mismo lugar
 			if ( iF == iT && jT == jF ){
-				//System.out.print("- MISMO LUGAR");
 				return false;
 			}else{
 			}
@@ -192,27 +183,23 @@ public class Board {
 			// no es dentro del tablero
 			if ( iF > dimention || jF > dimention || iT > dimention || jT > dimention ||
 					 iF < 0 || jF < 0|| iT < 0 || jT < 0) {
-				//System.out.print("- MALA DIMENSION");
 				return false;
 			}
 
 			// no es en linea reacta
 			if ( iF != iT && jF != jT) {
-				//System.out.println(" - NO EN LINEA R ");
 				return false;
 			}
 
 			// destino castillo pieza no es rey
 			if (from.getPiece().getC() != 'K'
 					&& ( (iT == 0 && jT == 0 ) || (iT == 0 && jT == dimention-1 ) || (iT == dimention-1 && jT == 0 ) || (iT == dimention-1 && jT == dimention -1 ) )) {
-				//System.out.print(" - DESTINO CASTILLO ");
 				return false;
 
 			}
 
 			// castilla trono -> solo rey
 			if (from.getPiece().getC() != 'K' && (iT == dimention/2 && jT == dimention/2 ) ) {
-				//System.out.print("- CASILLA REY");
 				return false;
 			}
 
@@ -347,7 +334,6 @@ public class Board {
 						
 			}
 			if ( (countEnemy == 3 && (countSpecial == 1 || countOut == 1 || countGuard == 1)) || (countEnemy == 4) || (countEnemy == 2 && countOut == 1 && countSpecial == 1)  ) {
-				System.out.println("cE: "+ countEnemy + " cS: " + countSpecial + " cO: " + countOut + " cG: " + countGuard);
 				eliminate(cell);
 				value = Integer.MAX_VALUE;
 				throw new EndGameException();

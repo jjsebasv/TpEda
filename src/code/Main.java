@@ -1,9 +1,7 @@
 package code;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.naming.directory.InvalidAttributesException;
@@ -17,23 +15,32 @@ import view.Table;
 public class Main {
 	
 	public static void main(String[] args) throws Exception {
-		DotGenerator graphviz = new DotGenerator();
-
+		
 		String[] params = parser(args);
-		//System.out.println(params[0]);
 		int turn = getTurn(params[0]);
-		System.out.println("TURN: MAIN: " + turn);
 		Game game = new Game(params[0],Boolean.valueOf(params[3]),Integer.valueOf(params[1]), Integer.valueOf(params[2]), Boolean.valueOf(params[5]), Boolean.valueOf(params[6]),turn  );
-		game.board.printBoard();
+		boolean tree =  Boolean.valueOf(params[5]);
+		//if ( tree ){
+			DotGenerator graphviz = new DotGenerator();
+		//}
+
+		
 		if ( Boolean.valueOf(params[3]) ){
 			Table gameView = new Table(game);
 			gameView.setVisible(true);
 		}else{
+			System.out.println("******* LA FUGA DEL REY *******");
+			System.out.println();
+			game.board.printBoard();
+			System.out.println();
+			System.out.println("Ingrese Movimiento:");
 			BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
 			while ( !game.isFinished() ){
 				try {
 					game.parserMove(buffer.readLine());
 					game.board.printBoard();
+					System.out.println();
+					System.out.println("Ingrese Movimiento:");
 				} catch (InvalidMoveException e) {
 					System.out.println("Movimiento invalido");
 				} catch (WinGameException e2) {
@@ -125,7 +132,6 @@ public class Main {
 			String l = br.readLine();
 			turn = Integer.valueOf(l.toCharArray()[0]-'0');
 			if ( turn < 1 && turn > 2 ){
-				System.out.println("f");
 				br.close();
 				throw new InvalidAttributesException();
 			}	

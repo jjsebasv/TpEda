@@ -52,42 +52,11 @@ public class Game {
 		this.turn = turn;
 		this.finished = false;
 		this.board = new Board(file);
-		System.out.println("GAME: "+ turn);	
-		System.out.println("DEPTH : " + this.depth);
-		System.out.println("MAXTIME: " + this.maxtime);
-		
-		
-		/*if ( turn == 2 ){
-			board = minimax.minMax(this, depth, prune,maxtime);
-		}
-		else{
-			board = new Board(file);
-		}
-		this.turn = 1;*/
 	}
 
 
 	// ------------------------------------ METODOS  ------------------------------------ // 
 	
-	/*
-	//private void getTurn(String file) {
-		//try {
-			//FileReader fr = new FileReader(file);
-			//BufferedReader br = new BufferedReader(fr);
-			//String l = br.readLine();
-			//this.turn = Integer.valueOf(l.toCharArray()[0]);
-			//if ( this.turn < 1 && turn > 2 ){
-				System.out.println("f");
-				br.close();
-				throw new InvalidAttributesException();
-			}	
-			br.close();
-			fr.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	*/
 	
 	public void saveGame(){
 		File fpw = new File(System.currentTimeMillis()+".txt");
@@ -106,7 +75,6 @@ public class Game {
  	        fw.write("\n");
  	        fw.close();
  	    } catch (IOException e) {
- 	        // TODO Auto-generated catch block
  	        e.printStackTrace();
  	    }
 	}
@@ -131,7 +99,6 @@ public class Game {
 	
 
 	public void move(int fil, int col, int fil2, int col2) throws InvalidMoveException, WinGameException, IllegalPieceException, EndGameException {
-		System.out.println("turno del game: " + this.turn);
 		
 		if(this.board.getBox(fil, col).getPiece().getPlayer().getTurn() != this.turn){
 			throw new InvalidMoveException();
@@ -144,7 +111,6 @@ public class Game {
 				this.setTurn(1);
 			}
 	
-			board.printBoard();
 			
 			if(depth == 0)
 				depth = 2;
@@ -152,8 +118,6 @@ public class Game {
 				maxtime = 1000000000;
 			board = pcBehave.minimax(this, depth, prune, maxtime);
 			this.turn = 1;
-
-			
 
 		}
 	
@@ -173,7 +137,6 @@ public class Game {
 		int y = Integer.valueOf(string.charAt(3)-'0');
 		int i = Integer.valueOf(string.charAt(6)-'0');
 		int j = Integer.valueOf(string.charAt(8)-'0');
-		System.out.println("a mover "+x+y+" "+i+j);
 		move(x,y,i,j);
 	}
 	

@@ -23,7 +23,6 @@ public class DotGenerator {
 			fw = new FileWriter(fr);
 			fw.write("digraph {\n");
 		} catch (IOException e) {
-			System.out.println("-------- NO PUDE ESCRIBIR ------------");
 			e.printStackTrace();
 		}
 		
@@ -33,15 +32,12 @@ public class DotGenerator {
 	public static void export(NodeII node){
 		
 		if ( node == null ){
-			System.out.println("node era null");
 			return;
 		}
 		
 		try {
 	 	     
-				//System.out.println(node.getMove());
 	 	        if ( !nodes.containsKey(node)){
-	 	        	System.out.println("no contiene la key");
 	 	        	nodes.put(node, nodeCounter);
 	 	        	fw.append(labelNode(node));
 	 	        	nodeCounter++;
@@ -52,7 +48,6 @@ public class DotGenerator {
 						nodes.put(child, nodeCounter++);
 						fw.append(labelNode(child));
 					}
-					System.out.println(child.getMove());
 					fw.append(setRelation(node,child));
 					fw.append(setColour(node,child));
 					fw.append(setShape(child));
@@ -62,8 +57,6 @@ public class DotGenerator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println(nodes);
-		//System.out.println(nodes.size());
  	}
     
 	private static String setColour(NodeII father, NodeII son){
@@ -80,9 +73,7 @@ public class DotGenerator {
 		}
 		
 		String coordenadas = "("+node.getMove().getIfrom()+","+node.getMove().getJfrom()+")("+node.getMove().getIto()+","+node.getMove().getJTo()+")";
-		//System.out.println("coordenadas"+coordenadas);
 		String label = nodeCounter+" "+"[label="+coordenadas+"]"+"\n";
-		//System.out.println("label: "+label);
 		return label;
 	}
 

@@ -133,11 +133,8 @@ public class Table extends JFrame {
 		            					//validatePiece();
 		            					to = (MyButton) e.getSource();
 		            					try {
-		            						System.out.print("ACA ("+from.getFil()+","+from.getCol()+")("+to.getFil()+","+to.getCol()+")");
 		            						try {
 		            							game.move(from.getFil(),from.getCol(),to.getFil(),to.getCol());
-		            							label.setText("TU TURNO");
-												//game.board.printBoard();
 											} catch (WinGameException e1) {
 												label.setText("  GANASTE EL JUEGO ");
 											} catch (InvalidMoveException e2) {
