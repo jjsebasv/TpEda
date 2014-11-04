@@ -67,7 +67,7 @@ public class pcBehave {
 						if(bestChoise != 0){
 							if(game.getTurn() == 2){
 								if(bestChoise>l.get(m).getValue()){
-									nAns.colour = "grey";
+									nAns.setColour("grey");
 									me.link(nAns);
 									continue;
 								}else{
@@ -75,7 +75,7 @@ public class pcBehave {
 								}
 							}else{
 								if(bestChoise<l.get(m).getValue()){
-									nAns.colour = "grey";
+									nAns.setColour("grey");
 									me.link(nAns);
 									continue;
 								}else{
@@ -141,12 +141,12 @@ public class pcBehave {
 			if(me.chosen == null)
 				me.chosen = n;
 			if(game.getTurn() == 2){
-				me.chosen.shape = "circle";
+				me.chosen.setShape("ellipse");
 				if(me.chosen.getValue()>n.getMove().getValue()){
 					me.chosen = n;
 				}
 			}else{
-				me.chosen.shape = "square";
+				me.chosen.setShape("box");
 				if(me.chosen.getValue()<n.getMove().getValue()){
 					me.chosen = n;
 				}
@@ -158,7 +158,7 @@ public class pcBehave {
 			turn = 1;
 		
 		DotGenerator.export(me);
-		me.chosen.colour = "red";
+		me.chosen.setColour("red");
 		return me.chosen.getMove();
 	}
 	

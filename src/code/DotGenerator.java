@@ -1,10 +1,6 @@
 package code;
 
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,10 +10,10 @@ import minimax.NodeII;
 
 public class DotGenerator {
 	
-	public static int nodeCounter;
-	public static Map<NodeII,Integer> nodes;
-	public static File fr;
-	public static FileWriter fw;
+	private static int nodeCounter;
+	private static Map<NodeII,Integer> nodes;
+	private static File fr;
+	private static FileWriter fw;
 	
 	public DotGenerator(){
 		this.nodeCounter = 0;
@@ -71,33 +67,19 @@ public class DotGenerator {
  	}
     
 	private static String setColour(NodeII father, NodeII son){
-		if (son.children == null || (son.children != null && son.children.size() == 0) ){
-			return nodes.get(son)+ "[color=grey style=filled] "+"\n";
-		}
-		else if ( father.chosen.equals(son) ){
-			return nodes.get(son)+ "[color=yellow style=filled] "+"\n";
-		}else{
-			return nodes.get(son)+ "[color=white style=filled] "+"\n";
-		}
+		return nodes.get(son)+ "[color=white style=filled] "+"\n";
 	}
 	
 	private static String setShape(NodeII node){
-		switch (node.getMove().getTurn()) {
-		case 1:
-			return nodes.get(node)+ "[shape=box]"+"\n";
-		case 2:
-			return nodes.get(node)+ "[shape=ellipse]"+"\n";
-		default:
-			return "\n";
-		}
+		return nodes.get(node)+ "[shape="+node.getShape()+"]"+"\n";
 	}
 	
 	private static String labelNode(NodeII node) {
-		if ( node.getMove().getFrom() == null || node.getMove().getTo() == null || nodeCounter == 0){
+		if ( node.getMove() == null || nodeCounter == 0){
 			return "START";
 		}
 		
-		String coordenadas = "("+node.getMove().getFrom().getFila()+","+node.getMove().getFrom().getColumna()+")("+node.getMove().getTo().getFila()+","+node.getMove().getTo().getColumna()+")";
+		String coordenadas = "("+node.getMove().getIfrom()+","+node.getMove().getJfrom()+")("+node.getMove().getIto()+","+node.getMove().getJTo()+")";
 		//System.out.println("coordenadas"+coordenadas);
 		String label = nodeCounter+" "+"[label="+coordenadas+"]"+"\n";
 		//System.out.println("label: "+label);

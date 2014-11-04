@@ -14,13 +14,53 @@ public class NodeII {
 	private int value; //el valor que tengo
 	public Board board; //el board que tengo
 	public List<NodeII> children;
-	public String colour;
-	public String shape;
+	private String colour;
+	private String shape;
 	
 	
 	
 	// ------------------------------------ CONSTRUCTORES ------------------------------------ //
 	
+
+	public NodeII getChosen() {
+		return chosen;
+	}
+
+	public void setChosen(NodeII chosen) {
+		this.chosen = chosen;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public List<NodeII> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<NodeII> children) {
+		this.children = children;
+	}
+
+	public String getColour() {
+		return colour;
+	}
+
+	public void setColour(String colour) {
+		this.colour = colour;
+	}
+
+	public String getShape() {
+		return shape;
+	}
+
+	public void setShape(String shape) {
+		this.shape = shape;
+	}
 
 	public NodeII(Board board){
 		this.board = board;
