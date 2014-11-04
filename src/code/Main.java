@@ -29,7 +29,6 @@ public class Main {
 
 		
 		if ( Boolean.valueOf(params[3]) ){
-			game.board.printBoard();
 			VisualBoard gameView = new VisualBoard(game);
 			gameView.setVisible(true);
 		}else{

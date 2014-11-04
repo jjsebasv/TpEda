@@ -1,9 +1,7 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color; 
+
 import java.awt.Container; 
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,13 +10,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame; 
 import javax.swing.JLabel; 
 import javax.swing.JPanel; 
-import javax.swing.SwingConstants;
 
 import code.Board;
 import code.Box;
 import code.Game;
 import exceptions.EndGameException;
-import exceptions.IllegalPieceException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
 
@@ -43,8 +39,9 @@ public class VisualBoard extends JFrame {
 		base.setLayout(new GridLayout(dimention,dimention)); 	
 		setSize(500,500); 
 		setDefaultCloseOperation(EXIT_ON_CLOSE); 
-		this.casilla = new JPanel[dimention][dimention];
+		this.setCasilla(new JPanel[dimention][dimention]);
 		crearCuadros(game.board); 
+		
 		/*
 		label = new JLabel("");
 		label.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
@@ -52,56 +49,57 @@ public class VisualBoard extends JFrame {
 		label.setBackground(Color.WHITE);
 		label.setVisible(true);
 		label.setText("TU TURNO");
-		this.add(label,BorderLayout.SOUTH);
+		base.add(label);
 		*/
+
 	} 
 
 
 	public void crearCuadros(Board board) { 
 
-		casilla = new JPanel[dimention][dimention]; 
+		setCasilla(new JPanel[dimention][dimention]); 
 		ImageIcon image;
 		System.out.println("dimension"+dimention);
 
 		for(int x = 0; x < dimention; x++) { 
 			for(int y=0; y < dimention ; y++) { 
-				casilla[x][y] = new JPanel();
+				getCasilla()[x][y] = new JPanel();
 				MyButton button = new MyButton(x,y,board.getBoard()[x][y].getPiece().getC());
 				switch (board.getBoard()[x][y].getPiece().getC()) {
 					case 'K':
 						image = new ImageIcon("./images/king.png");
 						button.setIcon(image);
-						casilla[x][y].add(button);
-						base.add(casilla[x][y]);
+						getCasilla()[x][y].add(button);
+						base.add(getCasilla()[x][y]);
 						break;
 					case 'N':
 						image = new ImageIcon("./images/enemy.png");
 						button.setIcon(image);
-						casilla[x][y].add(button);
-						base.add(casilla[x][y]);
+						getCasilla()[x][y].add(button);
+						base.add(getCasilla()[x][y]);
 						break;
 					case 'G':
 						image = new ImageIcon("./images/guard.png");
 						button.setIcon(image);
-						casilla[x][y].add(button);
-						base.add(casilla[x][y]);
+						getCasilla()[x][y].add(button);
+						base.add(getCasilla()[x][y]);
 						break;
 					case '0':	
 						if ( x == board.getDimention() /2 && y == board.getDimention() / 2  ) {
 							image = new ImageIcon("./images/throne.png");
 							button.setIcon(image);
-							casilla[x][y].add(button);
-							base.add(casilla[x][y]);
+							getCasilla()[x][y].add(button);
+							base.add(getCasilla()[x][y]);
 						}else if ( (x == 0 || x == dimention - 1)  && ( y == 0 || y == dimention - 1 )){
 							image = new ImageIcon("./images/castle.png");
 	                    	button.setIcon(image);
-	                    	casilla[x][y].add(button);
-	                    	base.add(casilla[x][y]);
+	                    	getCasilla()[x][y].add(button);
+	                    	base.add(getCasilla()[x][y]);
 	                    } else{
 	                    	image = new ImageIcon("./images/empty.png");
 	                    	button.setIcon(image);
-	                    	casilla[x][y].add(button);
-	                    	base.add(casilla[x][y]);
+	                    	getCasilla()[x][y].add(button);
+	                    	base.add(getCasilla()[x][y]);
 	                    	
 	                    }
 	
@@ -151,7 +149,7 @@ public class VisualBoard extends JFrame {
 		for (int i=0; i<board.getDimention(); i++){ 
 	           for (int j=0; j < board.getDimention(); j++){ 
 	        	   casillero  =board.getBoard()[i][j];
-	        	   boton = (MyButton) casilla[i][j].getComponent(0);
+	        	   boton = (MyButton) getCasilla()[i][j].getComponent(0);
 	        	   switch (casillero.getPiece().getC()) {
 					case 'K':
 						image = new ImageIcon("./images/king.png");
@@ -180,5 +178,15 @@ public class VisualBoard extends JFrame {
 	           }
 		}
 		
+	}
+
+
+	public static JPanel[][] getCasilla() {
+		return casilla;
+	}
+
+
+	public static void setCasilla(JPanel[][] casilla) {
+		VisualBoard.casilla = casilla;
 	}
 }
