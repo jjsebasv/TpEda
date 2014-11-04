@@ -2,9 +2,7 @@ package minimax;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import code.Board;
-import code.Box;
 import code.Move;
 
 public class NodeII {

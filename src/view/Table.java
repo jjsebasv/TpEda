@@ -1,39 +1,25 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.GridLayout;
-import java.awt.Image;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTable;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-
 import code.Board;
 import code.Box;
 import code.Game;
-
 import java.awt.SystemColor;
-
 import javax.swing.SwingConstants;
-
 import java.awt.Color;
 import java.awt.Font;
-
 import javax.swing.ImageIcon;
-
 import exceptions.EndGameException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.HashSet;
-import java.util.Set;
-import java.awt.Dimension;
+
 
 public class Table extends JFrame {
 

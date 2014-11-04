@@ -1,17 +1,11 @@
 package code;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.naming.directory.InvalidAttributesException;
-
-import exceptions.BoardOutOfBoundsException;
 import exceptions.EndGameException;
 import exceptions.IllegalPieceException;
 import exceptions.InvalidMoveException;

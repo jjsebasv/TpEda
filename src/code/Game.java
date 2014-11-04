@@ -1,13 +1,8 @@
 package code;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import javax.naming.directory.InvalidAttributesException;
-
 import exceptions.EndGameException;
 import exceptions.IllegalPieceException;
 import exceptions.InvalidArgumentsException;
@@ -38,7 +33,6 @@ public class Game {
 		this.depth = depth;
 		this.tree = tree;
 		this.prune = prune;
-		this.file = file;
 		this.turn = turn;
 	}
 	
@@ -126,7 +120,7 @@ public class Game {
 
 	public Game copy() throws IllegalPieceException {
 		Board newBoard = board.copyBoard(board);
-		return new Game(board, this.visual,this.maxtime, this.depth, this.tree, this.prune, this.turn);
+		return new Game(newBoard, this.visual,this.maxtime, this.depth, this.tree, this.prune, this.turn);
 	}
 	
 	public void parserMove(String string) throws InvalidMoveException, WinGameException, IllegalPieceException, EndGameException, InvalidArgumentsException{
