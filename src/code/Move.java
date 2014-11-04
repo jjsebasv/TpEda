@@ -4,17 +4,21 @@ public class Move {
 	
 	private int value;
 	private Board board;
-	private Box from;
-	private Box to;
+	private int iFrom;
+	private int jFrom;
+	private int iTo;
+	private int jTo;
 	private int turn;
 	
 	// ------------------------------------ CONSTRUCTORES ------------------------------------ //
 	
-	public Move(Board board, int value, Box from, Box to, int turn){
+	public Move(Board board, int value,int iFrom, int jFrom, int iTo, int jTo, int turn){
 		this.value = value;
 		this.board = board;
-		this.from = from;
-		this.to = to;
+		this.iFrom = iFrom;
+		this.iTo = iTo;
+		this.jFrom = jFrom;
+		this.jTo = jTo;
 		this.turn = turn;
 	}
 	
@@ -36,12 +40,20 @@ public class Move {
 	
 	// ------------------------------------ GETTERS Y SETTERS ------------------------------------ //
 	
-	public Box getFrom(){
-		return this.from;
+	public int getIfrom(){
+		return this.iFrom;
 	}
 	
-	public Box getTo(){
-		return this.to;
+	public int getIto(){
+		return this.iTo;
+	}
+	
+	public int getJfrom(){
+		return this.jFrom;
+	}
+	
+	public int getJTo(){
+		return this.jTo;
 	}
 	
 	public int getTurn(){
@@ -74,10 +86,10 @@ public class Move {
 	}
 	
 	public String toString(){
-		int x = (from==null)? (-1) : from.getFila();
-		int y = (from==null)? (-1) : from.getColumna();
-		int i = (to==null)? (-1) : from.getFila();
-		int j = (to==null)? (-1) : from.getColumna();
+		int x = iFrom;
+		int y = jFrom;
+		int i = iTo;
+		int j = jTo;
 		return "turn: "+turn+"("+x+","+y+")("+i+","+j+")";
 	}
 }

@@ -16,7 +16,7 @@ public class pcBehave {
 
 		NodeII me = new NodeII(game.board);
 		
-		me.setMove(new Move(game.board,Integer.MIN_VALUE,null,null,1));
+		me.setMove(new Move(game.board,Integer.MIN_VALUE,0,0,0,0,1));
 		
 		Board aux = mm2(game, game.board, depth, game.getTurn(),me,time+System.currentTimeMillis()).getBoard();
 		Move auxMove = null;
