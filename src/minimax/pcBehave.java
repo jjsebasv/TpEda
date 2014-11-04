@@ -30,7 +30,6 @@ public class pcBehave {
 		
 		Board aux = mm2(game, game.board, depth, game.getTurn(),me).getBoard();
 		Move auxMove = null;
-		DotGenerator.export(me);
 		for(NodeII n:me.children){
 			if(auxMove == null)
 				auxMove = n.getMove();
@@ -115,6 +114,7 @@ public class pcBehave {
 		else
 			turn = 1;
 		
+		DotGenerator.export(me);
 		return me.chosen.getMove();
 	}
 	

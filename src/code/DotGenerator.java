@@ -25,7 +25,7 @@ public class DotGenerator {
 		fr = new File("graph.txt");
 		try {
 			fw = new FileWriter(fr);
-			fw.append("digraph {\n");
+			fw.write("digraph {\n");
 		} catch (IOException e) {
 			System.out.println("-------- NO PUDE ESCRIBIR ------------");
 			e.printStackTrace();
@@ -43,7 +43,7 @@ public class DotGenerator {
 		
 		try {
 	 	     
-				System.out.println(node.getMove());
+				//System.out.println(node.getMove());
 	 	        if ( !nodes.containsKey(node)){
 	 	        	System.out.println("no contiene la key");
 	 	        	nodes.put(node, nodeCounter);
@@ -62,12 +62,12 @@ public class DotGenerator {
 					fw.append(setShape(child));
 				}	
 	 	        
-	 	       fw.close();
+	 	       //fw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(nodes);
-		System.out.println(nodes.size());
+		//System.out.println(nodes);
+		//System.out.println(nodes.size());
  	}
     
 	private static String setColour(NodeII father, NodeII son){
