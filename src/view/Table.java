@@ -46,19 +46,7 @@ public class Table extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		
-		/*
-		JButton btnSaveGame = new JButton("GUARDAR PARTIDA");
-		btnSaveGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				game.saveGame();
-				System.exit(0);
-			}
-		});
-		btnSaveGame.setForeground(new Color(0, 0, 0));
-		btnSaveGame.setBackground(Color.WHITE);
-		contentPane.add(btnSaveGame, BorderLayout.EAST);
-		*/
+	
 		
 		label = new JLabel("");
 		label.setFont(new Font("Lucida Grande", Font.PLAIN, 18));

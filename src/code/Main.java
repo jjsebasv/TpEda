@@ -11,6 +11,7 @@ import exceptions.InvalidArgumentsException;
 import exceptions.InvalidMoveException;
 import exceptions.WinGameException;
 import view.Table;
+import view.VisualBoard;
 
 public class Main {
 	
@@ -28,7 +29,8 @@ public class Main {
 
 		
 		if ( Boolean.valueOf(params[3]) ){
-			Table gameView = new Table(game);
+			game.board.printBoard();
+			VisualBoard gameView = new VisualBoard(game);
 			gameView.setVisible(true);
 		}else{
 			System.out.println("******* LA FUGA DEL REY *******");
