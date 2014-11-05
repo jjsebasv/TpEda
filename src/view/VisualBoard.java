@@ -41,10 +41,10 @@ public class VisualBoard extends JFrame {
 		this.dimention = game.getBoard().getDimention();
 		base = getContentPane(); 
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);			
-		base.setLayout(new GridLayout(dimention,dimention)); 	
+		base.setLayout(new GridLayout(dimention+1,dimention)); 	
 		setSize(500,500); 
 		setDefaultCloseOperation(EXIT_ON_CLOSE); 
-		this.setCasilla(new JPanel[dimention][dimention]);
+		this.setCasilla(new JPanel[dimention+1][dimention]);
 		crearCuadros(game.board); 
 		
 		
@@ -54,15 +54,24 @@ public class VisualBoard extends JFrame {
 		label.setBackground(Color.WHITE);
 		label.setVisible(true);
 		label.setText("TU TURNO");
-
+		
+		for (int i = 0; i <dimention; i++) {
+			if (i == dimention/2){
+				casilla[dimention][i] = new JPanel();
+				casilla[dimention][i].add(label);
+			}else{
+				casilla[dimention][i] = new JPanel();
+			}
+		}
 		
 	} 
 
 
 	public void crearCuadros(Board board) { 
 
-		setCasilla(new JPanel[dimention][dimention]); 
+		setCasilla(new JPanel[dimention+1][dimention]); 
 		ImageIcon image;
+		System.out.println("dimension"+dimention);
 
 		for(int x = 0; x < dimention; x++) { 
 			for(int y=0; y < dimention ; y++) { 
