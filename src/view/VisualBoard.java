@@ -1,7 +1,10 @@
 package view;
 
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container; 
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +25,7 @@ import exceptions.WinGameException;
 public class VisualBoard extends JFrame { 
 
 	private Container base; 
+	private Container info;
 	private static JPanel[][] casilla; 
 	private Game game;
 	private MyButton from;
@@ -32,6 +36,7 @@ public class VisualBoard extends JFrame {
 
 	public VisualBoard(Game game) 
 	{ 
+		
 		this.game = game;
 		this.dimention = game.getBoard().getDimention();
 		base = getContentPane(); 
@@ -42,16 +47,15 @@ public class VisualBoard extends JFrame {
 		this.setCasilla(new JPanel[dimention][dimention]);
 		crearCuadros(game.board); 
 		
-		/*
+		
 		label = new JLabel("");
 		label.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		label.setForeground(Color.RED);
 		label.setBackground(Color.WHITE);
 		label.setVisible(true);
 		label.setText("TU TURNO");
-		base.add(label);
-		*/
 
+		
 	} 
 
 
@@ -59,7 +63,6 @@ public class VisualBoard extends JFrame {
 
 		setCasilla(new JPanel[dimention][dimention]); 
 		ImageIcon image;
-		System.out.println("dimension"+dimention);
 
 		for(int x = 0; x < dimention; x++) { 
 			for(int y=0; y < dimention ; y++) { 
