@@ -56,6 +56,10 @@ public class Main {
 					System.out.println("Argumentos Invalidos. Ingresar (0,0)(0,0)");
 				}
 			}
+			
+			if ( graphviz != null ){
+				graphviz.getFw().close();
+			}
 		}
 		
 		
