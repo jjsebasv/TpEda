@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame; 
 import javax.swing.JLabel; 
 import javax.swing.JPanel; 
+import javax.swing.JTable;
 
 import code.Board;
 import code.Box;
@@ -25,7 +26,6 @@ import exceptions.WinGameException;
 public class VisualBoard extends JFrame { 
 
 	private Container base; 
-	private Container info;
 	private static JPanel[][] casilla; 
 	private Game game;
 	private MyButton from;
@@ -33,19 +33,22 @@ public class VisualBoard extends JFrame {
 	private int dimention;
 	private int counter;
 	private JLabel label;
-
+	private JPanel panel;
+	
 	public VisualBoard(Game game) 
 	{ 
 		
 		this.game = game;
 		this.dimention = game.getBoard().getDimention();
 		base = getContentPane(); 
+		
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);			
-		base.setLayout(new GridLayout(dimention+1,dimention)); 	
+		base.setLayout(new GridLayout(dimention,dimention));
 		setSize(500,500); 
 		setDefaultCloseOperation(EXIT_ON_CLOSE); 
-		this.setCasilla(new JPanel[dimention+1][dimention]);
-		crearCuadros(game.board); 
+		this.setCasilla(new JPanel[dimention][dimention]);
+		crearCuadros(game.board);
+		this.panel.add(base, BorderLayout.NORTH);
 		
 		
 		label = new JLabel("");
@@ -54,22 +57,15 @@ public class VisualBoard extends JFrame {
 		label.setBackground(Color.WHITE);
 		label.setVisible(true);
 		label.setText("TU TURNO");
+		this.panel.add(label, BorderLayout.SOUTH);
 		
-		for (int i = 0; i <dimention; i++) {
-			if (i == dimention/2){
-				casilla[dimention][i] = new JPanel();
-				casilla[dimention][i].add(label);
-			}else{
-				casilla[dimention][i] = new JPanel();
-			}
-		}
 		
 	} 
 
 
 	public void crearCuadros(Board board) { 
 
-		setCasilla(new JPanel[dimention+1][dimention]); 
+		setCasilla(new JPanel[dimention][dimention]); 
 		ImageIcon image;
 		System.out.println("dimension"+dimention);
 
